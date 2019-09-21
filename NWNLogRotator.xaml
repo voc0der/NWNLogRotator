@@ -1,0 +1,39 @@
+﻿<Window x:Class="NWNLogRotator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NWNLogRotator"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        Title="NWNLogRotator" Height="420" Width="500">
+    <Grid x:Name="Grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="27*"/>
+            <ColumnDefinition Width="707*"/>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="OutputDirectoryLabel" Content="Output Directory:" HorizontalAlignment="Left" Margin="14,94,0,0" VerticalAlignment="Top" Grid.Column="2" RenderTransformOrigin="0.44,2.721"/>
+        <Separator HorizontalAlignment="Left" Height="16" Margin="14,62,0,0" VerticalAlignment="Top" Width="334" Grid.Column="2"/>
+        <TextBox x:Name="OutputDirectoryTextBox" HorizontalAlignment="Left" Height="23" Margin="122,97,0,0" TextWrapping="Wrap" Text="C:/nwnlogs/output" VerticalAlignment="Top" Width="226" Grid.Column="2" RenderTransformOrigin="0.965,0.275"/>
+        <TextBlock x:Name="SettingsTextBlock" Grid.Column="2" HorizontalAlignment="Left" Margin="103,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="22" MouseDown="InvertColorScheme" MouseEnter="SettingsTextBlock_MouseEnter" MouseLeave="SettingsTextBlock_MouseLeave" ><Run Text="NWNLogRotator"/></TextBlock>
+        <GroupBox x:Name="FlagGroupBox" Grid.Column="2" Header="Flags (Optional)" HorizontalAlignment="Right" Height="112" Margin="0,187,66.667,0" VerticalAlignment="Top" Width="360"/>
+        <CheckBox x:Name="EventTextCheckBox" Content="Event Text" Grid.Column="2" HorizontalAlignment="Right" Margin="0,252,339.667,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="CombatTextCheckBox" Content="Combat Text" Grid.Column="2" HorizontalAlignment="Right" Margin="0,272,326.667,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609"/>
+        <Label x:Name="PathToLogLabel" Content="Path to Log:" HorizontalAlignment="Left" Margin="14,125,0,0" VerticalAlignment="Top" Grid.Column="2" RenderTransformOrigin="0.44,2.721"/>
+        <TextBox x:Name="PathToLogTextBox" HorizontalAlignment="Left" Height="23" Margin="122,129,0,0" TextWrapping="Wrap" Text="C:/nwnlogs/nwClientLog1.txt" VerticalAlignment="Top" Width="226" Grid.Column="2" RenderTransformOrigin="0.965,0.275"/>
+        <Label x:Name="MinimumRowsLabel" Content="Minimum Rows:" HorizontalAlignment="Left" Margin="14,155,0,0" VerticalAlignment="Top" Grid.Column="2" RenderTransformOrigin="0.44,2.721"/>
+        <Slider x:Name="MinimumRowsCountSlider" Grid.Column="2" HorizontalAlignment="Left" Margin="122,164,0,0" VerticalAlignment="Top" Width="203" ValueChanged="MinimumRowsCountSlider_ValueChanged" SmallChange="1" Minimum="1" Maximum="50" Value="10" IsSnapToTickEnabled="True" Cursor="SizeNS"/>
+        <TextBlock x:Name="MinimumRowsCountTextBlock" Grid.Column="2" HorizontalAlignment="Left" Margin="330,164,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="18" RenderTransformOrigin="0.615,2.005" Text="10"/>
+        <CheckBox x:Name="ServerNameColorCheckBox" Content="Server Name Color" Grid.Column="2" HorizontalAlignment="Right" Margin="0,232,292.667,0" VerticalAlignment="Top" RenderTransformOrigin="0.522,-0.045"/>
+        <CheckBox x:Name="ServerNameCheckBox" Content="Server Name" Grid.Column="2" HorizontalAlignment="Right" Margin="0,212,324.667,0" VerticalAlignment="Top"/>
+        <Button Content="Save Settings" Grid.Column="2" HorizontalAlignment="Left" Margin="14,317,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
+        <Button Content="Minimize to Tray" Grid.Column="2" HorizontalAlignment="Left" Margin="130,317,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867"/>
+        <StatusBar HorizontalAlignment="Left" Height="31" Margin="0,361,-0.333,0" VerticalAlignment="Top" Width="495" Grid.ColumnSpan="3" Background="Black">
+            <TextBlock x:Name="EventStatusTextBlock" TextWrapping="Wrap" Text="event.status" Width="149" RenderTransformOrigin="1.135,0.25" Height="29"/>
+            <Separator Margin="0,0,0,-0.333" Width="207" Visibility="Hidden" />
+            <TextBlock x:Name="NWNStatusTextBlock" TextWrapping="Wrap" Text="nwn.status" Width="113" RenderTransformOrigin="1.135,0.25" Height="29" TextAlignment="Right"/>
+        </StatusBar>
+        <Button Content="Run Once" Grid.Column="2" HorizontalAlignment="Left" Margin="254,317,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867"/>
+    </Grid>
+</Window>
