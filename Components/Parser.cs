@@ -1,12 +1,7 @@
 ﻿using NWNLogRotator.classes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace NWNLogRotator.Components
 {
@@ -24,28 +19,28 @@ namespace NWNLogRotator.Components
             InitializeComponent();
         }
 
-        public string ParseNWNLog( string NWNLog, Settings _run_settings, DateTime _dateTime )
+        public string ParseNWNLog(string NWNLog, Settings _run_settings, DateTime _dateTime)
         {
             string ParsedNWNLog = "<head>" +
                 "<style>" +
                     ".logbody { background-color: #000000; font-family: Tahoma, Geneva, sans-serif; color: #FFFFFF; }";
-                        ParsedNWNLog += ".logheader { color: #";
-                        if (_run_settings.ServerNameColor != "")
-                        {
-                            ParsedNWNLog += _run_settings.ServerNameColor;
-                        }
-                    ParsedNWNLog += " }" +
-                    ".default { color: #FFFFFF }" +
-                    ".timestamp { color: #B1A2BD; }" +
-                    ".actors { color: #8F7FFF; }" +
-                    ".tells { color: #0F0; }" +
-                    ".whispers { color: #808080; }" +
-                    ".emotes { color: #ffaed6; }" +
-                "</style>" +
-            "</head>";
+            ParsedNWNLog += ".logheader { color: #";
+            if (_run_settings.ServerNameColor != "")
+            {
+                ParsedNWNLog += _run_settings.ServerNameColor;
+            }
+            ParsedNWNLog += " }" +
+            ".default { color: #FFFFFF }" +
+            ".timestamp { color: #B1A2BD; }" +
+            ".actors { color: #8F7FFF; }" +
+            ".tells { color: #0F0; }" +
+            ".whispers { color: #808080; }" +
+            ".emotes { color: #ffaed6; }" +
+        "</style>" +
+    "</head>";
 
             string ServerNameTitle = "Server";
-            if( _run_settings.ServerName != "" )
+            if (_run_settings.ServerName != "")
                 ServerNameTitle = _run_settings.ServerName;
 
             string logTitle = "<h4>[<span class='logheader'>" + ServerNameTitle + " Log</span>] "

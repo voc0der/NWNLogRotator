@@ -1,12 +1,9 @@
 ﻿using NWNLogRotator.classes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace NWNLogRotator.Components
@@ -59,7 +56,7 @@ namespace NWNLogRotator.Components
             return NewSettingsFile;
         }
 
-        public void SaveSettingsIni( Settings _new_settings )
+        public void SaveSettingsIni(Settings _new_settings)
         {
             _settings = _new_settings;
             CreateSettingsIni();
@@ -113,7 +110,7 @@ namespace NWNLogRotator.Components
                 }
                 if (line.IndexOf("MinimumRows=") != -1)
                 {
-                    MinimumRowsToInteger = int.Parse( ParameterValue );
+                    MinimumRowsToInteger = int.Parse(ParameterValue);
                     Count += 1;
                 }
                 if (line.IndexOf("ServerName=") != -1)
@@ -128,12 +125,12 @@ namespace NWNLogRotator.Components
                 }
                 if (line.IndexOf("EventText=") != -1)
                 {
-                    EventText = bool.Parse( ParameterValue );
+                    EventText = bool.Parse(ParameterValue);
                     Count += 1;
                 }
                 if (line.IndexOf("CombatText=") != -1)
                 {
-                    CombatText = bool.Parse( ParameterValue );
+                    CombatText = bool.Parse(ParameterValue);
                     Count += 1;
                 }
                 if (line.IndexOf("UseTheme=") != -1)
@@ -143,7 +140,7 @@ namespace NWNLogRotator.Components
                 }
                 if (line.IndexOf("Tray=") != -1)
                 {
-                    Tray = bool.Parse( ParameterValue );
+                    Tray = bool.Parse(ParameterValue);
                     Count += 1;
                 }
             }
@@ -184,7 +181,7 @@ namespace NWNLogRotator.Components
             return _settings;
         }
 
-        public string FilePath_Get( Settings _run_settings )
+        public string FilePath_Get(Settings _run_settings)
         {
             string LogBasePath = _run_settings.OutputDirectory.Trim();
 
@@ -204,13 +201,13 @@ namespace NWNLogRotator.Components
             return LogBasePath;
         }
 
-        public string FileNameGenerator_Get( DateTime _dateTime )
+        public string FileNameGenerator_Get(DateTime _dateTime)
         {
             return "NWNLog_" + _dateTime.ToString("yyyy_MM_ddhhm") + ".html";
         }
 
-        public string ReadNWNLogAndInvokeParser( Settings _run_settings )
-        { 
+        public string ReadNWNLogAndInvokeParser(Settings _run_settings)
+        {
             string result;
             DateTime _dateTime = CurrentDateTime_Get();
             string filepath = FilePath_Get(_run_settings);
@@ -222,7 +219,7 @@ namespace NWNLogRotator.Components
             }
 
             Parser instance = new Parser();
-            result = instance.ParseNWNLog( result, _run_settings, _dateTime );
+            result = instance.ParseNWNLog(result, _run_settings, _dateTime);
 
             try
             {
@@ -231,7 +228,7 @@ namespace NWNLogRotator.Components
             }
             catch
             {
-                MessageBoxResult _messageBoxResult = MessageBox.Show("The destination file " + filepath + filename + " is unable to be written to this folder. Would you like NNWNLogRotator to try and create the destination folder?", 
+                MessageBoxResult _messageBoxResult = MessageBox.Show("The destination file " + filepath + filename + " is unable to be written to this folder. Would you like NNWNLogRotator to try and create the destination folder?",
                                                                     "Output Directory Invalid",
                                                                     MessageBoxButton.YesNo,
                                                                     MessageBoxImage.Question);

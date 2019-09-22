@@ -4,22 +4,15 @@
     *  LICENSE: MIT
 */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Diagnostics;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using NWNLogRotator.classes;
 using NWNLogRotator.Components;
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace NWNLogRotator
 {
@@ -35,7 +28,7 @@ namespace NWNLogRotator
 
         private void SetupApplication()
         {
-            IterateNWN_Watcher( false );
+            IterateNWN_Watcher(false);
             LoadSettings_Handler();
             LoadTray_Handler();
         }
@@ -50,7 +43,7 @@ namespace NWNLogRotator
         private async void IterateNWN_Watcher(bool PreviousStatus)
         {
             var Status = NWNProcessStatus_Get();
-            if(Status == true)
+            if (Status == true)
             {
                 NWNStatusTextBlock.Text = "nwmain is active!";
                 NWNStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
@@ -59,7 +52,7 @@ namespace NWNLogRotator
             }
             else
             {
-                if( PreviousStatus == true )
+                if (PreviousStatus == true)
                 {
                     NWNLog_Save();
                 }
@@ -77,10 +70,10 @@ namespace NWNLogRotator
 
             foreach (Process theProcess in processlist)
             {
-                if( theProcess.ProcessName.IndexOf("nwmain") != -1 )
+                if (theProcess.ProcessName.IndexOf("nwmain") != -1)
                 {
                     return true;
-                }      
+                }
             }
             return false;
         }
@@ -91,7 +84,7 @@ namespace NWNLogRotator
             string PathToLog = PathToLogTextBox.Text;
             int MinimumRowsToInteger = int.Parse(MinimumRowsCountSlider.Value.ToString());
             string ServerName = "";
-            if(ServerNameCheckBox.IsChecked == true && ServerNameTextBox.Text != "")
+            if (ServerNameCheckBox.IsChecked == true && ServerNameTextBox.Text != "")
             {
                 ServerName = ServerNameTextBox.Text;
             }
@@ -106,7 +99,7 @@ namespace NWNLogRotator
             // no implementation yet
             bool Tray = false;
 
-            _settings = new Settings(         OutputDirectory,
+            _settings = new Settings(OutputDirectory,
                                               PathToLog,
                                               MinimumRowsToInteger,
                                               ServerName,
@@ -118,12 +111,12 @@ namespace NWNLogRotator
                                             );
 
             FileHandler instance = new FileHandler();
-            instance.SaveSettingsIni( _settings );
+            instance.SaveSettingsIni(_settings);
 
             UpdateResultsPane(2);
         }
 
-        public async void UpdateResultsPane( int result )
+        public async void UpdateResultsPane(int result)
         {
             switch (result)
             {
@@ -190,11 +183,11 @@ namespace NWNLogRotator
             EventTextCheckBox.IsChecked = _settings.EventText;
             CombatTextCheckBox.IsChecked = _settings.CombatText;
 
-            if(_settings.UseTheme == "light")
+            if (_settings.UseTheme == "light")
             {
                 ActivateLightTheme();
             }
-            else if(_settings.UseTheme == "dark")
+            else if (_settings.UseTheme == "dark")
             {
                 ActivateDarkTheme();
             }
@@ -256,7 +249,7 @@ namespace NWNLogRotator
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
 
             FileHandler instance = new FileHandler();
-            string _filepathandname = instance.ReadNWNLogAndInvokeParser( _settings );
+            string _filepathandname = instance.ReadNWNLogAndInvokeParser(_settings);
             UpdateResultsPane(1);
             MessageBoxResult _messageBoxResult = MessageBox.Show("The log file has been generated successfully. Would you like to open the log file now?",
                             "Success!",
@@ -276,7 +269,7 @@ namespace NWNLogRotator
 
         private void InvertColorScheme(object sender, MouseButtonEventArgs e)
         {
-            if(_settings.UseTheme == "light")
+            if (_settings.UseTheme == "light")
             {
                 ActivateDarkTheme();
             }
@@ -298,7 +291,7 @@ namespace NWNLogRotator
 
         private void MinimumRowsCountSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if(MinimumRowsCountTextBlock != null)
+            if (MinimumRowsCountTextBlock != null)
                 MinimumRowsCountTextBlock.Text = e.NewValue.ToString();
         }
 
@@ -313,7 +306,7 @@ namespace NWNLogRotator
         }
 
         private void ServerNameCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        { 
+        {
             ServerNameTextBox.Text = "";
             ServerNameTextBox.Visibility = Visibility.Collapsed;
         }

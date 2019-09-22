@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NWNLogRotator.classes
+﻿namespace NWNLogRotator.classes
 {
     public class Settings
     {
@@ -24,20 +18,20 @@ namespace NWNLogRotator.classes
         // prototype
         public Settings()
         {
-            this.OutputDirectory = "C:\nwnlogs";
-            this.PathToLog = "C:\nwnlogs\nwClientLog1.txt";
+            this.OutputDirectory = "C:\\nwnlogs";
+            this.PathToLog = "C:\\nwnlogs\\nwClientLog1.txt";
             this.MinimumRowsCount = 10;
             this.ServerName = "";
             this.ServerNameColor = "";
             this.EventText = false;
             this.CombatText = false;
-            this.UseTheme = "";
+            this.UseTheme = "light";
             this.Tray = false;
         }
 
         // binding
         public Settings(string OutputDirectory,
-                        string PathToLog, 
+                        string PathToLog,
                         int MinimumRowsCount,
                         string ServerName,
                         string ServerNameColor,
@@ -62,5 +56,5 @@ namespace NWNLogRotator.classes
         {
             get { return _instance; }
         }
-}
+    }
 }
