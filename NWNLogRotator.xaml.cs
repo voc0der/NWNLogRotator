@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NWNLogRotator.classes;
 
 namespace NWNLogRotator
 {
@@ -80,6 +81,13 @@ namespace NWNLogRotator
 
         private void Settings_Save()
         {
+            int MinimumRowsToInteger = int.Parse(MinimumRowsCountTextBlock.Text.Substring(1));
+
+            var SavedSettings = new Settings( OutputDirectoryTextBox.Text,
+                                              PathToLogTextBox.Text,
+                                              MinimumRowsToInteger
+                                            );
+
             UpdateResultsPane(2);
         }
 

@@ -90,6 +90,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="classes\Settings.cs" />
     <Compile Include="NWNLogRotator.xaml.cs">
       <DependentUpon>NWNLogRotator.xaml</DependentUpon>
       <SubType>Code</SubType>
