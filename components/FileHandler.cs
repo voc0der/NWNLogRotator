@@ -178,5 +178,20 @@ namespace NWNLogRotator.Components
 
             return _settings;
         }
+
+        public void ReadNWNLogAndInvokeParser( Settings _run_settings )
+        { 
+            string result;
+            using (StreamReader streamReader = new StreamReader(_run_settings.PathToLog, Encoding.UTF8))
+            {
+                result = streamReader.ReadToEnd();
+            }
+
+            Parser instance = new Parser();
+            result = instance.ParseNWNLog( result, _run_settings );
+
+            Console.WriteLine(result);
+        }
+
     }
 }

@@ -234,14 +234,19 @@ namespace NWNLogRotator
             _settings.UseTheme = "light";
         }
 
+        private void ProcessNWNLog()
+        {
+            FileHandler instance = new FileHandler();
+            instance.ReadNWNLogAndInvokeParser( _settings );
+        }
+
         private void LoadTray_Handler()
         {
-
+            // to be implemented
         }
 
         private void InvertColorScheme(object sender, MouseButtonEventArgs e)
         {
-            // white => black 
             if(_settings.UseTheme == "light")
             {
                 ActivateDarkTheme();
@@ -250,7 +255,6 @@ namespace NWNLogRotator
             {
                 ActivateLightTheme();
             }
-
         }
 
         private void SettingsTextBlock_MouseEnter(object sender, MouseEventArgs e)
@@ -303,6 +307,11 @@ namespace NWNLogRotator
 
             base.OnStateChanged(e);
             */
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            ProcessNWNLog();
         }
     }
 }

@@ -94,6 +94,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\Settings.cs" />
+    <Compile Include="Components\Parser.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\Parser.Designer.cs">
+      <DependentUpon>Parser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\FileHandler.cs">
       <SubType>Component</SubType>
     </Compile>
