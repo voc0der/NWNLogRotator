@@ -65,7 +65,7 @@ namespace NWNLogRotator.Components
 
             ReadSettingsIni();
         }
-        public void ReadSettingsIni()
+        public bool ReadSettingsIni()
         {
             string iniPath = CurrentProgramDirectory_Get() + "NWNLogRotator.ini";
 
@@ -132,9 +132,7 @@ namespace NWNLogRotator.Components
                 }
             }
 
-            if(Count == 9)
-            {
-                var SavedSettings = new Settings(OutputDirectory,
+            var SavedSettings = new Settings();/*new Settings(OutputDirectory,
                                               PathToLog,
                                               MinimumRowsToInteger,
                                               ServerName,
@@ -143,24 +141,20 @@ namespace NWNLogRotator.Components
                                               CombatText,
                                               UseTheme,
                                               Tray
-                                            );
+                                            );*/
 
-            }
-            else
+            if (Count != 9)
             {
-                var SavedSettings = new Settings(OutputDirectory,
-                                              PathToLog,
-                                              MinimumRowsToInteger,
-                                              ServerName,
-                                              ServerNameColor,
-                                              EventText,
-                                              CombatText,
-                                              UseTheme,
-                                              Tray
-                                            );
-
                 MessageBox.Show("Default Configuration Loaded:\n\nPlease ensure NWNLogRotator.ini is properly formatted, and has 9 parameters present.\n\nIf it is deleted, NWNLogRotator will create a new one automatically with the default settings.", "Invalid Settings File!");
+                return false;
             }
+
+            EnactSettings();
+            return true;
+        }
+
+        public void EnactSettings( )
+        {
 
         }
 

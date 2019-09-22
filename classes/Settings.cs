@@ -18,6 +18,19 @@ namespace NWNLogRotator.classes
         public string UseTheme;
         public bool Tray;
 
+        public Settings()
+        {
+            this.OutputDirectory = "C:\nwnlogs";
+            this.PathToLog = "C:\nwnlogs\nwClientLog1.txt";
+            this.MinimumRowsCount = 10;
+            this.ServerName = "";
+            this.ServerNameColor = "";
+            this.EventText = false;
+            this.CombatText = false;
+            this.UseTheme = "";
+            this.Tray = false;
+        }
+
         public Settings(string OutputDirectory,
                         string PathToLog, 
                         int MinimumRowsCount,
