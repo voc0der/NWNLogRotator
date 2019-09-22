@@ -1,4 +1,4 @@
-﻿namespace NWNLogRotator.components
+﻿namespace NWNLogRotator.Components
 {
     partial class FileHandler
     {

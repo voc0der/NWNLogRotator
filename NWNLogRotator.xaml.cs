@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using NWNLogRotator.classes;
+using NWNLogRotator.Components;
 
 namespace NWNLogRotator
 {
@@ -102,6 +103,10 @@ namespace NWNLogRotator
                                               UseTheme,
                                               Tray
                                             );
+
+
+            FileHandler instance = new FileHandler();
+            instance.CreateSettingsIni();
 
             UpdateResultsPane(2);
         }
