@@ -93,7 +93,41 @@ namespace NWNLogRotator.Components
                 NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}Weapon equipped as a one-handed weapon.\r\n", "");
                 NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}You cannot rest so soon after exerting yourself.\r\n", "");
                 NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}Equipping this armor has disabled your monk abilities.\r\n", "");
-                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}No resting is allowed in this area.\r\n", "");
+                //NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}No resting is allowed in this area.\r\n", "");
+            }
+
+            // combat text removal
+            if (_run_settings.EventText == true)
+            {
+                // todo; make into a component
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*).{1}Event.{1} .*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)Minimum Tumble AC Bonus:\s?\+{1}[0-9]*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @"Minimum Tumble AC Bonus:\s?\+{1}[0-9]*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)No Monk\/Shield AC Bonus:\s?\+{1}[0-9]*.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)You are light sensitive!\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)has left as a player..\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)has joined as a player..\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)has left as a game master..\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)has joined as a game master..\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)You are now in a Party PVP area.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)You are now in a No PVP area.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)Resting.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)Cancelled Rest.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)You used a key.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)Equipped item swapped out.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)You are portalling, you can't do anything right now.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)Unknown Speaker: You are being moved to your last location, please wait...\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)You are entering a new area!\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)This container is persistent.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)This container is full.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)You are too busy to barter now.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)Player not found.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)You cannot carry any more items, your inventory is full.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)This is a trash, its contents may be purged at anytime.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)Armor\/Shield Applies: Skill .*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\-{1}\s{1}Your character has been saved\.{1}\s{1}\-{1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)New Value: [0-9]*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)Quick bar\s{1}.*loaded in.*\r\n", "");
             }
 
             // core format replacements

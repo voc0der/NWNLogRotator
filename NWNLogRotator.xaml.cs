@@ -123,7 +123,7 @@ namespace NWNLogRotator
             UpdateResultsPane(2);
         }
 
-        private async void UpdateResultsPane( int result )
+        public async void UpdateResultsPane( int result )
         {
             switch (result)
             {
@@ -144,6 +144,28 @@ namespace NWNLogRotator
                     EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
                     await Task.Delay(2000);
                     EventStatusTextBlock.Text = "";
+                    break;
+                case 4:
+                    EventStatusTextBlock.Text = "Saving 20%";
+                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    break;
+                case 5:
+                    EventStatusTextBlock.Text = "Saving 40%";
+                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    break;
+                case 6:
+                    EventStatusTextBlock.Text = "Saving 60%";
+                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    break;
+                case 7:
+                    EventStatusTextBlock.Text = "Saving 80%";
+                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    break;
+                case 8:
+                    EventStatusTextBlock.Text = "Saving 100%";
+                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    await Task.Delay(2000);
+                    UpdateResultsPane(2);
                     break;
             }
         }
@@ -231,6 +253,8 @@ namespace NWNLogRotator
 
         private void NWNLog_Save()
         {
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+
             FileHandler instance = new FileHandler();
             string _filepathandname = instance.ReadNWNLogAndInvokeParser( _settings );
             UpdateResultsPane(1);
@@ -241,6 +265,8 @@ namespace NWNLogRotator
 
             if (_messageBoxResult == MessageBoxResult.Yes)
                 System.Diagnostics.Process.Start(_filepathandname);
+
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
         }
 
         private void LoadTray_Handler()
