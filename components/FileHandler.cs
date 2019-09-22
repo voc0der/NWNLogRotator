@@ -65,6 +65,11 @@ namespace NWNLogRotator.Components
             CreateSettingsIni();
         }
 
+        public DateTime CurrentDateTime_Get()
+        {
+            return DateTime.Now;
+        }
+
         public void CreateSettingsIni()
         {
             string iniPath = CurrentProgramDirectory_Get() + "NWNLogRotator.ini";
@@ -179,18 +184,74 @@ namespace NWNLogRotator.Components
             return _settings;
         }
 
+        public string FilePath_Get( Settings _run_settings )
+        {
+            string LogBasePath = _run_settings.OutputDirectory.Trim();
+
+            if (!LogBasePath.EndsWith("/"))
+            {
+                LogBasePath += "/";
+            }
+
+            // has a server listed
+            string ServerName = "Server";
+            if (_run_settings.ServerName != "")
+            {
+                ServerName = _run_settings.ServerName + "/";
+                LogBasePath += ServerName;
+            }
+
+            return LogBasePath;
+        }
+
+        public string FileNameGenerator_Get( DateTime _dateTime )
+        {
+            return "NWNLog_" + _dateTime.ToString("yyyy_MM_ddhhm") + ".html";
+        }
+
         public void ReadNWNLogAndInvokeParser( Settings _run_settings )
         { 
             string result;
+            DateTime _dateTime = CurrentDateTime_Get();
+
+            string filepath = FilePath_Get(_run_settings);
+            string filename = FileNameGenerator_Get(_dateTime);
+
             using (StreamReader streamReader = new StreamReader(_run_settings.PathToLog, Encoding.UTF8))
             {
                 result = streamReader.ReadToEnd();
             }
 
             Parser instance = new Parser();
-            result = instance.ParseNWNLog( result, _run_settings );
+            result = instance.ParseNWNLog( result, _run_settings, _dateTime );
 
-            Console.WriteLine(result);
+            try
+            {
+                File.WriteAllText(filepath + filename, result);
+            }
+            catch
+            {
+                MessageBoxResult _messageBoxResult = MessageBox.Show("The destination file " + filepath + filename + " is unable to be written to this folder. Would you like NNWNLogRotator to try and create the destination folder?", 
+                                                                    "Output Directory Invalid",
+                                                                    MessageBoxButton.YesNo,
+                                                                    MessageBoxImage.Question);
+                if (_messageBoxResult == MessageBoxResult.Yes)
+                {
+                    // create folder
+                    if (!Directory.Exists(filepath))
+                    {
+                        Directory.CreateDirectory(filepath);
+                        try
+                        {
+                            File.WriteAllText(filepath + filename, result);
+                        }
+                        catch
+                        {
+                            MessageBox.Show("NWNLogRotator was not able to write to the entered Output Directory. Please ensure the file structure exists.", "Output Directory Error");
+                        }
+                    }
+                }
+            }
         }
 
     }
