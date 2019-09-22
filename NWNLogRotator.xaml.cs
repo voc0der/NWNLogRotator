@@ -35,6 +35,14 @@ namespace NWNLogRotator
         private void SetupApplication()
         {
             IterateNWN_Watcher( false );
+
+            Settings_Get();
+        }
+
+        private void Settings_Get()
+        {
+            FileHandler instance = new FileHandler();
+            instance.InitSettingsIni();
         }
 
         private async void IterateNWN_Watcher(bool PreviousStatus)
@@ -103,10 +111,6 @@ namespace NWNLogRotator
                                               UseTheme,
                                               Tray
                                             );
-
-
-            FileHandler instance = new FileHandler();
-            instance.CreateSettingsIni();
 
             UpdateResultsPane(2);
         }

@@ -37,9 +37,9 @@ namespace NWNLogRotator.Components
         public bool SettingsExist_Get()
         {
             string[] files =
-                Directory.GetFiles( CurrentProgramDirectory_Get(), "*NWNLogRotator.ini", SearchOption.TopDirectoryOnly );
+                Directory.GetFiles(CurrentProgramDirectory_Get(), "*NWNLogRotator.ini", SearchOption.TopDirectoryOnly);
 
-            if(files.Length == 1)
+            if (files.Length == 1)
             {
                 return true;
             }
@@ -48,8 +48,35 @@ namespace NWNLogRotator.Components
 
         public void CreateSettingsIni()
         {
-            // File.WriteAllText("C:\" , string[]);
-            MessageBox.Show(SettingsExist_Get().ToString());
+            string iniPath = CurrentProgramDirectory_Get() + "NWNLogRotator.ini";
+
+            string test = "config1=abc\nconfig2=def";
+
+            File.WriteAllText(iniPath, test);
+
+            ReadSettingsIni();
+        }
+        public void ReadSettingsIni()
+        {
+            string iniPath = CurrentProgramDirectory_Get() + "NWNLogRotator.ini";
+
+            foreach (var line in File.ReadLines(iniPath))
+            {
+                // ...process line.
+                MessageBox.Show(line);
+            }
+        }
+
+        public void InitSettingsIni()
+        {
+            if (SettingsExist_Get() == false)
+            {
+                CreateSettingsIni();
+            }
+            else
+            {
+                ReadSettingsIni();
+            }
         }
     }
 }
