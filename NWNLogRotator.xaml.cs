@@ -99,11 +99,11 @@ namespace NWNLogRotator
             string ServerNameColor = "";
             bool? EventText = EventTextCheckBox.IsChecked;
             bool? CombatText = CombatTextCheckBox.IsChecked;
-            string UseTheme = "";
+            string UseTheme = _settings.UseTheme;
             // no implementation yet
             bool Tray = false;
 
-            var SavedSettings = new Settings( OutputDirectory,
+            _settings = new Settings(         OutputDirectory,
                                               PathToLog,
                                               MinimumRowsToInteger,
                                               ServerName,
@@ -113,6 +113,9 @@ namespace NWNLogRotator
                                               UseTheme,
                                               Tray
                                             );
+
+            FileHandler instance = new FileHandler();
+            instance.SaveSettingsIni( _settings );
 
             UpdateResultsPane(2);
         }
@@ -133,13 +136,36 @@ namespace NWNLogRotator
                     await Task.Delay(2000);
                     EventStatusTextBlock.Text = "";
                     break;
+                case 3:
+                    EventStatusTextBlock.Text = "Settings Loaded Successfully!";
+                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    await Task.Delay(2000);
+                    EventStatusTextBlock.Text = "";
+                    break;
             }
         }
 
         private void LoadSettings_Handler()
         {
             Settings_Get();
-            MessageBox.Show("wellduh");
+
+            OutputDirectoryTextBox.Text = _settings.OutputDirectory;
+            PathToLogTextBox.Text = _settings.PathToLog;
+            MinimumRowsCountSlider.Value = _settings.MinimumRowsCount;
+            if (_settings.ServerName != "")
+            {
+                ServerNameCheckBox.IsChecked = true;
+                // left to implement: ServerNameTextBox.Text = _settings.ServerName;
+            }
+            if (_settings.ServerNameColor != "")
+            {
+                ServerNameColorCheckBox.IsChecked = true;
+                // left to implement: ServerNameColorTextBox.Text = _settings.ServerNameColor;
+            }
+            EventTextCheckBox.IsChecked = _settings.EventText;
+            CombatTextCheckBox.IsChecked = _settings.CombatText;
+
+            UpdateResultsPane(3);
         }
 
         private void InvertColorScheme(object sender, MouseButtonEventArgs e)
@@ -168,6 +194,8 @@ namespace NWNLogRotator
                 CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.White);
                 MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.White);
                 MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.White);
+
+                _settings.UseTheme = "dark";
             }
             // black => white
             else
@@ -189,6 +217,8 @@ namespace NWNLogRotator
                 CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.Black);
                 MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.Black);
                 MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.Black);
+
+                _settings.UseTheme = "light";
             }
 
         }

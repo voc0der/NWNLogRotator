@@ -45,19 +45,31 @@ namespace NWNLogRotator.Components
             return false;
         }
 
+        public string SettingsFile_Linter()
+        {
+            string NewSettingsFile = "OutputDirectory=" + _settings.OutputDirectory + "\n" +
+                                        "PathToLog=" + _settings.PathToLog + "\n" +
+                                        "MinimumRows=" + _settings.MinimumRowsCount + "\n" +
+                                        "ServerName=" + _settings.ServerName + "\n" +
+                                        "ServerNameColor=" + _settings.ServerNameColor + "\n" +
+                                        "EventText=" + _settings.EventText + "\n" +
+                                        "CombatText=" + _settings.CombatText + "\n" +
+                                        "UseTheme=" + _settings.UseTheme + "\n" +
+                                        "Tray=" + _settings.Tray;
+            return NewSettingsFile;
+        }
+
+        public void SaveSettingsIni( Settings _new_settings )
+        {
+            _settings = _new_settings;
+            CreateSettingsIni();
+        }
+
         public void CreateSettingsIni()
         {
             string iniPath = CurrentProgramDirectory_Get() + "NWNLogRotator.ini";
 
-            string DefaultSettings =    "OutputDirectory=C:/nwnlogs/\n" +
-                                        "PathToLog=C:/nwnlogs/nwClientLog1.txt\n" +
-                                        "MinimumRows=10\n" +
-                                        "ServerName=\n" +
-                                        "ServerNameColor=\n" +
-                                        "EventText=false\n" +
-                                        "CombatText=false\n" +
-                                        "UseTheme=false\n" +
-                                        "Tray=false";
+            string DefaultSettings = SettingsFile_Linter();
 
             File.WriteAllText(iniPath, DefaultSettings);
 
