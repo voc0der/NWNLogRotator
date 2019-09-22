@@ -209,11 +209,10 @@ namespace NWNLogRotator.Components
             return "NWNLog_" + _dateTime.ToString("yyyy_MM_ddhhm") + ".html";
         }
 
-        public void ReadNWNLogAndInvokeParser( Settings _run_settings )
+        public string ReadNWNLogAndInvokeParser( Settings _run_settings )
         { 
             string result;
             DateTime _dateTime = CurrentDateTime_Get();
-
             string filepath = FilePath_Get(_run_settings);
             string filename = FileNameGenerator_Get(_dateTime);
 
@@ -228,6 +227,7 @@ namespace NWNLogRotator.Components
             try
             {
                 File.WriteAllText(filepath + filename, result);
+                return filepath + filename;
             }
             catch
             {
@@ -244,6 +244,7 @@ namespace NWNLogRotator.Components
                         try
                         {
                             File.WriteAllText(filepath + filename, result);
+                            return filepath + filename;
                         }
                         catch
                         {
@@ -252,7 +253,7 @@ namespace NWNLogRotator.Components
                     }
                 }
             }
+            return "";
         }
-
     }
 }

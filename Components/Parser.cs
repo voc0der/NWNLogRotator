@@ -28,8 +28,13 @@ namespace NWNLogRotator.Components
         {
             string ParsedNWNLog = "<head>" +
                 "<style>" +
-                    ".logbody { background-color: #000000; font-family: Tahoma, Geneva, sans-serif; color: #FFFFFF; }" +
-                    ".logheader { color: #03FFFF; }" +
+                    ".logbody { background-color: #000000; font-family: Tahoma, Geneva, sans-serif; color: #FFFFFF; }";
+                        ParsedNWNLog += ".logheader { color: #";
+                        if (_run_settings.ServerNameColor != "")
+                        {
+                            ParsedNWNLog += _run_settings.ServerNameColor;
+                        }
+                    ParsedNWNLog += " }" +
                     ".default { color: #FFFFFF }" +
                     ".timestamp { color: #B1A2BD; }" +
                     ".actors { color: #8F7FFF; }" +
@@ -39,7 +44,11 @@ namespace NWNLogRotator.Components
                 "</style>" +
             "</head>";
 
-            string logTitle = "<h4>[<span class='logheader'>" + _run_settings.ServerName + "Log</span>]"
+            string ServerNameTitle = "Server";
+            if( _run_settings.ServerName != "" )
+                ServerNameTitle = _run_settings.ServerName;
+
+            string logTitle = "<h4>[<span class='logheader'>" + ServerNameTitle + " Log</span>] "
             + "<span class='actors'>Date/Time</span>: " + _dateTime.ToString("MM/dd/yyyy hh:m")
             + "</h4>";
             string preLog = "<html>" + ParsedNWNLog + "<body class='logbody'><span class='default'>" + logTitle;

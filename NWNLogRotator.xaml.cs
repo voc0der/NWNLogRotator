@@ -85,11 +85,6 @@ namespace NWNLogRotator
             return false;
         }
 
-        private void NWNLog_Save()
-        {
-            UpdateResultsPane(1);
-        }
-
         private void Settings_Save()
         {
             string OutputDirectory = OutputDirectoryTextBox.Text;
@@ -234,10 +229,18 @@ namespace NWNLogRotator
             _settings.UseTheme = "light";
         }
 
-        private void ProcessNWNLog()
+        private void NWNLog_Save()
         {
             FileHandler instance = new FileHandler();
-            instance.ReadNWNLogAndInvokeParser( _settings );
+            string _filepathandname = instance.ReadNWNLogAndInvokeParser( _settings );
+            UpdateResultsPane(1);
+            MessageBoxResult _messageBoxResult = MessageBox.Show("The log file has been generated successfully. Would you like to open the log file now?",
+                            "Success!",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+
+            if (_messageBoxResult == MessageBoxResult.Yes)
+                System.Diagnostics.Process.Start(_filepathandname);
         }
 
         private void LoadTray_Handler()
@@ -311,7 +314,7 @@ namespace NWNLogRotator
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            ProcessNWNLog();
+            NWNLog_Save();
         }
     }
 }
