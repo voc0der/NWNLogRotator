@@ -21,7 +21,7 @@ namespace NWNLogRotator.classes
         // create singleton
         public static Settings _instance = new Settings();
 
-        //prototype
+        // prototype
         public Settings()
         {
             this.OutputDirectory = "C:\nwnlogs";
@@ -35,7 +35,7 @@ namespace NWNLogRotator.classes
             this.Tray = false;
         }
 
-        //binding
+        // binding
         public Settings(string OutputDirectory,
                         string PathToLog, 
                         int MinimumRowsCount,
@@ -57,7 +57,7 @@ namespace NWNLogRotator.classes
             this.Tray = Tray;
         }
 
-        //get singleton
+        // get singleton
         public Settings Instance
         {
             get { return _instance; }

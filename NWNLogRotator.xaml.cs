@@ -94,7 +94,7 @@ namespace NWNLogRotator
         {
             string OutputDirectory = OutputDirectoryTextBox.Text;
             string PathToLog = PathToLogTextBox.Text;
-            int MinimumRowsToInteger = int.Parse(MinimumRowsCountTextBlock.Text.Substring(1));
+            int MinimumRowsToInteger = int.Parse(MinimumRowsCountSlider.Value.ToString());
             string ServerName = "";
             string ServerNameColor = "";
             bool? EventText = EventTextCheckBox.IsChecked;
