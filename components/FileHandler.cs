@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NWNLogRotator.classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -50,9 +51,17 @@ namespace NWNLogRotator.Components
         {
             string iniPath = CurrentProgramDirectory_Get() + "NWNLogRotator.ini";
 
-            string test = "config1=abc\nconfig2=def";
+            string DefaultSettings =    "OutputDirectory=C:/nwnlogs/\n" +
+                                        "PathToLog=C:/nwnlogs/nwClientLog1.txt\n" +
+                                        "MinimumRows=10\n" +
+                                        "ServerName=\n" +
+                                        "ServerNameColor=\n" +
+                                        "EventText=false\n" +
+                                        "CombatText=false\n" +
+                                        "UseTheme=false\n" +
+                                        "Tray=false";
 
-            File.WriteAllText(iniPath, test);
+            File.WriteAllText(iniPath, DefaultSettings);
 
             ReadSettingsIni();
         }
@@ -60,11 +69,99 @@ namespace NWNLogRotator.Components
         {
             string iniPath = CurrentProgramDirectory_Get() + "NWNLogRotator.ini";
 
+            string OutputDirectory = "C:\nwnlogs";
+            string PathToLog = "C:\nwnlogs\nwClientLog1.txt";
+            int MinimumRowsToInteger = 10;
+            string ServerName = "";
+            string ServerNameColor = "";
+            bool? EventText = false;
+            bool? CombatText = false;
+            string UseTheme = "";
+            bool Tray = false;
+
+            int Count = 0;
+
             foreach (var line in File.ReadLines(iniPath))
             {
-                // ...process line.
-                MessageBox.Show(line);
+                string ParameterValue = line.Split('=').Last();
+
+                if (line.IndexOf("OutputDirectory=") != -1)
+                {
+                    OutputDirectory = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("PathToLog=") != -1)
+                {
+                    PathToLog = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("MinimumRows=") != -1)
+                {
+                    MinimumRowsToInteger = int.Parse( ParameterValue );
+                    Count += 1;
+                }
+                if (line.IndexOf("ServerName=") != -1)
+                {
+                    ServerName = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("ServerNameColor=") != -1)
+                {
+                    ServerNameColor = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("EventText=") != -1)
+                {
+                    EventText = bool.Parse( ParameterValue );
+                    Count += 1;
+                }
+                if (line.IndexOf("CombatText=") != -1)
+                {
+                    CombatText = bool.Parse( ParameterValue );
+                    Count += 1;
+                }
+                if (line.IndexOf("UseTheme=") != -1)
+                {
+                    UseTheme = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("Tray=") != -1)
+                {
+                    Tray = bool.Parse( ParameterValue );
+                    Count += 1;
+                }
             }
+
+            if(Count == 9)
+            {
+                var SavedSettings = new Settings(OutputDirectory,
+                                              PathToLog,
+                                              MinimumRowsToInteger,
+                                              ServerName,
+                                              ServerNameColor,
+                                              EventText,
+                                              CombatText,
+                                              UseTheme,
+                                              Tray
+                                            );
+
+            }
+            else
+            {
+                var SavedSettings = new Settings(OutputDirectory,
+                                              PathToLog,
+                                              MinimumRowsToInteger,
+                                              ServerName,
+                                              ServerNameColor,
+                                              EventText,
+                                              CombatText,
+                                              UseTheme,
+                                              Tray
+                                            );
+
+                MessageBox.Show("Default Configuration Loaded:\n\nPlease ensure NWNLogRotator.ini is properly formatted, and has 9 parameters present.\n\nIf it is deleted, NWNLogRotator will create a new one automatically with the default settings.", "Invalid Settings File!");
+            }
+
         }
 
         public void InitSettingsIni()
