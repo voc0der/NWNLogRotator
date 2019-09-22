@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NWNLogRotator.classes
 {
-    class Settings
+    public class Settings
     {
         public string OutputDirectory;
         public string PathToLog;
@@ -18,6 +18,10 @@ namespace NWNLogRotator.classes
         public string UseTheme;
         public bool Tray;
 
+        // create singleton
+        public static Settings _instance = new Settings();
+
+        //prototype
         public Settings()
         {
             this.OutputDirectory = "C:\nwnlogs";
@@ -31,6 +35,7 @@ namespace NWNLogRotator.classes
             this.Tray = false;
         }
 
+        //binding
         public Settings(string OutputDirectory,
                         string PathToLog, 
                         int MinimumRowsCount,
@@ -51,5 +56,11 @@ namespace NWNLogRotator.classes
             this.UseTheme = UseTheme;
             this.Tray = Tray;
         }
-    }
+
+        //get singleton
+        public Settings Instance
+        {
+            get { return _instance; }
+        }
+}
 }

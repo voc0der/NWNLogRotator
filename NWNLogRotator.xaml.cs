@@ -25,6 +25,7 @@ namespace NWNLogRotator
 {
     public partial class MainWindow : Window
     {
+        Settings _settings;
         public MainWindow()
         {
             InitializeComponent();
@@ -36,13 +37,14 @@ namespace NWNLogRotator
         {
             IterateNWN_Watcher( false );
 
-            Settings_Get();
+            LoadSettings_Handler();
         }
 
-        private void Settings_Get()
+        private Settings Settings_Get()
         {
             FileHandler instance = new FileHandler();
-            instance.InitSettingsIni();
+            _settings = instance.InitSettingsIni();
+            return _settings;
         }
 
         private async void IterateNWN_Watcher(bool PreviousStatus)
@@ -132,6 +134,12 @@ namespace NWNLogRotator
                     EventStatusTextBlock.Text = "";
                     break;
             }
+        }
+
+        private void LoadSettings_Handler()
+        {
+            Settings_Get();
+            MessageBox.Show("wellduh");
         }
 
         private void InvertColorScheme(object sender, MouseButtonEventArgs e)

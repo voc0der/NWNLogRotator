@@ -13,6 +13,9 @@ namespace NWNLogRotator.Components
 {
     public partial class FileHandler : Component
     {
+        Settings _settings;
+        int _expectedSettingsCount = 9;
+
         public FileHandler()
         {
             InitializeComponent();
@@ -27,12 +30,7 @@ namespace NWNLogRotator.Components
 
         public string CurrentProgramDirectory_Get()
         {
-            string theWorkingDirectory = "";
-
-            //get the current working directory
-            theWorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
-            return theWorkingDirectory;
+            return AppDomain.CurrentDomain.BaseDirectory;
         }
 
         public bool SettingsExist_Get()
@@ -69,6 +67,7 @@ namespace NWNLogRotator.Components
         {
             string iniPath = CurrentProgramDirectory_Get() + "NWNLogRotator.ini";
 
+            // interpret fields
             string OutputDirectory = "C:\nwnlogs";
             string PathToLog = "C:\nwnlogs\nwClientLog1.txt";
             int MinimumRowsToInteger = 10;
@@ -132,7 +131,7 @@ namespace NWNLogRotator.Components
                 }
             }
 
-            var SavedSettings = new Settings();/*new Settings(OutputDirectory,
+            _settings = new Settings(OutputDirectory,
                                               PathToLog,
                                               MinimumRowsToInteger,
                                               ServerName,
@@ -141,25 +140,21 @@ namespace NWNLogRotator.Components
                                               CombatText,
                                               UseTheme,
                                               Tray
-                                            );*/
+                                            );
 
-            if (Count != 9)
+            if (Count != _expectedSettingsCount)
             {
-                MessageBox.Show("Default Configuration Loaded:\n\nPlease ensure NWNLogRotator.ini is properly formatted, and has 9 parameters present.\n\nIf it is deleted, NWNLogRotator will create a new one automatically with the default settings.", "Invalid Settings File!");
+                MessageBox.Show("Default Configuration Loaded:\n\nPlease ensure NWNLogRotator.ini is properly formatted, and has " + _expectedSettingsCount + " parameters present.\n\nIf it is deleted, NWNLogRotator will create a new one automatically with the default settings.", "Invalid Settings File!");
                 return false;
             }
 
-            EnactSettings();
             return true;
         }
 
-        public void EnactSettings( )
+        public Settings InitSettingsIni()
         {
+            _settings = new Settings();
 
-        }
-
-        public void InitSettingsIni()
-        {
             if (SettingsExist_Get() == false)
             {
                 CreateSettingsIni();
@@ -168,6 +163,8 @@ namespace NWNLogRotator.Components
             {
                 ReadSettingsIni();
             }
+
+            return _settings;
         }
     }
 }
