@@ -93,17 +93,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\Settings.cs" />
-    <Compile Include="Components\Parser.cs">
+    <Compile Include="Classes1\Settings.cs" />
+    <Compile Include="Components1\Parser.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\Parser.Designer.cs">
+    <Compile Include="Components1\Parser.Designer.cs">
       <DependentUpon>Parser.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\FileHandler.cs">
+    <Compile Include="Components1\FileHandler.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\FileHandler.Designer.cs">
+    <Compile Include="Components1\FileHandler.Designer.cs">
       <DependentUpon>FileHandler.cs</DependentUpon>
     </Compile>
     <Compile Include="NWNLogRotator.xaml.cs">
