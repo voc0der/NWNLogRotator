@@ -36,8 +36,8 @@ namespace NWNLogRotator
         private void SetupApplication()
         {
             IterateNWN_Watcher( false );
-
             LoadSettings_Handler();
+            LoadTray_Handler();
         }
 
         private Settings Settings_Get()
@@ -234,6 +234,11 @@ namespace NWNLogRotator
             _settings.UseTheme = "light";
         }
 
+        private void LoadTray_Handler()
+        {
+
+        }
+
         private void InvertColorScheme(object sender, MouseButtonEventArgs e)
         {
             // white => black 
@@ -289,6 +294,15 @@ namespace NWNLogRotator
         {
             ServerNameColorTextBox.Text = "";
             ServerNameColorTextBox.Visibility = Visibility.Collapsed;
+        }
+        protected override void OnStateChanged(EventArgs e)
+        {
+            /* works but we need handlers so we dont send them down a black hole
+            if (WindowState == System.Windows.WindowState.Minimized)
+                this.Hide();
+
+            base.OnStateChanged(e);
+            */
         }
     }
 }
