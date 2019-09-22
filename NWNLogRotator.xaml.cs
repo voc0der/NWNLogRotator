@@ -96,7 +96,15 @@ namespace NWNLogRotator
             string PathToLog = PathToLogTextBox.Text;
             int MinimumRowsToInteger = int.Parse(MinimumRowsCountSlider.Value.ToString());
             string ServerName = "";
+            if(ServerNameCheckBox.IsChecked == true && ServerNameTextBox.Text != "")
+            {
+                ServerName = ServerNameTextBox.Text;
+            }
             string ServerNameColor = "";
+            if (ServerNameCheckBox.IsChecked == true && ServerNameTextBox.Text != "")
+            {
+                ServerNameColor = ServerNameColorTextBox.Text;
+            }
             bool? EventText = EventTextCheckBox.IsChecked;
             bool? CombatText = CombatTextCheckBox.IsChecked;
             string UseTheme = _settings.UseTheme;
@@ -155,70 +163,87 @@ namespace NWNLogRotator
             if (_settings.ServerName != "")
             {
                 ServerNameCheckBox.IsChecked = true;
-                // left to implement: ServerNameTextBox.Text = _settings.ServerName;
+                ServerNameTextBox.Text = _settings.ServerName;
             }
             if (_settings.ServerNameColor != "")
             {
                 ServerNameColorCheckBox.IsChecked = true;
-                // left to implement: ServerNameColorTextBox.Text = _settings.ServerNameColor;
+                ServerNameColorTextBox.Text = _settings.ServerNameColor;
             }
             EventTextCheckBox.IsChecked = _settings.EventText;
             CombatTextCheckBox.IsChecked = _settings.CombatText;
 
+            if(_settings.UseTheme == "light")
+            {
+                ActivateLightTheme();
+            }
+            else if(_settings.UseTheme == "dark")
+            {
+                ActivateDarkTheme();
+            }
+
             UpdateResultsPane(3);
+        }
+
+        private void ActivateDarkTheme()
+        {
+            // purple => black => purple 
+            LinearGradientBrush myBrush = new LinearGradientBrush();
+            myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 0.0));
+            myBrush.GradientStops.Add(new GradientStop(Colors.Black, 0.5));
+            myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 1.0));
+            Grid.Background = myBrush;
+
+            OutputDirectoryTextBox.Background = Brushes.Black;
+            PathToLogTextBox.Background = Brushes.Black;
+            OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.White);
+            PathToLogTextBox.Foreground = new SolidColorBrush(Colors.White);
+            SettingsTextBlock.Foreground = new SolidColorBrush(Colors.White);
+            OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.White);
+            PathToLogLabel.Foreground = new SolidColorBrush(Colors.White);
+            FlagGroupBox.Foreground = new SolidColorBrush(Colors.White);
+            ServerNameCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            ServerNameColorCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            EventTextCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.White);
+            MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.White);
+
+            _settings.UseTheme = "dark";
+        }
+
+        private void ActivateLightTheme()
+        {
+            Grid.Background = Brushes.White;
+
+            OutputDirectoryTextBox.Background = Brushes.White;
+            PathToLogTextBox.Background = Brushes.White;
+            OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.Black);
+            PathToLogTextBox.Foreground = new SolidColorBrush(Colors.Black);
+            SettingsTextBlock.Foreground = new SolidColorBrush(Colors.Black);
+            OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.Black);
+            PathToLogLabel.Foreground = new SolidColorBrush(Colors.Black);
+            FlagGroupBox.Foreground = new SolidColorBrush(Colors.Black);
+            ServerNameCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            ServerNameColorCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            EventTextCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.Black);
+            MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.Black);
+
+            _settings.UseTheme = "light";
         }
 
         private void InvertColorScheme(object sender, MouseButtonEventArgs e)
         {
             // white => black 
-            if(Grid.Background == Brushes.White || Grid.Background == null )
+            if(_settings.UseTheme == "light")
             {
-                // purple => black => purple 
-                LinearGradientBrush myBrush = new LinearGradientBrush();
-                myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 0.0));
-                myBrush.GradientStops.Add(new GradientStop(Colors.Black, 0.5));
-                myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 1.0));
-                Grid.Background = myBrush;
-
-                OutputDirectoryTextBox.Background = Brushes.Black;
-                PathToLogTextBox.Background = Brushes.Black;
-                OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.White);
-                PathToLogTextBox.Foreground = new SolidColorBrush(Colors.White);
-                SettingsTextBlock.Foreground = new SolidColorBrush(Colors.White);
-                OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.White);
-                PathToLogLabel.Foreground = new SolidColorBrush(Colors.White);
-                FlagGroupBox.Foreground = new SolidColorBrush(Colors.White);
-                ServerNameCheckBox.Foreground = new SolidColorBrush(Colors.White);
-                ServerNameColorCheckBox.Foreground = new SolidColorBrush(Colors.White);
-                EventTextCheckBox.Foreground = new SolidColorBrush(Colors.White);
-                CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.White);
-                MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.White);
-                MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.White);
-
-                _settings.UseTheme = "dark";
+                ActivateDarkTheme();
             }
-            // black => white
             else
             {
-                // white background
-                Grid.Background = Brushes.White;
-
-                OutputDirectoryTextBox.Background = Brushes.White;
-                PathToLogTextBox.Background = Brushes.White;
-                OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.Black);
-                PathToLogTextBox.Foreground = new SolidColorBrush(Colors.Black);
-                SettingsTextBlock.Foreground = new SolidColorBrush(Colors.Black);
-                OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.Black);
-                PathToLogLabel.Foreground = new SolidColorBrush(Colors.Black);
-                FlagGroupBox.Foreground = new SolidColorBrush(Colors.Black);
-                ServerNameCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-                ServerNameColorCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-                EventTextCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-                CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-                MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.Black);
-                MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.Black);
-
-                _settings.UseTheme = "light";
+                ActivateLightTheme();
             }
 
         }
@@ -242,6 +267,28 @@ namespace NWNLogRotator
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Settings_Save();
+        }
+
+        private void ServerNameCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            ServerNameTextBox.Visibility = Visibility.Visible;
+        }
+
+        private void ServerNameCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        { 
+            ServerNameTextBox.Text = "";
+            ServerNameTextBox.Visibility = Visibility.Collapsed;
+        }
+
+        private void ServerNameColorCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            ServerNameColorTextBox.Visibility = Visibility.Visible;
+        }
+
+        private void ServerNameColorCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ServerNameColorTextBox.Text = "";
+            ServerNameColorTextBox.Visibility = Visibility.Collapsed;
         }
     }
 }
