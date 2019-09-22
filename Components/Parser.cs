@@ -57,23 +57,59 @@ namespace NWNLogRotator.Components
             // combat text removal
             if (_run_settings.CombatText == true)
             {
-                NWNLog = Regex.Replace(NWNLog, @"(/.+? (?=.*)\*{ 1}hit\*{ 1}.*\s\:\s\(\d{ 1,}\s\+\s\d{ 1,}\s\=\s\d{ 1,}.*\){ 1}\r\n/g)", "", RegexOptions.IgnoreCase);
+                // todo; make into a component
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\*{1}hit\*{1}.*\s\:\s\(\d{1,}\s\+\s\d{1,}\s\=\s\d{1,}.*\){1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)damages\s.*\:\s{1}\d{1,}\s{1}\({1}\d{1,}\s{1}.*\){1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\*{1}parried\*{1}.*\({1}\d{1,}.*\){1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}[a-zA-Z]*\:{1}\s{1}Damage\s{1}[a-zA-Z]*\s{1}absorbs\s{1}.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\*{1}target concealed\:{1}.*\:{1}\s{1}\({1}\d{1,}.*\){1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\*{1}critical hit\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\*{1}resisted\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)Immune\s{1}to\s{1}Critical\s{1}Hits\.{1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\*{1}miss\*{1}.*\s\:\s\(\d{1,}\s{1}.*\d{1,}\s\=\s\d{1,}\)\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\*{1}success\*{1}\s{1}\:{1}\s{1}\(\d{1,}.*\){1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\*{1}failure\*{1}.*\s\:\s{1}\({1}.*\){1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\:\s{1}Initiative\s{1}Roll\s{1}\:\s\d{1,}\s\:\s\(\d{1,}\s\+\s{1}\d{1,}\s{1}\={1}\s{1}\d{1,}\){1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\:{1}\s{1}Damage Immunity\s{1}absorbs.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\:{1}\s{1}Immune to Sneak Attacks\.{1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\:{1}\s{1}Immune to Negative Levels\.{1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\:{1}\s{1}Spell Level Absorption absorbs\s{1}\d{1,}.*\:{1}\s{1}\d{1,}.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}[a-zA-Z]*cast.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}[a-zA-Z]*uses.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}[a-zA-Z]*enables.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)[a-zA-Z]*\s{1}attempts\s{1}to\s{1}.*\:\s{1}.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)[a-zA-Z]*\:{1}\s{1}Healed\s{1}\d{1,}\s{1}hit.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)[a-zA-Z]*\:{1}\sImmune to [a-zA-Z]*.*\.{1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}Dispel\s{1}Magic\s{1}\:{1}\s{1}[a-zA-z]*.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}Experience Points Gained\:{1}\s{1,}\d{1,}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)There are signs of recent fighting here...\*{1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)Stale temporary properties detected, cleaning item\.{1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}\[Check for loot\:{1}\s{1}\d{1,}.*\]{1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}You.{1}ve reached your maximum level.\s{1}.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}Devastating Critical Hit!\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1,}Done resting\.{1}.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1,}You triggered a Trap!{1}.*\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}You cannot target a creature you cannot see or do not have a line of sight to\.{1}\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}Weapon equipped as a one-handed weapon.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}You cannot rest so soon after exerting yourself.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}Equipping this armor has disabled your monk abilities.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}No resting is allowed in this area.\r\n", "");
             }
 
             // core format replacements
-            NWNLog = Regex.Replace(NWNLog, @"\[CHAT WINDOW TEXT\]", "", RegexOptions.IgnoreCase);
-            NWNLog = Regex.Replace(NWNLog, @"\[{ 1}[A-z]{3}\s[A - z]{3}\s[0 - 9]{2}\s", "<span class='timestamp'>[", RegexOptions.IgnoreCase);
-            NWNLog = Regex.Replace(NWNLog, @":[0-9]*]{1}", "]</span>", RegexOptions.IgnoreCase);
+            NWNLog = Regex.Replace(NWNLog, @"\[CHAT WINDOW TEXT\]", "");
+            NWNLog = Regex.Replace(NWNLog, @"\[{1}[A-z]{3}\s[A-z]{3}\s[0-9]{2}\s", "<span class='timestamp'>[");
+            NWNLog = Regex.Replace(NWNLog, @"\:{1}[0-9]*]{1}", "]</span>");
             // actors
-            NWNLog = Regex.Replace(NWNLog, @"\]<\/span>((...).*: )", "]</span><span class='actors'>$1</span>", RegexOptions.IgnoreCase);
+            NWNLog = Regex.Replace(NWNLog, @"\]<\/span>((...).*: )", "]</span><span class='actors'>$1</span>");
             // tells
-            NWNLog = Regex.Replace(NWNLog, @":\s?<\/span>\s?(\[Tell])(.*.*)", "</span><span class='tells'> $1:$2</span>", RegexOptions.IgnoreCase);
+            NWNLog = Regex.Replace(NWNLog, @":\s?<\/span>\s?(\[Tell])(.*.*)", "</span><span class='tells'> $1:$2</span><br />");
             // whispers 
-            NWNLog = Regex.Replace(NWNLog, @":\s?<\/span>\s?(\[Whisper])(.*.*)", "</span><span class='whispers'> $1:$2</span>", RegexOptions.IgnoreCase);
+            NWNLog = Regex.Replace(NWNLog, @":\s?<\/span>\s?(\[Whisper])(.*.*)", "</span><span class='whispers'> $1:$2</span><br />");
             // emotes 
-            NWNLog = Regex.Replace(NWNLog, @"(\*.*\*)", "<span class='emotes'>$1</span>", RegexOptions.IgnoreCase);
+            NWNLog = Regex.Replace(NWNLog, @"(\*.*\*)", "<span class='emotes'>$1</span>");
             // html formatting
-            NWNLog = Regex.Replace(NWNLog, @"\r\n", "<br />", RegexOptions.IgnoreCase) + postLog;
+            NWNLog = Regex.Replace(NWNLog, @"\r\n", "<br />") + postLog;
 
             ParsedNWNLog = preLog + NWNLog + postLog;
 

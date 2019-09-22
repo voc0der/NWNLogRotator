@@ -28,7 +28,7 @@
         <CheckBox x:Name="ServerNameColorCheckBox" Content="Server Name Color" Grid.Column="2" HorizontalAlignment="Right" Margin="0,220,292.667,0" VerticalAlignment="Top" RenderTransformOrigin="0.522,-0.045" Checked="ServerNameColorCheckBox_Checked" Unchecked="ServerNameColorCheckBox_Unchecked"/>
         <CheckBox x:Name="ServerNameCheckBox" Content="Server Name" Grid.Column="2" HorizontalAlignment="Right" Margin="0,195,324.667,0" VerticalAlignment="Top" Checked="ServerNameCheckBox_Checked" Unchecked="ServerNameCheckBox_Unchecked"/>
         <Button Content="Save Settings" Grid.Column="2" HorizontalAlignment="Left" Margin="14,322,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
-        <Button Content="Start in Tray" Grid.Column="2" HorizontalAlignment="Left" Margin="130,322,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867"/>
+        <Button Content="Start in Tray" Grid.Column="2" HorizontalAlignment="Left" Margin="130,322,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867" Click="Button_Click_2"/>
         <StatusBar HorizontalAlignment="Left" Height="31" Margin="0,361,-0.333,0" VerticalAlignment="Top" Width="495" Grid.ColumnSpan="3" Background="Black">
             <TextBlock x:Name="EventStatusTextBlock" TextWrapping="Wrap" Text="event.status" Width="191" RenderTransformOrigin="1.135,0.25" Height="29"/>
             <Separator Margin="0,0,0,-0.333" Width="166" Visibility="Hidden" />

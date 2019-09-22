@@ -316,5 +316,10 @@ namespace NWNLogRotator
         {
             NWNLog_Save();
         }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("This feature is currently in development");
+        }
     }
 }
