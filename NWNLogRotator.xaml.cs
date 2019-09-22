@@ -81,11 +81,26 @@ namespace NWNLogRotator
 
         private void Settings_Save()
         {
+            string OutputDirectory = OutputDirectoryTextBox.Text;
+            string PathToLog = PathToLogTextBox.Text;
             int MinimumRowsToInteger = int.Parse(MinimumRowsCountTextBlock.Text.Substring(1));
+            string ServerName = "";
+            string ServerNameColor = "";
+            bool? EventText = EventTextCheckBox.IsChecked;
+            bool? CombatText = CombatTextCheckBox.IsChecked;
+            string UseTheme = "";
+            // no implementation yet
+            bool Tray = false;
 
-            var SavedSettings = new Settings( OutputDirectoryTextBox.Text,
-                                              PathToLogTextBox.Text,
-                                              MinimumRowsToInteger
+            var SavedSettings = new Settings( OutputDirectory,
+                                              PathToLog,
+                                              MinimumRowsToInteger,
+                                              ServerName,
+                                              ServerNameColor,
+                                              EventText,
+                                              CombatText,
+                                              UseTheme,
+                                              Tray
                                             );
 
             UpdateResultsPane(2);

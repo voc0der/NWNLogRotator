@@ -91,6 +91,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="classes\Settings.cs" />
+    <Compile Include="components\FileHandler.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="components\FileHandler.Designer.cs">
+      <DependentUpon>FileHandler.cs</DependentUpon>
+    </Compile>
     <Compile Include="NWNLogRotator.xaml.cs">
       <DependentUpon>NWNLogRotator.xaml</DependentUpon>
       <SubType>Code</SubType>
