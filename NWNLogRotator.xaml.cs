@@ -78,7 +78,7 @@ namespace NWNLogRotator
             return false;
         }
 
-        private void Settings_Save()
+        private Settings CurrentSettings_Get()
         {
             string OutputDirectory = OutputDirectoryTextBox.Text;
             string PathToLog = PathToLogTextBox.Text;
@@ -110,10 +110,7 @@ namespace NWNLogRotator
                                               Tray
                                             );
 
-            FileHandler instance = new FileHandler();
-            instance.SaveSettingsIni(_settings);
-
-            UpdateResultsPane(2);
+            return _settings;
         }
 
         public async void UpdateResultsPane(int result)
@@ -248,6 +245,8 @@ namespace NWNLogRotator
         {
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
 
+            _settings = CurrentSettings_Get();
+
             FileHandler instance = new FileHandler();
             string _filepathandname = instance.ReadNWNLogAndInvokeParser(_settings);
          
@@ -301,7 +300,12 @@ namespace NWNLogRotator
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Settings_Save();
+            _settings = CurrentSettings_Get();
+
+            FileHandler instance = new FileHandler();
+            instance.SaveSettingsIni(_settings);
+
+            UpdateResultsPane(2);
         }
 
         private void ServerNameCheckBox_Checked(object sender, RoutedEventArgs e)
