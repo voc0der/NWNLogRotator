@@ -88,7 +88,7 @@ namespace NWNLogRotator.Components
                 NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}Weapon equipped as a one-handed weapon.\r\n", "");
                 NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}You cannot rest so soon after exerting yourself.\r\n", "");
                 NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}Equipping this armor has disabled your monk abilities.\r\n", "");
-                //NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}No resting is allowed in this area.\r\n", "");
+                NWNLog = Regex.Replace(NWNLog, @".+?(?=.*)\s{1}No resting is allowed in this area.\r\n", "");
             }
 
             // combat text removal
@@ -143,6 +143,20 @@ namespace NWNLogRotator.Components
             ParsedNWNLog = preLog + NWNLog + postLog;
 
             return ParsedNWNLog;
+        }
+
+        public bool ActorOccurences_Get(string ParsedNWNLog, Settings _run_settings)
+        {
+            Match ActorOccurences = Regex.Match(ParsedNWNLog, @"<span class=\'actors\'>");
+
+            if(ActorOccurences.Length >= _run_settings.MinimumRowsCount)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

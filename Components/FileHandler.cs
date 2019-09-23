@@ -215,6 +215,7 @@ namespace NWNLogRotator.Components
             DateTime _dateTime = CurrentDateTime_Get();
             string filepath = FilePath_Get(_run_settings);
             string filename = FileNameGenerator_Get(_dateTime);
+            bool ActorThresholdMet = true;
 
             try
             {
@@ -231,10 +232,22 @@ namespace NWNLogRotator.Components
                                 MessageBoxImage.Error);
                 return "";
             }
-            
+
 
             Parser instance = new Parser();
             result = instance.ParseNWNLog(result, _run_settings, _dateTime);
+
+            // maintain minimum row lines requirement
+            ActorThresholdMet = instance.ActorOccurences_Get(result, _run_settings);
+            if (ActorThresholdMet == false)
+            {
+                MessageBox.Show("This NWN Log did not meet the 'Minimum Rows' requirement. The specified log file was not saved!",
+                                "Minimum Rows Information",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
+                return "";
+            }
+                
 
             try
             {
