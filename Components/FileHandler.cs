@@ -158,7 +158,10 @@ namespace NWNLogRotator.Components
 
             if (Count != _expectedSettingsCount)
             {
-                MessageBox.Show("Default Configuration Loaded:\n\nPlease ensure NWNLogRotator.ini is properly formatted, and has " + _expectedSettingsCount + " parameters present.\n\nIf it is deleted, NWNLogRotator will create a new one automatically with the default settings.", "Invalid Settings File!");
+                MessageBox.Show("Default Configuration Loaded:\n\nPlease ensure NWNLogRotator.ini is properly formatted, and has " + _expectedSettingsCount + " parameters present.\n\nIf it is deleted, NWNLogRotator will create a new one automatically with the default settings.",
+                                "Invalid Settings File!",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
                 return false;
             }
 
@@ -213,10 +216,22 @@ namespace NWNLogRotator.Components
             string filepath = FilePath_Get(_run_settings);
             string filename = FileNameGenerator_Get(_dateTime);
 
-            using (StreamReader streamReader = new StreamReader(_run_settings.PathToLog, Encoding.UTF8))
+            try
             {
-                result = streamReader.ReadToEnd();
+                using (StreamReader streamReader = new StreamReader(_run_settings.PathToLog, Encoding.UTF8))
+                {
+                    result = streamReader.ReadToEnd();
+                }
             }
+            catch
+            {
+                MessageBox.Show("NWNLogRotator could not read the Log at PathToLog specified!",
+                                "Invalid Log Location",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                return "";
+            }
+            
 
             Parser instance = new Parser();
             result = instance.ParseNWNLog(result, _run_settings, _dateTime);
@@ -237,7 +252,18 @@ namespace NWNLogRotator.Components
                     // create folder
                     if (!Directory.Exists(filepath))
                     {
-                        Directory.CreateDirectory(filepath);
+                        try
+                        {
+                            Directory.CreateDirectory(filepath);
+                        }
+                        catch
+                        {
+                            MessageBox.Show("NWNLogRotator was not able create a folder or verify the folder structure of the Output Directory.",
+                                            "Invalid Output Directory",
+                                            MessageBoxButton.OK,
+                                            MessageBoxImage.Error);
+                            return "";
+                        }
                         try
                         {
                             File.WriteAllText(filepath + filename, result);
@@ -245,7 +271,10 @@ namespace NWNLogRotator.Components
                         }
                         catch
                         {
-                            MessageBox.Show("NWNLogRotator was not able to write to the entered Output Directory. Please ensure the file structure exists.", "Output Directory Error");
+                            MessageBox.Show("NWNLogRotator was not able to write to the entered Output Directory. Please ensure the file structure exists.",
+                                "Output Directory Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
                         }
                     }
                 }
