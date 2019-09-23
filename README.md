@@ -1,11 +1,18 @@
 # NWNLogRotator
-Transforms and parses any Neverwinter Nights chat log into beautiful HTML. Written in C# .NET WPF, and is a WIP!
+Transforms and parses any Neverwinter Nights chat log into beautiful HTML. Written in C# .NET WPF, and is a WIP! Both EE and 1.69 compatible.
+
+# Automation
+While open, NWNLogRotator will try process new logs automatically if your directories are configured to match with your Neverwinter Nights default log storage.
 
 # Notes
-1) This exe is unsigned and will probably prevent it from running unless you click "More Info" -> "Run anyways". It is simply not finished, nor published anywhere.
-2) If open the log rotator, then NWN, then it detects the window, and then detects you quit, it will try to process the log automatically. This behavior will be refined soon.
-3) Please report any terrible bugs, I release a lot of it is simply not done but it helps. 
+1) This application may warn you that the publisher is not signed or verified, but if you click 'More Info' it will allow you to run anyways.
+2) Minimize to tray is not finished or implemented at all.
+3) This will probably not work with servers who artificially inject invalid log sequences into the combat log.
+4) Please report any bugs or post suggestions. 
 
-Download <a href="https://github.com/ravenmyst/NWNLogRotator/releases/download/0.1/NWNLogRotator.exe">Here</a>
+# In Development
+1) Allowing automatic modification of nwnplayer.ini file to Enable logging.
+2) The tray features
+3) Automation: Detect NWN log directory button that rotates between known stores and finds them.
 
-ENJOY!!
+Download <a href="https://github.com/ravenmyst/NWNLogRotator/releases">Here</a>
