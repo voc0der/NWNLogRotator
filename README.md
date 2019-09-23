@@ -18,7 +18,8 @@ While open, NWNLogRotator will try to process new logs automatically based on th
 1) This application may warn you that the publisher is not signed or verified, but if you click 'More Info' it will allow you to run anyways.
 2) Minimize to tray is not finished or implemented at all.
 3) The parsing will not be accurate if obtained from a third-party server that alters the standard NWN logging.
-4) Please report any bugs or post suggestions. 
+4) Changing the theme is available by clicking the "NWNLogRotator" header.
+5) Please report any bugs or post suggestions. 
 
 # Releases
 Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases">Here</a>.
