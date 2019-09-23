@@ -10,9 +10,10 @@ While open, NWNLogRotator will try process new logs automatically if your direct
 3) This will probably not work with servers who artificially inject invalid log sequences into the combat log.
 4) Please report any bugs or post suggestions. 
 
+# Releases
+Download <a href="https://github.com/ravenmyst/NWNLogRotator/releases">Here</a>
+
 # In Development
 1) Allowing automatic modification of nwnplayer.ini file to Enable logging.
 2) The tray features
 3) Automation: Detect NWN log directory button that rotates between known stores and finds them.
-
-Download <a href="https://github.com/ravenmyst/NWNLogRotator/releases">Here</a>
