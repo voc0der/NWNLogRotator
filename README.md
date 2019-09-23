@@ -12,7 +12,7 @@ Important: Open Windows Explorer and enter %HOMEPATH%, and the last directory th
 | Path to Log | C:\Program Files (x86)\Neverwinter Nights\logs\nwClientLog1.txt | Acess log from 1.69 default log directory |
 
 # Automation (How it works)
-While open, NWNLogRotator will try process new logs automatically based on the status of whether Neverwinter Nights is running. If your directories are configured to match with your Neverwinter Nights default log storage, it will process them automatically.
+While open, NWNLogRotator will try to process new logs automatically based on the status of whether Neverwinter Nights is running. If your directories are configured to match with your Neverwinter Nights default log storage, it will process them automatically.
 
 # Notes
 1) This application may warn you that the publisher is not signed or verified, but if you click 'More Info' it will allow you to run anyways.
