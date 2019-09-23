@@ -8,8 +8,8 @@ Important: Open Windows Explorer and enter %HOMEPATH%, and the last directory th
 | ------------- | ------------- | ------------- |
 | Output Directory | C:\Users\\_USER_\Documents\Neverwinter Nights\logs\ | New logs stored in default Steam EE log directory |
 | Output Directory | C:\Program Files (x86)\Neverwinter Nights\logs\ | New logs stored in default 1.69 log directory |
-| Path to Log | C:\Users\\_USER_\Documents\Neverwinter Nights\logs\nwClientLog1.txt | Acess log from Steam EE default log directory |
-| Path to Log | C:\Program Files (x86)\Neverwinter Nights\logs\nwClientLog1.txt | Acess log from 1.69 default log directory |
+| Path to Log | C:\Users\\_USER_\Documents\Neverwinter Nights\logs\nwClientLog1.txt | Get log from Steam EE default log directory |
+| Path to Log | C:\Program Files (x86)\Neverwinter Nights\logs\nwClientLog1.txt | Get log from 1.69 default log directory |
 
 # Automation (How it works)
 While open, NWNLogRotator will try to process new logs automatically based on the status of whether Neverwinter Nights is running. If your directories are configured to match with your Neverwinter Nights default log storage, it will process them automatically.
