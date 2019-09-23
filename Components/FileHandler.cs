@@ -187,14 +187,14 @@ namespace NWNLogRotator.Components
 
             if (!LogBasePath.EndsWith("/"))
             {
-                LogBasePath += "/";
+                LogBasePath += "\\";
             }
 
             // has a server listed
             string ServerName = "Server";
             if (_run_settings.ServerName != "")
             {
-                ServerName = _run_settings.ServerName + "/";
+                ServerName = _run_settings.ServerName + "\\";
                 LogBasePath += ServerName;
             }
 

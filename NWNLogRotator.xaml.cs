@@ -250,15 +250,19 @@ namespace NWNLogRotator
 
             FileHandler instance = new FileHandler();
             string _filepathandname = instance.ReadNWNLogAndInvokeParser(_settings);
-            UpdateResultsPane(1);
-            MessageBoxResult _messageBoxResult = MessageBox.Show("The log file has been generated successfully. Would you like to open the log file now?",
+         
+            if(_filepathandname != "")
+            {
+                UpdateResultsPane(1);
+                MessageBoxResult _messageBoxResult = MessageBox.Show("The log file has been generated successfully. Would you like to open the log file now?",
                             "Success!",
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Question);
 
-            if (_messageBoxResult == MessageBoxResult.Yes)
-                System.Diagnostics.Process.Start(_filepathandname);
-
+                if (_messageBoxResult == MessageBoxResult.Yes)
+                    System.Diagnostics.Process.Start(_filepathandname);
+            }
+            
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
         }
 
