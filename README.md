@@ -30,5 +30,8 @@ Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases">He
 4) Convert FileHandler to a class.
 5) Add Http.Get to allow user to specify custom parsing off a list from a source like github.
 
-# Screenshots and Examples
+# Parsed Neverwinter Night Log Example:
+Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator/master/output/NWNLogExample.html">This Text -> Save as as an HTML and load that downloaded file in a browser!
+
+# NWNLogRotator Screenshot
 ![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/app1.png)
