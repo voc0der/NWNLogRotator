@@ -120,7 +120,7 @@ namespace NWNLogRotator
         {
             if (_settings.Tray == true)
             {
-                TrayButton.Content = "Start Windowed";
+                TrayButton.Content = "Start in Tray";
                 if (doMinimize == true)
                 {
                     WindowState = WindowState.Minimized;
@@ -129,7 +129,7 @@ namespace NWNLogRotator
             }
             else
             {
-                TrayButton.Content = "Start in Tray";
+                TrayButton.Content = "Start Windowed";
             }
         }
 
@@ -223,11 +223,15 @@ namespace NWNLogRotator
 
             OutputDirectoryTextBox.Background = Brushes.Black;
             PathToLogTextBox.Background = Brushes.Black;
+            ServerNameTextBox.Background = Brushes.Black;
+            ServerNameColorTextBox.Background = Brushes.Black;
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.White);
             PathToLogTextBox.Foreground = new SolidColorBrush(Colors.White);
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.White);
             PathToLogLabel.Foreground = new SolidColorBrush(Colors.White);
+            ServerNameTextBox.Foreground = new SolidColorBrush(Colors.White);
+            ServerNameColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             FlagGroupBox.Foreground = new SolidColorBrush(Colors.White);
             ServerNameCheckBox.Foreground = new SolidColorBrush(Colors.White);
             ServerNameColorCheckBox.Foreground = new SolidColorBrush(Colors.White);
@@ -245,11 +249,15 @@ namespace NWNLogRotator
 
             OutputDirectoryTextBox.Background = Brushes.White;
             PathToLogTextBox.Background = Brushes.White;
+            ServerNameTextBox.Background = Brushes.White;
+            ServerNameColorTextBox.Background = Brushes.White;
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.Black);
             PathToLogTextBox.Foreground = new SolidColorBrush(Colors.Black);
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.Black);
             PathToLogLabel.Foreground = new SolidColorBrush(Colors.Black);
+            ServerNameTextBox.Foreground = new SolidColorBrush(Colors.Black);
+            ServerNameColorTextBox.Foreground = new SolidColorBrush(Colors.Black);
             FlagGroupBox.Foreground = new SolidColorBrush(Colors.Black);
             ServerNameCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             ServerNameColorCheckBox.Foreground = new SolidColorBrush(Colors.Black);
