@@ -16,9 +16,10 @@ While open, NWNLogRotator will try to process new logs automatically based on th
 
 # Notes
 1) This application may warn you that the publisher is not signed or verified, but if you click 'More Info' it will allow you to run anyways.
-2) The parsing will not be accurate if obtained from a third-party server that alters the standard NWN logging.
-3) Changing the theme is available by clicking the "NWNLogRotator" header.
-4) Please report any bugs or post suggestions. 
+2) Make sure you have logging enabled if you cannot find a log file. The setting to enable logging is located in nwnplayer.ini as ClientEntireChatWindowLogging = 1 under [Game Options].
+3) The parsing will not be accurate if obtained from a third-party server that alters the standard NWN logging.
+4) Changing the theme is available by clicking the "NWNLogRotator" header.
+5) Please report any bugs or post suggestions. 
 
 # Releases
 Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases">Here</a>.
@@ -30,7 +31,6 @@ Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator
 ![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/app1.png)
 
 # In Development
-1) Allowing automatic modification of nwnplayer.ini file to Enable logging.
-2) Folder picker, or detect NWN log directory button that rotates between known stores and finds them.
-3) Convert FileHandler to a class.
-4) Add Http.Get to allow user to specify custom parsing off a list from a source like github.
+1) Folder picker, or detect NWN log directory button that rotates between known stores and finds them.
+2) Convert FileHandler to a class.
+3) Add Http.Get to allow user to specify custom parsing off a list from a source like github.
