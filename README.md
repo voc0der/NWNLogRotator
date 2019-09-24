@@ -28,3 +28,6 @@ Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases">He
 1) Allowing automatic modification of nwnplayer.ini file to Enable logging.
 2) The "Minimize to tray" features.
 3) Folder picker, or detect NWN log directory button that rotates between known stores and finds them.
+4) Detach parsing from UI thread.
+5) Convert FileHandler to a class.
+6) Add Http.Get for custom server configurations.
