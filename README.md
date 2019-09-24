@@ -23,15 +23,15 @@ While open, NWNLogRotator will try to process new logs automatically based on th
 # Releases
 Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases">Here</a>.
 
+# Example Parsed Log
+Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator/master/output/NWNLogExample.html">This Text</a> then select "Save Link As" and it should save it as an HTML file, viewable in any browser.
+
+# NWNLogRotator Screenshot
+![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/app1.png)
+
 # In Development
 1) Allowing automatic modification of nwnplayer.ini file to Enable logging.
 2) Folder picker, or detect NWN log directory button that rotates between known stores and finds them.
 3) Detach parsing from UI thread.
 4) Convert FileHandler to a class.
 5) Add Http.Get to allow user to specify custom parsing off a list from a source like github.
-
-# Example Parsed Log
-Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator/master/output/NWNLogExample.html">This Text</a> then select "Save Link As" and it should save it as an HTML file, viewable in any browser.
-
-# NWNLogRotator Screenshot
-![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/app1.png)
