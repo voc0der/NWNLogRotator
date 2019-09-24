@@ -30,4 +30,5 @@ Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases">He
 3) Folder picker, or detect NWN log directory button that rotates between known stores and finds them.
 4) Detach parsing from UI thread.
 5) Convert FileHandler to a class.
-6) Add Http.Get for custom server configurations.
+6) Add Http.Get to allow user to specify custom parsing off a list from a source like github.
+7) Fix optional textbox ui style on dark theme and be more intuitive.
