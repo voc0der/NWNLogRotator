@@ -47,6 +47,7 @@ namespace NWNLogRotator
         private async void IterateNWN_Watcher(bool PreviousStatus)
         {
             var Status = NWNProcessStatus_Get();
+
             if (Status == true)
             {
                 NWNStatusTextBlock.Text = "nwmain is active!";
@@ -58,7 +59,9 @@ namespace NWNLogRotator
             {
                 if (PreviousStatus == true)
                 {
-                    NWNLog_Save();
+                    _settings = CurrentSettings_Get();
+                    if (NWNLog_Save(_settings) == true)
+                        UpdateResultsPane(1);
                 }
                 NWNStatusTextBlock.Text = "nwmain not found!";
                 NWNStatusTextBlock.Foreground = new SolidColorBrush(Colors.Red);
@@ -116,6 +119,20 @@ namespace NWNLogRotator
             return _settings;
         }
 
+        private void ToggleLoading_Handler()
+        {
+            if( StatusBarProgressBar.Visibility == Visibility.Collapsed)
+            {
+                StatusBarProgressBar.Visibility = Visibility.Visible;
+                UpdateResultsPane(4);
+            }
+            else
+            {
+                StatusBarProgressBar.Visibility = Visibility.Collapsed;
+                UpdateResultsPane(-1);
+            }
+        }
+
         private void Tray_Set(bool doMinimize)
         {
             if (_settings.Tray == true)
@@ -137,6 +154,10 @@ namespace NWNLogRotator
         {
             switch (result)
             {
+                case -1:
+                    EventStatusTextBlock.Text = "";
+                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    break;
                 case 1:
                     EventStatusTextBlock.Text = "Log Saved Successfully!";
                     EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
@@ -146,36 +167,25 @@ namespace NWNLogRotator
                 case 2:
                     EventStatusTextBlock.Text = "Settings Saved Successfully!";
                     EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
-                    await Task.Delay(2000);
+                    await Task.Delay(1000);
                     EventStatusTextBlock.Text = "";
                     break;
                 case 3:
                     EventStatusTextBlock.Text = "Settings Loaded Successfully!";
                     EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
                     await Task.Delay(2000);
+                    System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                    FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+                    string version = fvi.FileVersion;
+                    version = "v" + version.Substring(2, version.Length - 2);
+                    EventStatusTextBlock.Text = "Version " + version;
+                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    await Task.Delay(1000);
                     EventStatusTextBlock.Text = "";
                     break;
                 case 4:
-                    EventStatusTextBlock.Text = "Saving 20%";
+                    EventStatusTextBlock.Text = "Loading..";
                     EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
-                    break;
-                case 5:
-                    EventStatusTextBlock.Text = "Saving 40%";
-                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
-                    break;
-                case 6:
-                    EventStatusTextBlock.Text = "Saving 60%";
-                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
-                    break;
-                case 7:
-                    EventStatusTextBlock.Text = "Saving 80%";
-                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
-                    break;
-                case 8:
-                    EventStatusTextBlock.Text = "Saving 100%";
-                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
-                    await Task.Delay(2000);
-                    UpdateResultsPane(2);
                     break;
             }
         }
@@ -269,18 +279,13 @@ namespace NWNLogRotator
             _settings.UseTheme = "light";
         }
 
-        private void NWNLog_Save()
+        private bool NWNLog_Save( Settings _settings )
         {
-            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-
-            _settings = CurrentSettings_Get();
-
             FileHandler instance = new FileHandler();
             string _filepathandname = instance.ReadNWNLogAndInvokeParser(_settings);
 
             if (_filepathandname != "")
             {
-                UpdateResultsPane(1);
                 MessageBoxResult _messageBoxResult = MessageBox.Show("The log file has been generated successfully. Would you like to open the log file now?",
                             "Success!",
                             MessageBoxButton.YesNo,
@@ -288,9 +293,11 @@ namespace NWNLogRotator
 
                 if (_messageBoxResult == MessageBoxResult.Yes)
                     System.Diagnostics.Process.Start(_filepathandname);
+
+                return true;
             }
 
-            Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+            return false;
         }
 
         private void LoadTray_Handler()
@@ -368,9 +375,29 @@ namespace NWNLogRotator
         }
         
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            NWNLog_Save();
+            _settings = CurrentSettings_Get();
+            bool SavedLogResult = false;
+            ToggleLoading_Handler();
+            //StatusBarProgressBar.Visibility = Visibility.Visible;
+
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+            await Task.Run(() =>
+            {
+                SavedLogResult = NWNLog_Save(_settings);
+            });
+
+            SavedResult_Callback(SavedLogResult);
+            ToggleLoading_Handler();
+            //StatusBarProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        private void SavedResult_Callback( bool result )
+        {
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+            if (result == true)
+                UpdateResultsPane(1);
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
