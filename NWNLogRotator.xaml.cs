@@ -7,7 +7,9 @@
 using NWNLogRotator.classes;
 using NWNLogRotator.Components;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +21,8 @@ namespace NWNLogRotator
     public partial class MainWindow : Window
     {
         Settings _settings;
+        System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -96,8 +100,7 @@ namespace NWNLogRotator
             bool? EventText = EventTextCheckBox.IsChecked;
             bool? CombatText = CombatTextCheckBox.IsChecked;
             string UseTheme = _settings.UseTheme;
-            // no implementation yet
-            bool Tray = false;
+            bool Tray = _settings.Tray;
 
             _settings = new Settings(OutputDirectory,
                                               PathToLog,
@@ -111,6 +114,23 @@ namespace NWNLogRotator
                                             );
 
             return _settings;
+        }
+
+        private void Tray_Set(bool doMinimize)
+        {
+            if (_settings.Tray == true)
+            {
+                TrayButton.Content = "Start Windowed";
+                if (doMinimize == true)
+                {
+                    WindowState = WindowState.Minimized;
+                    this.Hide();
+                }
+            }
+            else
+            {
+                TrayButton.Content = "Start in Tray";
+            }
         }
 
         public async void UpdateResultsPane(int result)
@@ -267,7 +287,16 @@ namespace NWNLogRotator
 
         private void LoadTray_Handler()
         {
-            // to be implemented
+            ni.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+            ni.Visible = true;
+            ni.DoubleClick +=
+                delegate (object sender, EventArgs args)
+                {
+                    this.Show();
+                    this.WindowState = WindowState.Normal;
+                };
+
+            Tray_Set(true);
         }
 
         private void InvertColorScheme(object sender, MouseButtonEventArgs e)
@@ -329,15 +358,7 @@ namespace NWNLogRotator
             ServerNameColorTextBox.Text = "";
             ServerNameColorTextBox.Visibility = Visibility.Collapsed;
         }
-        protected override void OnStateChanged(EventArgs e)
-        {
-            /* works but we need handlers so we dont send them down a black hole
-            if (WindowState == System.Windows.WindowState.Minimized)
-                this.Hide();
-
-            base.OnStateChanged(e);
-            */
-        }
+        
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -346,10 +367,20 @@ namespace NWNLogRotator
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("This feature is currently in development",
-                            "Alpha",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
+            _settings.Tray = _settings.Tray ? false : true;
+            Tray_Set(false);
+        }
+        protected override void OnStateChanged(EventArgs e)
+        {
+            if (WindowState == System.Windows.WindowState.Minimized)
+                this.Hide();
+
+            base.OnStateChanged(e);
+        }
+        private void WindowClosed_Event(object sender, CancelEventArgs e)
+        {
+            // example of overload use : e.Cancel = true;
+            ni.Visible = false;
         }
     }
 }
