@@ -1,5 +1,4 @@
 # NWNLogRotator
-![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/app1.png)
 Transforms and parses any Neverwinter Nights chat log into beautiful HTML. Written in C# .NET. NWNLogRotator is both Enhanced Edition and 1.69 compatible.
 
 # Configuration Examples
@@ -30,3 +29,6 @@ Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases">He
 3) Detach parsing from UI thread.
 4) Convert FileHandler to a class.
 5) Add Http.Get to allow user to specify custom parsing off a list from a source like github.
+
+# Screenshots and Examples
+![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/app1.png)
