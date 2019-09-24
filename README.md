@@ -31,7 +31,7 @@ Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases">He
 5) Add Http.Get to allow user to specify custom parsing off a list from a source like github.
 
 # Parsed Neverwinter Night Log Example:
-Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator/master/output/NWNLogExample.html">This Text -> Save as as an HTML and load that downloaded file in a browser!
+Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator/master/output/NWNLogExample.html">This Text -> Select Save Link Target and it should save it as an HTML. Double click to see it live in a browser!
 
 # NWNLogRotator Screenshot
 ![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/app1.png)
