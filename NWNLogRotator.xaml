@@ -18,8 +18,8 @@
         <TextBox x:Name="OutputDirectoryTextBox" HorizontalAlignment="Left" Height="23" Margin="121,78,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="226" Grid.Column="2" RenderTransformOrigin="0.965,0.275"/>
         <TextBlock x:Name="SettingsTextBlock" Grid.Column="2" HorizontalAlignment="Left" Margin="103,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="22" MouseDown="InvertColorScheme" MouseEnter="SettingsTextBlock_MouseEnter" MouseLeave="SettingsTextBlock_MouseLeave" ><Run Text="NWNLogRotator"/></TextBlock>
         <GroupBox x:Name="FlagGroupBox" Grid.Column="2" Header="Flags (Optional)" HorizontalAlignment="Right" Height="133" Margin="0,167,66.667,0" VerticalAlignment="Top" Width="360"/>
-        <CheckBox x:Name="EventTextCheckBox" Content="Event Text" Grid.Column="2" HorizontalAlignment="Right" Margin="0,245,339.667,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CombatTextCheckBox" Content="Combat Text" Grid.Column="2" HorizontalAlignment="Right" Margin="0,270,326.667,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609"/>
+        <CheckBox x:Name="EventTextCheckBox" Content="Remove Event Text" Grid.Column="2" HorizontalAlignment="Right" Margin="0,245,293.667,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="CombatTextCheckBox" Content="Remove Combat Text" Grid.Column="2" HorizontalAlignment="Right" Margin="0,270,280.667,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609"/>
         <Label x:Name="PathToLogLabel" Content="Path to Log:" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" Grid.Column="2" RenderTransformOrigin="0.44,2.721"/>
         <TextBox x:Name="PathToLogTextBox" HorizontalAlignment="Left" Height="23" Margin="121,109,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="226" Grid.Column="2" RenderTransformOrigin="0.965,0.275"/>
         <Label x:Name="MinimumRowsLabel" Content="Minimum Rows:" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" Grid.Column="2" RenderTransformOrigin="0.44,2.721"/>
