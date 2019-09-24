@@ -31,6 +31,5 @@ Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator
 ![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/app1.png)
 
 # In Development
-1) Folder picker, or detect NWN log directory button that rotates between known stores and finds them.
-2) Convert FileHandler to a class.
-3) Add Http.Get to allow user to specify custom parsing off a list from a source like github.
+1) Folder picker + File picker and validation.
+2) Optimizing the parser and cleaning and compartementalization.
