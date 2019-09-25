@@ -146,6 +146,7 @@ namespace NWNLogRotator
             else
             {
                 TrayButton.Content = "Start Windowed";
+                ni.Visible = false;
             }
         }
 
@@ -416,7 +417,16 @@ namespace NWNLogRotator
         protected override void OnStateChanged(EventArgs e)
         {
             if (WindowState == System.Windows.WindowState.Minimized)
+            {
                 this.Hide();
+                ni.Visible = true;
+            }
+                
+            if (WindowState == System.Windows.WindowState.Normal)
+            {
+                ni.Visible = false;
+            }
+                
 
             base.OnStateChanged(e);
         }
