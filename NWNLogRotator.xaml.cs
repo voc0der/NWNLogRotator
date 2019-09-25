@@ -20,6 +20,7 @@ namespace NWNLogRotator
 {
     public partial class MainWindow : Window
     {
+        FileHandler instance = new FileHandler();
         Settings _settings;
         System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
 
@@ -39,7 +40,6 @@ namespace NWNLogRotator
 
         private Settings Settings_Get()
         {
-            FileHandler instance = new FileHandler();
             _settings = instance.InitSettingsIni();
             return _settings;
         }
@@ -68,7 +68,6 @@ namespace NWNLogRotator
                 await Task.Delay(10000);
                 IterateNWN_Watcher(false);
             }
-            // eventually obtain the Path automatically if it's checked (scrape files in known locs, find dates, if null do default)
         }
 
         private bool NWNProcessStatus_Get()
@@ -119,7 +118,7 @@ namespace NWNLogRotator
             return _settings;
         }
 
-        private void ToggleLoading_Handler()
+        private void SaveToggle_Event()
         {
             if (StatusBarProgressBar.Visibility == Visibility.Collapsed)
             {
@@ -231,6 +230,12 @@ namespace NWNLogRotator
             myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 1.0));
             Grid.Background = myBrush;
 
+            RunOnceButton.Background = Brushes.Black;
+            RunOnceButton.Foreground = new SolidColorBrush(Colors.White);
+            TrayButton.Background = Brushes.Black;
+            TrayButton.Foreground = new SolidColorBrush(Colors.White);
+            SaveSettingsButton.Background = Brushes.Black;
+            SaveSettingsButton.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryTextBox.Background = Brushes.Black;
             PathToLogTextBox.Background = Brushes.Black;
             ServerNameTextBox.Background = Brushes.Black;
@@ -257,6 +262,12 @@ namespace NWNLogRotator
         {
             Grid.Background = Brushes.White;
 
+            RunOnceButton.Background = Brushes.White;
+            RunOnceButton.Foreground = new SolidColorBrush(Colors.Black);
+            TrayButton.Background = Brushes.White;
+            TrayButton.Foreground = new SolidColorBrush(Colors.Black);
+            SaveSettingsButton.Background = Brushes.White;
+            SaveSettingsButton.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryTextBox.Background = Brushes.White;
             PathToLogTextBox.Background = Brushes.White;
             ServerNameTextBox.Background = Brushes.White;
@@ -378,8 +389,7 @@ namespace NWNLogRotator
         {
             _settings = CurrentSettings_Get();
             bool SavedLogResult = false;
-            ToggleLoading_Handler();
-            //StatusBarProgressBar.Visibility = Visibility.Visible;
+            SaveToggle_Event();
 
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             await Task.Run(() =>
@@ -388,8 +398,7 @@ namespace NWNLogRotator
             });
 
             SavedResult_Callback(SavedLogResult);
-            ToggleLoading_Handler();
-            //StatusBarProgressBar.Visibility = Visibility.Collapsed;
+            SaveToggle_Event();
         }
 
         private void SavedResult_Callback(bool result)
@@ -413,7 +422,6 @@ namespace NWNLogRotator
         }
         private void WindowClosed_Event(object sender, CancelEventArgs e)
         {
-            // example of overload use : e.Cancel = true;
             ni.Visible = false;
         }
 
@@ -421,6 +429,7 @@ namespace NWNLogRotator
         {
             using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
+                dialog.SelectedPath = _settings.OutputDirectory;
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK)
                     OutputDirectoryTextBox.Text = dialog.SelectedPath;
@@ -430,7 +439,7 @@ namespace NWNLogRotator
         private void Image_MouseDown2(object sender, MouseButtonEventArgs e)
         {
             var fileDialog = new System.Windows.Forms.OpenFileDialog();
-            fileDialog.InitialDirectory = "c:\\";
+            fileDialog.InitialDirectory = _settings.PathToLog;
             fileDialog.Filter = "txt file (*.txt)|*.txt";
             fileDialog.FilterIndex = 1;
             fileDialog.RestoreDirectory = true;
