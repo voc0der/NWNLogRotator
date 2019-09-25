@@ -50,7 +50,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ravenmyst.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Images\ravenmyst.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
@@ -148,7 +148,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ravenmyst.ico" />
+    <Resource Include="Assets\Images\ravenmyst.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -161,6 +161,15 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\DownloadFolder_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\AssociationEditor_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\screenshot_nwnlr1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

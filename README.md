@@ -28,8 +28,7 @@ Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases">He
 Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator/master/output/NWNLogExample.html">This Text</a> then select "Save Link As" and it should save it as an HTML file, viewable in any browser.
 
 # NWNLogRotator Screenshot
-![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/app1.png)
+![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/Assets/Images/screenshot_nwnlr1.png)
 
 # In Development
-1) Folder picker + File picker and validation.
-2) Optimizing the parser and cleaning and compartementalization.
+1) Optimizing the parser and cleaning and compartementalization. (Credits to BasicHuman)

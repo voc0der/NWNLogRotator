@@ -121,7 +121,7 @@ namespace NWNLogRotator
 
         private void ToggleLoading_Handler()
         {
-            if( StatusBarProgressBar.Visibility == Visibility.Collapsed)
+            if (StatusBarProgressBar.Visibility == Visibility.Collapsed)
             {
                 StatusBarProgressBar.Visibility = Visibility.Visible;
                 UpdateResultsPane(4);
@@ -279,7 +279,7 @@ namespace NWNLogRotator
             _settings.UseTheme = "light";
         }
 
-        private bool NWNLog_Save( Settings _settings )
+        private bool NWNLog_Save(Settings _settings)
         {
             FileHandler instance = new FileHandler();
             string _filepathandname = instance.ReadNWNLogAndInvokeParser(_settings);
@@ -373,7 +373,6 @@ namespace NWNLogRotator
             ServerNameColorTextBox.Text = "";
             ServerNameColorTextBox.Visibility = Visibility.Collapsed;
         }
-        
 
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -393,7 +392,7 @@ namespace NWNLogRotator
             //StatusBarProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private void SavedResult_Callback( bool result )
+        private void SavedResult_Callback(bool result)
         {
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
             if (result == true)
@@ -417,5 +416,38 @@ namespace NWNLogRotator
             // example of overload use : e.Cancel = true;
             ni.Visible = false;
         }
+
+        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                    OutputDirectoryTextBox.Text = dialog.SelectedPath;
+            }
+        }
+
+        private void Image_MouseDown2(object sender, MouseButtonEventArgs e)
+        {
+            var fileDialog = new System.Windows.Forms.OpenFileDialog();
+            fileDialog.InitialDirectory = "c:\\";
+            fileDialog.Filter = "txt file (*.txt)|*.txt";
+            fileDialog.FilterIndex = 1;
+            fileDialog.RestoreDirectory = true;
+            var result = fileDialog.ShowDialog();
+            switch (result)
+            {
+                case System.Windows.Forms.DialogResult.OK:
+                    var file = fileDialog.FileName;
+                    PathToLogTextBox.Text = file;
+                    PathToLogTextBox.ToolTip = file;
+                    break;
+                case System.Windows.Forms.DialogResult.Cancel:
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 }
