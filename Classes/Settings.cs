@@ -1,4 +1,4 @@
-﻿namespace NWNLogRotator.classes
+﻿namespace NWNLogRotator.Classes
 {
     public class Settings
     {
@@ -7,8 +7,8 @@
         public int MinimumRowsCount;
         public string ServerName;
         public string ServerNameColor;
-        public bool? EventText;
-        public bool? CombatText;
+        public bool EventText;
+        public bool CombatText;
         public string UseTheme;
         public bool Tray;
 
@@ -35,8 +35,8 @@
                         int MinimumRowsCount,
                         string ServerName,
                         string ServerNameColor,
-                        bool? EventText,
-                        bool? CombatText,
+                        bool EventText,
+                        bool CombatText,
                         string UseTheme,
                         bool Tray)
         {

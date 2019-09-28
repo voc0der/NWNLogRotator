@@ -1,4 +1,4 @@
-﻿using NWNLogRotator.classes;
+﻿using NWNLogRotator.Classes;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -87,8 +87,8 @@ namespace NWNLogRotator.Components
             int MinimumRowsToInteger = 10;
             string ServerName = "";
             string ServerNameColor = "";
-            bool? EventText = false;
-            bool? CombatText = false;
+            bool EventText = false;
+            bool CombatText = false;
             string UseTheme = "";
             bool Tray = false;
 
@@ -217,12 +217,11 @@ namespace NWNLogRotator.Components
             string filename = FileNameGenerator_Get(_dateTime);
             bool ActorThresholdMet = true;
 
+
+            FileStream fs;
             try
             {
-                using (StreamReader streamReader = new StreamReader(_run_settings.PathToLog, Encoding.UTF8))
-                {
-                    result = streamReader.ReadToEnd();
-                }
+                fs = new FileStream(_run_settings.PathToLog, FileMode.Open);
             }
             catch
             {
@@ -233,12 +232,12 @@ namespace NWNLogRotator.Components
                 return "";
             }
 
-
-            Parser instance = new Parser();
-            result = instance.ParseNWNLog(result, _run_settings, _dateTime);
+            LogParser instance = new LogParser();
+            result = instance.ParseLog(fs, _run_settings.CombatText, _run_settings.EventText, _run_settings.ServerName, _run_settings.ServerNameColor);
+            fs.Close();
 
             // maintain minimum row lines requirement
-            ActorThresholdMet = instance.ActorOccurences_Get(result, _run_settings);
+            ActorThresholdMet = instance.ActorOccurences_Get(result, _run_settings.MinimumRowsCount);
             if (ActorThresholdMet == false)
             {
                 MessageBox.Show("This NWN Log did not meet the 'Minimum Rows' requirement. The specified log file was not saved!",

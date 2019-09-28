@@ -25,7 +25,7 @@ While open, NWNLogRotator will try to process new logs automatically based on th
 5) Please report any bugs or post suggestions. 
 
 # Releases
-Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases">Here</a>.
+Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases/latest">Here</a>.
 
 # Example Parsed Log
 Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator/master/output/NWNLogExample.html">This Text</a> then select "Save Link As" and it should save it as an HTML file, viewable in any browser.

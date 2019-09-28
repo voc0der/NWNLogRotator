@@ -4,7 +4,7 @@
     *  LICENSE: MIT
 */
 
-using NWNLogRotator.classes;
+using NWNLogRotator.Classes;
 using NWNLogRotator.Components;
 using System;
 using System.ComponentModel;
@@ -99,8 +99,8 @@ namespace NWNLogRotator
             {
                 ServerNameColor = ServerNameColorTextBox.Text;
             }
-            bool? EventText = EventTextCheckBox.IsChecked;
-            bool? CombatText = CombatTextCheckBox.IsChecked;
+            bool EventText = EventTextCheckBox.IsChecked.GetValueOrDefault();
+            bool CombatText = CombatTextCheckBox.IsChecked.GetValueOrDefault();
             string UseTheme = _settings.UseTheme;
             bool Tray = _settings.Tray;
 
