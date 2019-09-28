@@ -32,6 +32,3 @@ Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator
 
 # NWNLogRotator Screenshot
 ![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/Assets/Images/screenshot_nwnlr1.png)
-
-# In Development
-1) Optimizing the parser and cleaning and compartementalization. (Credits to BasicHuman)
