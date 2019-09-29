@@ -10,6 +10,7 @@
         public bool EventText;
         public bool CombatText;
         public string UseTheme;
+        public bool Silent;
         public bool Tray;
 
         // create singleton
@@ -26,6 +27,7 @@
             this.EventText = false;
             this.CombatText = false;
             this.UseTheme = "light";
+            this.Silent = false;
             this.Tray = false;
         }
 
@@ -38,6 +40,7 @@
                         bool EventText,
                         bool CombatText,
                         string UseTheme,
+                        bool Silent,
                         bool Tray)
         {
             this.OutputDirectory = OutputDirectory;
@@ -48,6 +51,7 @@
             this.EventText = EventText;
             this.CombatText = CombatText;
             this.UseTheme = UseTheme;
+            this.Silent = Silent;
             this.Tray = Tray;
         }
 

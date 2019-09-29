@@ -11,7 +11,7 @@ namespace NWNLogRotator.Components
     public partial class FileHandler : Component
     {
         Settings _settings;
-        int _expectedSettingsCount = 9;
+        int _expectedSettingsCount = 10;
 
         public FileHandler()
         {
@@ -52,6 +52,7 @@ namespace NWNLogRotator.Components
                                         "EventText=" + _settings.EventText + "\n" +
                                         "CombatText=" + _settings.CombatText + "\n" +
                                         "UseTheme=" + _settings.UseTheme + "\n" +
+                                        "Silent=" + _settings.Silent + "\n" +
                                         "Tray=" + _settings.Tray;
             return NewSettingsFile;
         }
@@ -71,9 +72,9 @@ namespace NWNLogRotator.Components
         {
             string iniPath = CurrentProgramDirectory_Get() + "NWNLogRotator.ini";
 
-            string DefaultSettings = SettingsFile_Linter();
+            string CurrentSettings = SettingsFile_Linter();
 
-            File.WriteAllText(iniPath, DefaultSettings);
+            File.WriteAllText(iniPath, CurrentSettings);
 
             ReadSettingsIni();
         }
@@ -90,6 +91,7 @@ namespace NWNLogRotator.Components
             bool EventText = false;
             bool CombatText = false;
             string UseTheme = "";
+            bool Silent = false;
             bool Tray = false;
 
             int Count = 0;
@@ -138,6 +140,11 @@ namespace NWNLogRotator.Components
                     UseTheme = ParameterValue;
                     Count += 1;
                 }
+                if (line.IndexOf("Silent=") != -1)
+                {
+                    Silent = bool.Parse(ParameterValue);
+                    Count += 1;
+                }
                 if (line.IndexOf("Tray=") != -1)
                 {
                     Tray = bool.Parse(ParameterValue);
@@ -153,13 +160,21 @@ namespace NWNLogRotator.Components
                                               EventText,
                                               CombatText,
                                               UseTheme,
+                                              Silent,
                                               Tray
                                             );
-
-            if (Count != _expectedSettingsCount)
+            if(Count == 0)
             {
                 MessageBox.Show("Default Configuration Loaded:\n\nPlease ensure NWNLogRotator.ini is properly formatted, and has " + _expectedSettingsCount + " parameters present.\n\nIf it is deleted, NWNLogRotator will create a new one automatically with the default settings.",
                                 "Invalid Settings File!",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+                return false;
+            }
+            else if (Count != _expectedSettingsCount)
+            {
+                MessageBox.Show("The application detected a change in configuration.\n\nPlease verify and save the new NWNLogRotator.ini configuration.",
+                                "Save Settings!",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Warning);
                 return false;

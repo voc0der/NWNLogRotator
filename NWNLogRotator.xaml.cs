@@ -102,7 +102,8 @@ namespace NWNLogRotator
             bool EventText = EventTextCheckBox.IsChecked.GetValueOrDefault();
             bool CombatText = CombatTextCheckBox.IsChecked.GetValueOrDefault();
             string UseTheme = _settings.UseTheme;
-            bool Tray = _settings.Tray;
+            bool Silent = SilentCheckBox.IsChecked.GetValueOrDefault(); ;
+            bool Tray = TrayCheckBox.IsChecked.GetValueOrDefault();
 
             _settings = new Settings(OutputDirectory,
                                               PathToLog,
@@ -112,6 +113,7 @@ namespace NWNLogRotator
                                               EventText,
                                               CombatText,
                                               UseTheme,
+                                              Silent,
                                               Tray
                                             );
 
@@ -136,7 +138,6 @@ namespace NWNLogRotator
         {
             if (_settings.Tray == true)
             {
-                TrayButton.Content = "Start in Tray";
                 if (doMinimize == true)
                 {
                     WindowState = WindowState.Minimized;
@@ -145,7 +146,6 @@ namespace NWNLogRotator
             }
             else
             {
-                TrayButton.Content = "Start Windowed";
                 ni.Visible = false;
             }
         }
@@ -209,6 +209,8 @@ namespace NWNLogRotator
             }
             EventTextCheckBox.IsChecked = _settings.EventText;
             CombatTextCheckBox.IsChecked = _settings.CombatText;
+            SilentCheckBox.IsChecked = _settings.Silent;
+            TrayCheckBox.IsChecked = _settings.Tray;
 
             if (_settings.UseTheme == "light")
             {
@@ -233,8 +235,8 @@ namespace NWNLogRotator
 
             RunOnceButton.Background = Brushes.Black;
             RunOnceButton.Foreground = new SolidColorBrush(Colors.White);
-            TrayButton.Background = Brushes.Black;
-            TrayButton.Foreground = new SolidColorBrush(Colors.White);
+            TrayCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            SilentCheckBox.Foreground = new SolidColorBrush(Colors.White);
             SaveSettingsButton.Background = Brushes.Black;
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryTextBox.Background = Brushes.Black;
@@ -265,8 +267,8 @@ namespace NWNLogRotator
 
             RunOnceButton.Background = Brushes.White;
             RunOnceButton.Foreground = new SolidColorBrush(Colors.Black);
-            TrayButton.Background = Brushes.White;
-            TrayButton.Foreground = new SolidColorBrush(Colors.Black);
+            TrayCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            SilentCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             SaveSettingsButton.Background = Brushes.White;
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryTextBox.Background = Brushes.White;
@@ -298,15 +300,22 @@ namespace NWNLogRotator
 
             if (_filepathandname != "")
             {
-                MessageBoxResult _messageBoxResult = MessageBox.Show("The log file has been generated successfully. Would you like to open the log file now?",
+                if(_settings.Silent == false)
+                {
+                    MessageBoxResult _messageBoxResult = MessageBox.Show("The log file has been generated successfully. Would you like to open the log file now?",
                             "Success!",
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Question);
 
-                if (_messageBoxResult == MessageBoxResult.Yes)
-                    System.Diagnostics.Process.Start(_filepathandname);
+                    if (_messageBoxResult == MessageBoxResult.Yes)
+                        System.Diagnostics.Process.Start(_filepathandname);
 
-                return true;
+                    return true;
+                }
+                else
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -397,9 +406,9 @@ namespace NWNLogRotator
             {
                 SavedLogResult = NWNLog_Save(_settings);
             });
-
-            SavedResult_Callback(SavedLogResult);
+       
             SaveToggle_Event();
+            SavedResult_Callback(SavedLogResult);
         }
 
         private void SavedResult_Callback(bool result)
@@ -467,6 +476,5 @@ namespace NWNLogRotator
                     break;
             }
         }
-
     }
 }

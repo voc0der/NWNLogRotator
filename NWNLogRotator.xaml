@@ -29,7 +29,6 @@
         <CheckBox x:Name="ServerNameColorCheckBox" Content="Server Name Color" Grid.Column="2" HorizontalAlignment="Right" Margin="0,220,292.667,0" VerticalAlignment="Top" RenderTransformOrigin="0.522,-0.045" Checked="ServerNameColorCheckBox_Checked" Unchecked="ServerNameColorCheckBox_Unchecked"/>
         <CheckBox x:Name="ServerNameCheckBox" Content="Server Name" Grid.Column="2" HorizontalAlignment="Right" Margin="0,195,324.667,0" VerticalAlignment="Top" Checked="ServerNameCheckBox_Checked" Unchecked="ServerNameCheckBox_Unchecked"/>
         <Button x:Name="SaveSettingsButton" Content="Save Settings" Grid.Column="2" HorizontalAlignment="Left" Margin="14,322,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
-        <Button x:Name="TrayButton" Content="" Grid.Column="2" HorizontalAlignment="Left" Margin="130,322,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867" Click="Button_Click_2"/>
         <StatusBar HorizontalAlignment="Left" Height="31" Margin="0,361,-0.333,0" VerticalAlignment="Top" Width="495" Grid.ColumnSpan="3" Background="Black">
             <TextBlock x:Name="EventStatusTextBlock" TextWrapping="Wrap" Text="event.status" Width="191" RenderTransformOrigin="1.135,0.25" Height="29"/>
             <Separator Margin="0,0,0,-0.333" Width="166" Visibility="Hidden" />
@@ -41,5 +40,7 @@
         <ProgressBar x:Name="StatusBarProgressBar" Grid.Column="2" HorizontalAlignment="Left" Height="10" Margin="130,367,0,0" VerticalAlignment="Top" Width="108" IsIndeterminate="True" Visibility="Collapsed"/>
         <Image x:Name="OutputDirectoryButtonImage" Grid.Column="2" HorizontalAlignment="Left" Height="16" Margin="368,82,0,0" VerticalAlignment="Top" Width="16" RenderTransformOrigin="2.303,1.51" Source="Assets/Images/DownloadFolder_16x.png" MouseDown="Image_MouseDown"/>
         <Image x:Name="PathToLogButtonImage" Grid.Column="2" HorizontalAlignment="Left" Height="16" Margin="368,113,0,0" VerticalAlignment="Top" Width="16" RenderTransformOrigin="2.303,1.51" Source="Assets/Images/AssociationEditor_16x.png" MouseDown="Image_MouseDown2"/>
+        <CheckBox x:Name="TrayCheckBox" Content="Start in Tray" Grid.Column="2" HorizontalAlignment="Right" Margin="0,245,144.667,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109"/>
+        <CheckBox x:Name="SilentCheckBox" Content="Silent Mode" Grid.Column="2" HorizontalAlignment="Right" Margin="0,270,142.667,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109"/>
     </Grid>
 </Window>
