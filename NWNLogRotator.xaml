@@ -36,7 +36,7 @@
         </StatusBar>
         <Button x:Name="RunOnceButton" Content="Run Once" Grid.Column="2" HorizontalAlignment="Left" Margin="255,322,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867" Click="Button_Click_1"/>
         <TextBox x:Name="ServerNameTextBox" HorizontalAlignment="Left" Height="17" Margin="157,194,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="108" Grid.Column="2" RenderTransformOrigin="0.965,0.275" Visibility="Collapsed"/>
-        <TextBox x:Name="ServerNameColorTextBox" HorizontalAlignment="Left" Height="17" Margin="157,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="108" Grid.Column="2" RenderTransformOrigin="0.965,0.275" Visibility="Collapsed" />
+        <TextBox x:Name="ServerNameColorTextBox" HorizontalAlignment="Left" Height="17" Margin="157,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="108" Grid.Column="2" RenderTransformOrigin="0.965,0.275" Visibility="Collapsed" MaxLength="6" />
         <ProgressBar x:Name="StatusBarProgressBar" Grid.Column="2" HorizontalAlignment="Left" Height="10" Margin="130,367,0,0" VerticalAlignment="Top" Width="108" IsIndeterminate="True" Visibility="Collapsed"/>
         <Image x:Name="OutputDirectoryButtonImage" Grid.Column="2" HorizontalAlignment="Left" Height="16" Margin="368,82,0,0" VerticalAlignment="Top" Width="16" RenderTransformOrigin="2.303,1.51" Source="Assets/Images/DownloadFolder_16x.png" MouseDown="Image_MouseDown"/>
         <Image x:Name="PathToLogButtonImage" Grid.Column="2" HorizontalAlignment="Left" Height="16" Margin="368,113,0,0" VerticalAlignment="Top" Width="16" RenderTransformOrigin="2.303,1.51" Source="Assets/Images/AssociationEditor_16x.png" MouseDown="Image_MouseDown2"/>
