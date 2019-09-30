@@ -1,14 +1,11 @@
 # NWNLogRotator
-Transforms and parses any Neverwinter Nights chat log into beautiful HTML. Written in C# .NET. NWNLogRotator is both Enhanced Edition and 1.69 compatible.
+Transforms and parses any Neverwinter Nights chat log into beautiful HTML. Written in C# .NET. NWNLogRotator is both Enhanced Edition and 1.69 compatible. <a href="http://htmlpreview.github.io/?https://github.com/ravenmyst/NWN-Log-Rotator/blob/master/output/NWNLogExample.html">Click here</a> for an example of a parsed log.
 
 # NWNLogRotator Screenshot
 ![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/ravenmyst/NWNLogRotator/master/Assets/Images/screenshot_nwnlr1.png)
 
-# Example Parsed Log
-Right Click <a href="https://raw.githubusercontent.com/ravenmyst/NWN-Log-Rotator/master/output/NWNLogExample.html">This Text</a> then select "Save Link As" and it should save it as an HTML file, viewable in any browser.
-
-# Releases
-Download Latest <a href="https://github.com/ravenmyst/NWNLogRotator/releases/latest">Here</a>.
+# Download
+Newest releases can be found <a href="https://github.com/ravenmyst/NWNLogRotator/releases/latest">here</a>.
 
 # Automation (How it works)
 While open, NWNLogRotator will try to process new logs automatically based on the status of whether Neverwinter Nights is running. If your directories are configured to match with your Neverwinter Nights default log storage, it will process them automatically.
