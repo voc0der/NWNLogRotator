@@ -136,7 +136,8 @@ namespace NWNLogRotator.Classes
             "Your character has been saved",
             "New Value:",
             "Quick bar",
-            "[ERROR TOO MANY INSTRUCTIONS]"
+            "[ERROR TOO MANY INSTRUCTIONS]",
+            "*** ValidateGFFResource sent by user.",
         };
 
         private static string timestampMatch = @".+?(?=.*)"; //@"^\[\w\w\w\s\w\w\w\s\d\d\s\d\d:\d\d:\d\d\]\s";
@@ -182,8 +183,13 @@ namespace NWNLogRotator.Classes
         };
         private List<Regex> garbageLines = new List<Regex>
         {
+            new Regex( @"nwsync\:\s?storage\s?at\s?[0-9:A-z\,= ]{10,}\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( @"nwsync\:\s?migrations\s?currently\s?applied\:\s?\d{1,}\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( @"nwsync\:\s?shard\s?\d{1,}\s?available,\sspace\sused\:\s?\d{1,}\skb\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( @"game\s?is\s?using\s?local\s?port\:\s?\d{1,}\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( @"Error\:\s?\d{1,}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( @"gog\:\s?authentication\s?failed\:\s?\d{1,}\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
             new Regex( timestampMatch+@"Script\s.*,\sOID\:.*,\sTag\:\s.*,\sERROR\:\sTOO MANY INSTRUCTIONS\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"nwsync\:\s?shard\s?0\s?available,\sspace\sused\:\s?\d{1,}\skb\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
         };
     }
 }
