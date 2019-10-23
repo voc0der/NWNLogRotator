@@ -11,7 +11,7 @@ namespace NWNLogRotator.Classes
     {
         public string ParseLog(Stream inputStream, bool removeCombat, bool removeEvents, string ServerName, string ServerNameColor)
         {
-            var reader = new StreamReader(inputStream, Encoding.UTF8);
+            var reader = new StreamReader(inputStream, Encoding.GetEncoding("iso-8859-1"));
             var removeExps = new List<Regex>();
 
             string text;
@@ -183,6 +183,7 @@ namespace NWNLogRotator.Classes
         private List<Regex> garbageLines = new List<Regex>
         {
             new Regex( timestampMatch+@"Script\s.*,\sOID\:.*,\sTag\:\s.*,\sERROR\:\sTOO MANY INSTRUCTIONS\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( timestampMatch+@"nwsync\:\s?shard\s?0\s?available,\sspace\sused\:\s?\d{1,}\skb\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
         };
     }
 }
