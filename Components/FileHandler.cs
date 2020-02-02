@@ -11,7 +11,7 @@ namespace NWNLogRotator.Components
     public partial class FileHandler : Component
     {
         Settings _settings;
-        int _expectedSettingsCount = 10;
+        int _expectedSettingsCount = 11;
 
         public FileHandler()
         {
@@ -53,7 +53,8 @@ namespace NWNLogRotator.Components
                                         "CombatText=" + _settings.CombatText + "\n" +
                                         "UseTheme=" + _settings.UseTheme + "\n" +
                                         "Silent=" + _settings.Silent + "\n" +
-                                        "Tray=" + _settings.Tray;
+                                        "Tray=" + _settings.Tray + "\n" +
+                                        "SaveBackup=" + _settings.SaveBackup;
             return NewSettingsFile;
         }
 
@@ -93,6 +94,7 @@ namespace NWNLogRotator.Components
             string UseTheme = "";
             bool Silent = false;
             bool Tray = false;
+            bool SaveBackup = false;
 
             int Count = 0;
 
@@ -150,6 +152,11 @@ namespace NWNLogRotator.Components
                     Tray = bool.Parse(ParameterValue);
                     Count += 1;
                 }
+                if (line.IndexOf("SaveBackup=") != -1)
+                {
+                    SaveBackup = bool.Parse(ParameterValue);
+                    Count += 1;
+                }
             }
 
             _settings = new Settings(OutputDirectory,
@@ -161,7 +168,8 @@ namespace NWNLogRotator.Components
                                               CombatText,
                                               UseTheme,
                                               Silent,
-                                              Tray
+                                              Tray,
+                                              SaveBackup
                                             );
             if(Count == 0)
             {
@@ -230,8 +238,8 @@ namespace NWNLogRotator.Components
             DateTime _dateTime = CurrentDateTime_Get();
             string filepath = FilePath_Get(_run_settings);
             string filename = FileNameGenerator_Get(_dateTime);
+            string backupfilename = filename.Remove(filename.Length - 5, 5) + ".txt";
             bool ActorThresholdMet = true;
-
 
             FileStream fs;
             try
@@ -261,11 +269,19 @@ namespace NWNLogRotator.Components
                                 MessageBoxImage.Information);
                 return "";
             }
-                
-
+            
             try
             {
                 File.WriteAllText(filepath + filename, result);
+
+                if (_run_settings.SaveBackup == true)
+                {
+                    string theFileToCopy = _run_settings.PathToLog;
+                    string theDestinationFile = filepath + backupfilename;
+
+                    File.Copy(theFileToCopy, theDestinationFile);
+                }
+
                 return filepath + filename;
             }
             catch
@@ -294,6 +310,15 @@ namespace NWNLogRotator.Components
                         try
                         {
                             File.WriteAllText(filepath + filename, result);
+
+                            if(_run_settings.SaveBackup == true)
+                            {
+                                string theFileToCopy = _run_settings.PathToLog;
+                                string theDestinationFile = filepath + backupfilename;
+
+                                File.Copy(theFileToCopy, theDestinationFile);
+                            }
+
                             return filepath + filename;
                         }
                         catch

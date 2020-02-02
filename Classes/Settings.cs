@@ -12,6 +12,7 @@
         public string UseTheme;
         public bool Silent;
         public bool Tray;
+        public bool SaveBackup;
 
         // create singleton
         public static Settings _instance = new Settings();
@@ -29,6 +30,7 @@
             this.UseTheme = "light";
             this.Silent = false;
             this.Tray = false;
+            this.SaveBackup = false;
         }
 
         // binding
@@ -41,7 +43,8 @@
                         bool CombatText,
                         string UseTheme,
                         bool Silent,
-                        bool Tray)
+                        bool Tray,
+                        bool SaveBackup)
         {
             this.OutputDirectory = OutputDirectory;
             this.PathToLog = PathToLog;
@@ -53,6 +56,7 @@
             this.UseTheme = UseTheme;
             this.Silent = Silent;
             this.Tray = Tray;
+            this.SaveBackup = SaveBackup;
         }
 
         // get singleton

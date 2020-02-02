@@ -104,6 +104,7 @@ namespace NWNLogRotator
             string UseTheme = _settings.UseTheme;
             bool Silent = SilentCheckBox.IsChecked.GetValueOrDefault(); ;
             bool Tray = TrayCheckBox.IsChecked.GetValueOrDefault();
+            bool SaveBackup = SaveBackupCheckBox.IsChecked.GetValueOrDefault();
 
             _settings = new Settings(OutputDirectory,
                                               PathToLog,
@@ -114,7 +115,8 @@ namespace NWNLogRotator
                                               CombatText,
                                               UseTheme,
                                               Silent,
-                                              Tray
+                                              Tray,
+                                              SaveBackup
                                             );
 
             return _settings;
@@ -211,6 +213,7 @@ namespace NWNLogRotator
             CombatTextCheckBox.IsChecked = _settings.CombatText;
             SilentCheckBox.IsChecked = _settings.Silent;
             TrayCheckBox.IsChecked = _settings.Tray;
+            SaveBackupCheckBox.IsChecked = _settings.SaveBackup;
 
             if (_settings.UseTheme == "light")
             {
@@ -257,6 +260,7 @@ namespace NWNLogRotator
             CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.White);
             MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.White);
             MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.White);
+            SaveBackupCheckBox.Foreground = new SolidColorBrush(Colors.White);
 
             _settings.UseTheme = "dark";
         }
@@ -289,6 +293,7 @@ namespace NWNLogRotator
             CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.Black);
             MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.Black);
+            SaveBackupCheckBox.Foreground = new SolidColorBrush(Colors.Black);
 
             _settings.UseTheme = "light";
         }
