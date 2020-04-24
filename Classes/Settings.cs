@@ -13,6 +13,9 @@
         public bool Silent;
         public bool Tray;
         public bool SaveBackup;
+        public bool Notifications;
+        public string CustomEmotes;
+        public string FilterLines;
 
         // create singleton
         public static Settings _instance = new Settings();
@@ -31,6 +34,9 @@
             this.Silent = false;
             this.Tray = false;
             this.SaveBackup = false;
+            this.Notifications = false;
+            this.CustomEmotes = "";
+            this.FilterLines = "";
         }
 
         // binding
@@ -44,7 +50,10 @@
                         string UseTheme,
                         bool Silent,
                         bool Tray,
-                        bool SaveBackup)
+                        bool SaveBackup,
+                        bool Notifications,
+                        string CustomEmotes,
+                        string FilterLines)
         {
             this.OutputDirectory = OutputDirectory;
             this.PathToLog = PathToLog;
@@ -57,6 +66,9 @@
             this.Silent = Silent;
             this.Tray = Tray;
             this.SaveBackup = SaveBackup;
+            this.Notifications = Notifications;
+            this.CustomEmotes = CustomEmotes;
+            this.FilterLines = FilterLines;
         }
 
         // get singleton

@@ -11,7 +11,7 @@ namespace NWNLogRotator.Components
     public partial class FileHandler : Component
     {
         Settings _settings;
-        int _expectedSettingsCount = 11;
+        int _expectedSettingsCount = 14;
 
         public FileHandler()
         {
@@ -54,7 +54,10 @@ namespace NWNLogRotator.Components
                                         "UseTheme=" + _settings.UseTheme + "\n" +
                                         "Silent=" + _settings.Silent + "\n" +
                                         "Tray=" + _settings.Tray + "\n" +
-                                        "SaveBackup=" + _settings.SaveBackup;
+                                        "SaveBackup=" + _settings.SaveBackup + "\n" +
+                                        "Notifications=" + _settings.Notifications + "\n" +
+                                        "CustomEmotes=" + _settings.CustomEmotes + "\n" +
+                                        "FilterLines=" + _settings.FilterLines;
             return NewSettingsFile;
         }
 
@@ -95,6 +98,9 @@ namespace NWNLogRotator.Components
             bool Silent = false;
             bool Tray = false;
             bool SaveBackup = false;
+            bool Notifications = false;
+            string CustomEmotes = "";
+            string FilterLines = "";
 
             int Count = 0;
 
@@ -157,6 +163,21 @@ namespace NWNLogRotator.Components
                     SaveBackup = bool.Parse(ParameterValue);
                     Count += 1;
                 }
+                if (line.IndexOf("Notifications=") != -1)
+                {
+                    Notifications = bool.Parse(ParameterValue);
+                    Count += 1;
+                }
+                if (line.IndexOf("CustomEmotes=") != -1)
+                {
+                    CustomEmotes = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("FilterLines=") != -1)
+                {
+                    FilterLines = ParameterValue;
+                    Count += 1;
+                }
             }
 
             _settings = new Settings(OutputDirectory,
@@ -169,7 +190,10 @@ namespace NWNLogRotator.Components
                                               UseTheme,
                                               Silent,
                                               Tray,
-                                              SaveBackup
+                                              SaveBackup,
+                                              Notifications,
+                                              CustomEmotes,
+                                              FilterLines
                                             );
             if(Count == 0)
             {
