@@ -228,6 +228,17 @@ namespace NWNLogRotator
             SilentCheckBox.IsChecked = _settings.Silent;
             TrayCheckBox.IsChecked = _settings.Tray;
             SaveBackupCheckBox.IsChecked = _settings.SaveBackup;
+            NotificationsCheckBox.IsChecked = _settings.Notifications;
+            if (_settings.CustomEmotes != "")
+            {
+                CustomEmotesCheckBox.IsChecked = true;
+                CustomEmotesTextBox.Text = _settings.CustomEmotes;
+            }
+            if (_settings.FilterLines != "")
+            {
+                FilterLinesCheckBox.IsChecked = true;
+                FilterLinesTextBox.Text = _settings.FilterLines;
+            }
 
             if (_settings.UseTheme == "light")
             {
