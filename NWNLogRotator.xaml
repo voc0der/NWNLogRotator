@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         Closing="WindowClosed_Event"
-        Title="NWNLogRotator" Height="478" Width="535">
+        Title="NWNLogRotator" Height="478" Width="535"
+        Icon="./Assets/Images/ravenmyst.ico">
     <Grid x:Name="Grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60*"/>

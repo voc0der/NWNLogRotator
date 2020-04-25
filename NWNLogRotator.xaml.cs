@@ -23,6 +23,7 @@ namespace NWNLogRotator
         FileHandler instance = new FileHandler();
         Settings _settings;
         System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
+        Notification notification = new Notification();
 
         public MainWindow()
         {
@@ -344,7 +345,12 @@ namespace NWNLogRotator
 
             if (_filepathandname != "")
             {
-                if(_settings.Silent == false)
+                if(_settings.Notifications == true)
+                {
+                    notification.ShowNotification("Log file generated successfully!");
+                }
+                   
+                if (_settings.Silent == false)
                 {
                     MessageBoxResult _messageBoxResult = MessageBox.Show("The log file has been generated successfully. Would you like to open the log file now?",
                             "Success!",
