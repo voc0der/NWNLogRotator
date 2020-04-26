@@ -445,6 +445,28 @@ namespace NWNLogRotator
             ServerNameColorTextBox.Visibility = Visibility.Collapsed;
         }
 
+        private void CustomEmotesCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CustomEmotesTextBox.Visibility = Visibility.Visible;
+        }
+
+        private void CustomEmotesCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CustomEmotesTextBox.Text = "";
+            CustomEmotesTextBox.Visibility = Visibility.Collapsed;
+        }
+
+        private void FilterLinesCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            FilterLinesTextBox.Visibility = Visibility.Visible;
+        }
+
+        private void FilterLinesCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            FilterLinesTextBox.Text = "";
+            FilterLinesTextBox.Visibility = Visibility.Collapsed;
+        }
+
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
             _settings = CurrentSettings_Get();

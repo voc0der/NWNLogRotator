@@ -47,8 +47,8 @@
         <CheckBox x:Name="SilentCheckBox" Content="Silent Mode" Grid.Column="2" HorizontalAlignment="Right" Margin="0,275,192.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109"/>
         <CheckBox x:Name="SaveBackupCheckBox" Content="Save Backup" Grid.Column="2" HorizontalAlignment="Right" Margin="0,250,82.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109"/>
         <CheckBox x:Name="NotificationsCheckBox" Content="Notifications" Grid.Column="2" HorizontalAlignment="Right" Margin="0,275,81.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609"/>
-        <CheckBox x:Name="CustomEmotesCheckBox" Content="Custom Emotes" Grid.Column="2" HorizontalAlignment="Right" Margin="0,300,325.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609"/>
-        <CheckBox x:Name="FilterLinesCheckBox" Content="Filter Lines" Grid.Column="2" HorizontalAlignment="Right" Margin="0,325,352.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609"/>
+        <CheckBox x:Name="CustomEmotesCheckBox" Content="Custom Emotes" Grid.Column="2" HorizontalAlignment="Right" Margin="0,300,325.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609" Checked="CustomEmotesCheckBox_Checked" Unchecked="CustomEmotesCheckBox_Unchecked"/>
+        <CheckBox x:Name="FilterLinesCheckBox" Content="Filter Lines" Grid.Column="2" HorizontalAlignment="Right" Margin="0,325,352.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609" Unchecked="FilterLinesCheckBox_Unchecked" Checked="FilterLinesCheckBox_Checked"/>
         <TextBox x:Name="CustomEmotesTextBox" HorizontalAlignment="Left" Height="17" Margin="189,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" Grid.Column="2" RenderTransformOrigin="0.965,0.275" MaxLength="6" Visibility="Collapsed" />
     </Grid>
 </Window>
