@@ -9,7 +9,7 @@ namespace NWNLogRotator.Classes
 {
     class LogParser
     {
-        public string ParseLog(Stream inputStream, bool removeCombat, bool removeEvents, string ServerName, string ServerNameColor)
+        public string ParseLog(Stream inputStream, bool removeCombat, bool removeEvents, string ServerName, string ServerNameColor, string CustomEmotes, string FilterLines)
         {
             var reader = new StreamReader(inputStream, Encoding.GetEncoding("iso-8859-1"));
             var removeExps = new List<Regex>();
@@ -36,6 +36,9 @@ namespace NWNLogRotator.Classes
             if (removeCombat) removeExps.AddRange(combatLines);
             foreach (var exp in removeExps)
                 text = exp.Replace(text, "");
+
+
+            formatReplacesOrdered = formatReplacesWithUserOverride( CustomEmotes, FilterLines );
 
             foreach (var exp in formatReplacesOrdered)
                 text = exp.Item1.Replace(text, exp.Item2);
@@ -86,7 +89,42 @@ namespace NWNLogRotator.Classes
             return "<html>" + HTMLHeader + logTitle + ParsedNWNLog + "<body class='logbody'><span class='default'>" + postLog;
         }
 
-        private List<Tuple<Regex, string>> formatReplacesOrdered = new List<Tuple<Regex, string>>
+        private List<Tuple<Regex, string>> formatReplacesWithUserOverride( string CustomEmotes, string FilterLines )
+        {
+            string[] emotesArray = CustomEmotes.Split(',');
+            string[] filterLinesArray = FilterLines.Split(',');
+
+            List<Tuple<Regex, string>> formatReplacesOrderedReturn = new List<Tuple<Regex, string>>();
+
+            formatReplacesOrderedReturn.AddRange(formatReplacesOrderedOne);
+            formatReplacesOrderedReturn.AddRange(formatReplacesOrderedTwo);
+            if (CustomEmotes.Length != 0)
+            {
+                List<Tuple<Regex, string>> additionalActorsList = new List<Tuple<Regex, string>>();
+                foreach (string emotePair in emotesArray)
+                {
+                    if (emotesArray.Length == 2)
+                    {
+                        string tempLeftBracket = "";
+                        string tempRightBracket = "";
+                        string theRegEx;
+                        theRegEx = "\\" + tempLeftBracket + ".*\\" + tempRightBracket;
+
+                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled | RegexOptions.Multiline), "<span class='emotes'>$1</span>");
+                        additionalActorsList.Add(theCustomEmote);
+                    }
+                }
+                formatReplacesOrderedReturn.AddRange(additionalActorsList);
+            }
+       
+            formatReplacesOrderedReturn.AddRange(formatReplacesOrderedThree);
+
+            return formatReplacesOrderedReturn;
+        }
+
+        private List<Tuple<Regex, string>> formatReplacesOrdered = new List<Tuple<Regex, string>>();
+
+        private List<Tuple<Regex, string>> formatReplacesOrderedOne = new List<Tuple<Regex, string>>
         {
             new Tuple<Regex, string> ( new Regex(@"\[{1}[A-z]{3}\s[A-z]{3}\s[0-9]{2}\s", RegexOptions.Compiled | RegexOptions.Multiline ), "<span class='timestamp'>[" ),
             new Tuple<Regex, string> ( new Regex(@"\:{1}[0-9]*]{1}",RegexOptions.Compiled | RegexOptions.Multiline ), "]</span>" ),
@@ -96,8 +134,17 @@ namespace NWNLogRotator.Classes
             new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Tell])(.*.*)",RegexOptions.Compiled | RegexOptions.Multiline ), "</span><span class='tells'> $1:$2</span><br />"),
             // whispers 
             new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Whisper])(.*.*)",RegexOptions.Compiled | RegexOptions.Multiline ), "</span><span class='whispers'> $1:$2</span><br />"),
+        };
+
+
+        private List<Tuple<Regex, string>> formatReplacesOrderedTwo = new List<Tuple<Regex, string>>
+        {
             // emotes 
-            new Tuple<Regex, string>( new Regex(@"(\*.*\*)",RegexOptions.Compiled | RegexOptions.Multiline ), "<span class='emotes'>$1</span>"),
+            new Tuple<Regex, string>( new Regex(@"(\*.*\*)",RegexOptions.Compiled | RegexOptions.Multiline ), "<span class='emotes'>$1</span>")
+        };
+
+        private List<Tuple<Regex, string>> formatReplacesOrderedThree = new List<Tuple<Regex, string>>
+        {
             // html formatting
             new Tuple<Regex, string>( new Regex(@"\r\n",RegexOptions.Compiled | RegexOptions.Multiline ), "<br />")
         };
