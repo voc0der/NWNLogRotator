@@ -22,7 +22,7 @@ Important: Open Windows Explorer and enter %HOMEPATH%, and the last directory th
 | Server Name | Test | Server logs will be written to OutputDirectory\Test |
 | Server Name Color | FFCC00 | The server name in the log appears yellow |
 | Server Name Color | FF0000 | The server name in the log appears red |
-| Custom Emotes | [],~ | [This will be an emote], ~This will be an emote~ |
+| Custom Emotes | [],^ | [This will be an emote], ^This will be an emote^ |
 | Filter Lines | question | Any line that has the word question will be removed |
 
 # Notes
