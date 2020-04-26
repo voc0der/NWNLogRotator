@@ -14,6 +14,26 @@ namespace NWNLogRotator.Classes
             var reader = new StreamReader(inputStream, Encoding.GetEncoding("iso-8859-1"));
             var removeExps = new List<Regex>();
 
+            string[] filterLinesArray = FilterLines.Split(',');
+            if (!removeEvents && FilterLines != "")
+            {
+                eventLines = new List<String>();
+                foreach (string theEvent in eventLines)
+                {
+                    eventLines.Add(theEvent);
+                }
+                removeEvents = true;
+            }
+            else if (removeEvents && FilterLines != "")
+            {
+                List<String> eventLinesTemp = new List<String>();
+                foreach (string theEvent in eventLines)
+                {
+                    eventLinesTemp.Add(theEvent);
+                }
+                eventLines.AddRange(eventLinesTemp);
+            }
+            
             string text;
             if (removeEvents)
             {
@@ -38,7 +58,7 @@ namespace NWNLogRotator.Classes
                 text = exp.Replace(text, "");
 
 
-            formatReplacesOrdered = formatReplacesWithUserOverride( CustomEmotes, FilterLines );
+            formatReplacesOrdered = formatReplacesWithUserOverride( CustomEmotes );
 
             foreach (var exp in formatReplacesOrdered)
                 text = exp.Item1.Replace(text, exp.Item2);
@@ -89,11 +109,9 @@ namespace NWNLogRotator.Classes
             return "<html>" + HTMLHeader + logTitle + ParsedNWNLog + "<body class='logbody'><span class='default'>" + postLog;
         }
 
-        private List<Tuple<Regex, string>> formatReplacesWithUserOverride( string CustomEmotes, string FilterLines )
+        private List<Tuple<Regex, string>> formatReplacesWithUserOverride( string CustomEmotes )
         {
             string[] emotesArray = CustomEmotes.Split(',');
-            string[] filterLinesArray = FilterLines.Split(',');
-
             List<Tuple<Regex, string>> formatReplacesOrderedReturn = new List<Tuple<Regex, string>>();
 
             formatReplacesOrderedReturn.AddRange(formatReplacesOrderedOne);
@@ -103,12 +121,22 @@ namespace NWNLogRotator.Classes
                 List<Tuple<Regex, string>> additionalActorsList = new List<Tuple<Regex, string>>();
                 foreach (string emotePair in emotesArray)
                 {
-                    if (emotesArray.Length == 2)
+                    string theEmotePair = emotePair.Trim();
+                    if (theEmotePair.Length == 2)
                     {
-                        string tempLeftBracket = "";
-                        string tempRightBracket = "";
+                        string tempLeftBracket = theEmotePair.Substring(0,1);
+                        string tempRightBracket = theEmotePair.Substring(1,1);
                         string theRegEx;
-                        theRegEx = "\\" + tempLeftBracket + ".*\\" + tempRightBracket;
+                        theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell)).*\\" + tempRightBracket;
+
+                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled | RegexOptions.Multiline), "<span class='emotes'>$1</span>");
+                        additionalActorsList.Add(theCustomEmote);
+                    }
+                    else if (theEmotePair.Length == 1)
+                    {
+                        string tempBracket = theEmotePair.Substring(0, 1);
+                        string theRegEx;
+                        theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell)).*\\" + tempBracket;
 
                         Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled | RegexOptions.Multiline), "<span class='emotes'>$1</span>");
                         additionalActorsList.Add(theCustomEmote);
@@ -149,7 +177,7 @@ namespace NWNLogRotator.Classes
             new Tuple<Regex, string>( new Regex(@"\r\n",RegexOptions.Compiled | RegexOptions.Multiline ), "<br />")
         };
 
-        private List<string> coreRemoves = new List<string>()
+        private List<string> coreRemoves = new List<string>
         {
             "[CHAT WINDOW TEXT] ",
         };
