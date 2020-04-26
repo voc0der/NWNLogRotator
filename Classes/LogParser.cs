@@ -18,16 +18,17 @@ namespace NWNLogRotator.Classes
             if (!removeEvents && FilterLines != "")
             {
                 eventLines = new List<String>();
-                foreach (string theEvent in eventLines)
+                foreach (string eventString in filterLinesArray)
                 {
-                    eventLines.Add(theEvent);
+                    string theEventString = eventString.Trim();
+                    eventLines.Add(theEventString);
                 }
                 removeEvents = true;
             }
             else if (removeEvents && FilterLines != "")
             {
                 List<String> eventLinesTemp = new List<String>();
-                foreach (string theEvent in eventLines)
+                foreach (string theEvent in filterLinesArray)
                 {
                     eventLinesTemp.Add(theEvent);
                 }
@@ -118,7 +119,7 @@ namespace NWNLogRotator.Classes
             formatReplacesOrderedReturn.AddRange(formatReplacesOrderedTwo);
             if (CustomEmotes.Length != 0)
             {
-                List<Tuple<Regex, string>> additionalActorsList = new List<Tuple<Regex, string>>();
+                List<Tuple<Regex, string>> additionalEmotesList = new List<Tuple<Regex, string>>();
                 foreach (string emotePair in emotesArray)
                 {
                     string theEmotePair = emotePair.Trim();
@@ -130,7 +131,7 @@ namespace NWNLogRotator.Classes
                         theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell)).*\\" + tempRightBracket;
 
                         Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled | RegexOptions.Multiline), "<span class='emotes'>$1</span>");
-                        additionalActorsList.Add(theCustomEmote);
+                        additionalEmotesList.Add(theCustomEmote);
                     }
                     else if (theEmotePair.Length == 1)
                     {
@@ -139,10 +140,10 @@ namespace NWNLogRotator.Classes
                         theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell)).*\\" + tempBracket;
 
                         Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled | RegexOptions.Multiline), "<span class='emotes'>$1</span>");
-                        additionalActorsList.Add(theCustomEmote);
+                        additionalEmotesList.Add(theCustomEmote);
                     }
                 }
-                formatReplacesOrderedReturn.AddRange(additionalActorsList);
+                formatReplacesOrderedReturn.AddRange(additionalEmotesList);
             }
        
             formatReplacesOrderedReturn.AddRange(formatReplacesOrderedThree);
