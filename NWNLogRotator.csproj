@@ -164,5 +164,8 @@
   <ItemGroup>
     <Resource Include="Assets\Images\AssociationEditor_16x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\screenshot_nwnlr1.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

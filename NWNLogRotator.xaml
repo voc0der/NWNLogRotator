@@ -53,8 +53,8 @@
         <GroupBox x:Name="LauncherGroupBox" Header="Launcher" HorizontalAlignment="Right" Height="153" Margin="0,370,56.333,0" VerticalAlignment="Top" Width="405" Grid.Column="2">
             <TextBox x:Name="FilterLinesTextBox1" HorizontalAlignment="Left" Height="17" Margin="180,172,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" RenderTransformOrigin="0.965,0.275" Visibility="Collapsed" />
         </GroupBox>
-        <CheckBox x:Name="RunClientOnLaunchCheckBox" Content="Auto Start" Grid.Column="2" HorizontalAlignment="Right" Margin="0,437,352.333,0" VerticalAlignment="Top" Checked="ServerNameCheckBox_Checked" Unchecked="ServerNameCheckBox_Unchecked" RenderTransformOrigin="0.004,0.604"/>
-        <CheckBox x:Name="CloseAfterGenerationCheckBox" Content="Auto Close" Grid.Column="2" HorizontalAlignment="Right" Margin="0,437,199.333,0" VerticalAlignment="Top" Checked="ServerNameCheckBox_Checked" Unchecked="ServerNameCheckBox_Unchecked" RenderTransformOrigin="0.004,0.604"/>
+        <CheckBox x:Name="RunClientOnLaunchCheckBox" Content="Auto Start" Grid.Column="2" HorizontalAlignment="Right" Margin="0,437,352.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604"/>
+        <CheckBox x:Name="CloseAfterGenerationCheckBox" Content="Auto Close" Grid.Column="2" HorizontalAlignment="Right" Margin="0,437,199.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604"/>
         <Label x:Name="PathToClientLabel" Content="Path to Client:" HorizontalAlignment="Left" Margin="22,400,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Grid.Column="2"/>
         <TextBox x:Name="PathToClientTextBox" HorizontalAlignment="Left" Height="23" Margin="112,403,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="262" Grid.Column="2" RenderTransformOrigin="0.965,0.275"/>
         <Image x:Name="PathToClientImage" Grid.Column="2" HorizontalAlignment="Left" Height="16" Margin="379,407,0,0" VerticalAlignment="Top" Width="16" RenderTransformOrigin="2.303,1.51" Source="Assets/Images/AssociationEditor_16x.png" MouseDown="Image_MouseDown3"/>
@@ -64,6 +64,6 @@
         <TextBox x:Name="ServerPasswordTextBox" HorizontalAlignment="Left" Height="23" Margin="180,488,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="206" Grid.Column="2" RenderTransformOrigin="0.965,0.275"/>
         <Label x:Name="HintLabel" Content="Usage Tip: To configure multiple servers, copy NWNLogRotator.exe into another&#xD;&#xA;folder and configure that copy for the new server." HorizontalAlignment="Left" Margin="0,585,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Grid.Column="1" Width="460" Height="42" Grid.ColumnSpan="2" />
         <Button x:Name="LaunchClientButton" Content="Launch Client" Grid.Column="2" HorizontalAlignment="Left" Margin="150,540,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867" Click="Button_Click_3"/>
-        <CheckBox x:Name="DMCheckBox" Content="DM" Grid.Column="2" HorizontalAlignment="Right" Margin="0,437,129.333,0" VerticalAlignment="Top" Checked="ServerNameCheckBox_Checked" Unchecked="ServerNameCheckBox_Unchecked" RenderTransformOrigin="0.004,0.604"/>
+        <CheckBox x:Name="DMCheckBox" Content="DM" Grid.Column="2" HorizontalAlignment="Right" Margin="0,437,129.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604"/>
     </Grid>
 </Window>

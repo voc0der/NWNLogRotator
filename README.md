@@ -24,10 +24,13 @@ Important: Open Windows Explorer and enter %HOMEPATH%, and the last directory th
 | Server Name Color | FF0000 | The server name in the log appears red |
 | Custom Emotes | [],^ | [This will be an emote], ^This will be an emote^ |
 | Filter Lines | foo,bar | Any line that has the word foo or bar will be removed |
+| Auto Start | |true,false| True will launch client on NWNLogRotator start |
+| Auto Close | |true,false| True will close client on Log creation |
 
 # Notes
 1) This application may warn you that the publisher is not signed or verified, but if you click 'More Info' it will allow you to run anyways.
-2) Make sure you have logging enabled if you cannot find a log file. The setting to enable logging is located in nwnplayer.ini as ClientEntireChatWindowLogging = 1 under [Game Options].
-3) The parsing will not be accurate if obtained from a third-party server that alters the standard NWN logging.
-4) Changing the theme is available by clicking the "NWNLogRotator" header.
-5) Please report any bugs or post suggestions. Stars are appreciated!
+2) Make sure you save your configuration settings or some options may not do what you expected!
+3) Make sure you have logging enabled if you cannot find a log file. The setting to enable logging is located in nwnplayer.ini as ClientEntireChatWindowLogging = 1 under [Game Options].
+4) The parsing will not be accurate if obtained from a third-party server that alters the standard NWN logging.
+5) Changing the theme is available by clicking the "NWNLogRotator" header.
+6) Please report any bugs or post suggestions. Stars are appreciated!
