@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         Closing="WindowClosed_Event"
-        Title="NWNLogRotator" Height="478" Width="535"
+        Title="NWNLogRotator" Height="690" Width="535"
         Icon="./Assets/Images/ravenmyst.ico">
     <Grid x:Name="Grid">
         <Grid.ColumnDefinitions>
@@ -31,16 +31,16 @@
         <TextBlock x:Name="MinimumRowsCountTextBlock" Grid.Column="2" HorizontalAlignment="Left" Margin="22,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="18" RenderTransformOrigin="0.615,2.005" Text="1"/>
         <CheckBox x:Name="ServerNameColorCheckBox" Content="Server Name Color" Grid.Column="2" HorizontalAlignment="Right" Margin="0,225,308.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.522,-0.045" Checked="ServerNameColorCheckBox_Checked" Unchecked="ServerNameColorCheckBox_Unchecked"/>
         <CheckBox x:Name="ServerNameCheckBox" Content="Server Name" Grid.Column="2" HorizontalAlignment="Right" Margin="0,200,340.333,0" VerticalAlignment="Top" Checked="ServerNameCheckBox_Checked" Unchecked="ServerNameCheckBox_Unchecked" RenderTransformOrigin="0.004,0.604"/>
-        <Button x:Name="SaveSettingsButton" Content="Save Settings" Grid.Column="2" HorizontalAlignment="Left" Margin="0,385,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
-        <StatusBar HorizontalAlignment="Left" Height="31" Margin="0,419,0,0" VerticalAlignment="Top" Width="529" Grid.ColumnSpan="3" Background="Black">
+        <Button x:Name="SaveSettingsButton" Content="Save Settings" Grid.Column="2" HorizontalAlignment="Left" Margin="0,540,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
+        <StatusBar HorizontalAlignment="Left" Height="31" Margin="0,631,0,0" VerticalAlignment="Top" Width="529" Grid.ColumnSpan="3" Background="Black">
             <TextBlock x:Name="EventStatusTextBlock" TextWrapping="Wrap" Text="event.status" Width="191" RenderTransformOrigin="1.135,0.25" Height="29"/>
             <Separator Margin="0,0,0,-0.333" Width="166" Visibility="Hidden" />
             <TextBlock x:Name="NWNStatusTextBlock" TextWrapping="Wrap" Text="nwn.status" Width="152" RenderTransformOrigin="1.135,0.25" Height="29" TextAlignment="Right"/>
         </StatusBar>
-        <Button x:Name="RunOnceButton" Content="Run Once" Grid.Column="2" HorizontalAlignment="Left" Margin="300,385,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867" Click="Button_Click_1"/>
+        <Button x:Name="RunOnceButton" Content="Run Once" Grid.Column="2" HorizontalAlignment="Left" Margin="300,540,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867" Click="Button_Click_1"/>
         <TextBox x:Name="ServerNameTextBox" HorizontalAlignment="Left" Height="17" Margin="189,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" Grid.Column="2" RenderTransformOrigin="0.965,0.275" Visibility="Collapsed"/>
         <TextBox x:Name="ServerNameColorTextBox" HorizontalAlignment="Left" Height="17" Margin="189,225,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" Grid.Column="2" RenderTransformOrigin="0.965,0.275" MaxLength="6" Visibility="Collapsed" />
-        <ProgressBar x:Name="StatusBarProgressBar" Grid.Column="2" HorizontalAlignment="Left" Height="10" Margin="146,392,0,0" VerticalAlignment="Top" Width="108" IsIndeterminate="True" Visibility="Collapsed"/>
+        <ProgressBar x:Name="StatusBarProgressBar" Grid.Column="2" HorizontalAlignment="Left" Height="10" Margin="149,574,0,0" VerticalAlignment="Top" Width="108" IsIndeterminate="True" Visibility="Collapsed"/>
         <Image x:Name="OutputDirectoryButtonImage" Grid.Column="2" HorizontalAlignment="Left" Height="16" Margin="392,85,0,0" VerticalAlignment="Top" Width="16" RenderTransformOrigin="2.303,1.51" Source="Assets/Images/DownloadFolder_16x.png" MouseDown="Image_MouseDown"/>
         <Image x:Name="PathToLogButtonImage" Grid.Column="2" HorizontalAlignment="Left" Height="16" Margin="392,116,0,0" VerticalAlignment="Top" Width="16" RenderTransformOrigin="2.303,1.51" Source="Assets/Images/AssociationEditor_16x.png" MouseDown="Image_MouseDown2"/>
         <CheckBox x:Name="TrayCheckBox" Content="Start in Tray" Grid.Column="2" HorizontalAlignment="Right" Margin="0,250,194.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109"/>
@@ -50,5 +50,20 @@
         <CheckBox x:Name="CustomEmotesCheckBox" Content="Custom Emotes" Grid.Column="2" HorizontalAlignment="Right" Margin="0,300,325.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609" Checked="CustomEmotesCheckBox_Checked" Unchecked="CustomEmotesCheckBox_Unchecked"/>
         <CheckBox x:Name="FilterLinesCheckBox" Content="Filter Lines" Grid.Column="2" HorizontalAlignment="Right" Margin="0,325,352.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609" Unchecked="FilterLinesCheckBox_Unchecked" Checked="FilterLinesCheckBox_Checked"/>
         <TextBox x:Name="CustomEmotesTextBox" HorizontalAlignment="Left" Height="17" Margin="189,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" Grid.Column="2" RenderTransformOrigin="0.965,0.275" MaxLength="6" Visibility="Collapsed" />
+        <GroupBox x:Name="LauncherGroupBox" Header="Launcher" HorizontalAlignment="Right" Height="153" Margin="0,370,56.333,0" VerticalAlignment="Top" Width="405" Grid.Column="2">
+            <TextBox x:Name="FilterLinesTextBox1" HorizontalAlignment="Left" Height="17" Margin="180,172,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" RenderTransformOrigin="0.965,0.275" Visibility="Collapsed" />
+        </GroupBox>
+        <CheckBox x:Name="RunClientOnLaunchCheckBox" Content="Auto Start" Grid.Column="2" HorizontalAlignment="Right" Margin="0,437,352.333,0" VerticalAlignment="Top" Checked="ServerNameCheckBox_Checked" Unchecked="ServerNameCheckBox_Unchecked" RenderTransformOrigin="0.004,0.604"/>
+        <CheckBox x:Name="CloseAfterGenerationCheckBox" Content="Auto Close" Grid.Column="2" HorizontalAlignment="Right" Margin="0,437,199.333,0" VerticalAlignment="Top" Checked="ServerNameCheckBox_Checked" Unchecked="ServerNameCheckBox_Unchecked" RenderTransformOrigin="0.004,0.604"/>
+        <Label x:Name="PathToClientLabel" Content="Path to Client:" HorizontalAlignment="Left" Margin="22,400,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Grid.Column="2"/>
+        <TextBox x:Name="PathToClientTextBox" HorizontalAlignment="Left" Height="23" Margin="112,403,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="262" Grid.Column="2" RenderTransformOrigin="0.965,0.275"/>
+        <Image x:Name="PathToClientImage" Grid.Column="2" HorizontalAlignment="Left" Height="16" Margin="379,407,0,0" VerticalAlignment="Top" Width="16" RenderTransformOrigin="2.303,1.51" Source="Assets/Images/AssociationEditor_16x.png" MouseDown="Image_MouseDown3"/>
+        <TextBox x:Name="ServerAddressTextBox" HorizontalAlignment="Left" Height="23" Margin="124,461,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="263" Grid.Column="2" RenderTransformOrigin="0.965,0.275"/>
+        <Label x:Name="ServerAddressLabel" Content="Server Address:" HorizontalAlignment="Left" Margin="22,458,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Grid.Column="2"/>
+        <Label x:Name="ServerPasswordLabel" Content="Server Password (optional):" HorizontalAlignment="Left" Margin="22,487,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Grid.Column="2"/>
+        <TextBox x:Name="ServerPasswordTextBox" HorizontalAlignment="Left" Height="23" Margin="180,488,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="206" Grid.Column="2" RenderTransformOrigin="0.965,0.275"/>
+        <Label x:Name="HintLabel" Content="Usage Tip: To configure multiple servers, copy NWNLogRotator.exe into another&#xD;&#xA;folder and configure that copy for the new server." HorizontalAlignment="Left" Margin="0,585,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Grid.Column="1" Width="460" Height="42" Grid.ColumnSpan="2" />
+        <Button x:Name="LaunchClientButton" Content="Launch Client" Grid.Column="2" HorizontalAlignment="Left" Margin="150,540,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867" Click="Button_Click_3"/>
+        <CheckBox x:Name="DMCheckBox" Content="DM" Grid.Column="2" HorizontalAlignment="Right" Margin="0,437,129.333,0" VerticalAlignment="Top" Checked="ServerNameCheckBox_Checked" Unchecked="ServerNameCheckBox_Unchecked" RenderTransformOrigin="0.004,0.604"/>
     </Grid>
 </Window>

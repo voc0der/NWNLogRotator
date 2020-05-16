@@ -11,7 +11,7 @@ namespace NWNLogRotator.Components
     public partial class FileHandler : Component
     {
         Settings _settings;
-        int _expectedSettingsCount = 14;
+        int _expectedSettingsCount = 20;
 
         public FileHandler()
         {
@@ -57,7 +57,13 @@ namespace NWNLogRotator.Components
                                         "SaveBackup=" + _settings.SaveBackup + "\n" +
                                         "Notifications=" + _settings.Notifications + "\n" +
                                         "CustomEmotes=" + _settings.CustomEmotes + "\n" +
-                                        "FilterLines=" + _settings.FilterLines;
+                                        "FilterLines=" + _settings.FilterLines + "\n" +
+                                        "PathToClient=" + _settings.PathToClient + "\n" +
+                                        "RunClientOnLaunch=" + _settings.RunClientOnLaunch + "\n" +
+                                        "CloseOnLogGenerated=" + _settings.CloseOnLogGenerated + "\n" +
+                                        "ServerAddress=" + _settings.ServerAddress + "\n" +
+                                        "ServerPassword=" + _settings.ServerPassword + "\n" +
+                                        "DM=" + _settings.DM + "\n";
             return NewSettingsFile;
         }
 
@@ -101,6 +107,12 @@ namespace NWNLogRotator.Components
             bool Notifications = false;
             string CustomEmotes = "";
             string FilterLines = "";
+            string PathToClient = "";
+            bool RunClientOnLaunch = false;
+            bool CloseOnLogGenerated = false;
+            string ServerAddress = "";
+            string ServerPassword = "";
+            bool DM = false;
 
             int Count = 0;
 
@@ -178,6 +190,36 @@ namespace NWNLogRotator.Components
                     FilterLines = ParameterValue;
                     Count += 1;
                 }
+                if (line.IndexOf("PathToClient=") != -1)
+                {
+                    PathToClient = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("RunClientOnLaunch=") != -1)
+                {
+                    RunClientOnLaunch = bool.Parse(ParameterValue);
+                    Count += 1;
+                }
+                if (line.IndexOf("CloseOnLogGenerated=") != -1)
+                {
+                    CloseOnLogGenerated = bool.Parse(ParameterValue);
+                    Count += 1;
+                }
+                if (line.IndexOf("ServerAddress=") != -1)
+                {
+                    ServerAddress = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("ServerPassword=") != -1)
+                {
+                    ServerPassword = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("DM=") != -1)
+                {
+                    DM = bool.Parse(ParameterValue);
+                    Count += 1;
+                }
             }
 
             _settings = new Settings(OutputDirectory,
@@ -193,7 +235,13 @@ namespace NWNLogRotator.Components
                                               SaveBackup,
                                               Notifications,
                                               CustomEmotes,
-                                              FilterLines
+                                              FilterLines,
+                                              PathToClient,
+                                              RunClientOnLaunch,
+                                              CloseOnLogGenerated,
+                                              ServerAddress,
+                                              ServerPassword,
+                                              DM
                                             );
             if(Count == 0)
             {

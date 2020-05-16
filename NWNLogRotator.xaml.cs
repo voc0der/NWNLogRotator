@@ -1,12 +1,13 @@
 ﻿/*  
     *  AUTHOR: Ravenmyst
-    *  DATE: 9/21/2019
+    *  DATE: 05/16/2020
     *  LICENSE: MIT
 */
 
 using NWNLogRotator.Classes;
 using NWNLogRotator.Components;
 using System;
+using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -117,6 +118,12 @@ namespace NWNLogRotator
             {
                 FilterLines = FilterLinesTextBox.Text;
             }
+            string PathToClient = PathToClientTextBox.Text;
+            bool RunClientOnLaunch = RunClientOnLaunchCheckBox.IsChecked.GetValueOrDefault();
+            bool CloseOnLogGenerated = CloseAfterGenerationCheckBox.IsChecked.GetValueOrDefault();
+            string ServerAddress = ServerAddressTextBox.Text;
+            string ServerPassword = ServerPasswordTextBox.Text;
+            bool DM = DMCheckBox.IsChecked.GetValueOrDefault();
 
             _settings = new Settings(OutputDirectory,
                                               PathToLog,
@@ -131,7 +138,13 @@ namespace NWNLogRotator
                                               SaveBackup,
                                               Notifications,
                                               CustomEmotes,
-                                              FilterLines
+                                              FilterLines,
+                                              PathToClient,
+                                              RunClientOnLaunch,
+                                              CloseOnLogGenerated,
+                                              ServerAddress,
+                                              ServerPassword,
+                                              DM
                                             );
 
             return _settings;
@@ -240,7 +253,12 @@ namespace NWNLogRotator
                 FilterLinesCheckBox.IsChecked = true;
                 FilterLinesTextBox.Text = _settings.FilterLines;
             }
-
+            PathToClientTextBox.Text = _settings.PathToClient;
+            RunClientOnLaunchCheckBox.IsChecked = _settings.RunClientOnLaunch;
+            CloseAfterGenerationCheckBox.IsChecked = _settings.CloseOnLogGenerated;
+            ServerAddressTextBox.Text = _settings.ServerAddress;
+            ServerPasswordTextBox.Text = _settings.ServerPassword;
+            DMCheckBox.IsChecked = _settings.DM;
             if (_settings.UseTheme == "light")
             {
                 ActivateLightTheme();
@@ -251,6 +269,9 @@ namespace NWNLogRotator
             }
 
             UpdateResultsPane(3);
+
+            if(_settings.RunClientOnLaunch)
+                LaunchClient();
         }
 
         private void ActivateDarkTheme()
@@ -268,12 +289,18 @@ namespace NWNLogRotator
             SilentCheckBox.Foreground = new SolidColorBrush(Colors.White);
             SaveSettingsButton.Background = Brushes.Black;
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.White);
+            LaunchClientButton.Background = Brushes.Black;
+            LaunchClientButton.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryTextBox.Background = Brushes.Black;
             PathToLogTextBox.Background = Brushes.Black;
             ServerNameTextBox.Background = Brushes.Black;
             ServerNameColorTextBox.Background = Brushes.Black;
             CustomEmotesTextBox.Background = Brushes.Black;
             FilterLinesTextBox.Background = Brushes.Black;
+            PathToClientLabel.Background = Brushes.Black;
+            PathToClientTextBox.Background = Brushes.Black;
+            ServerAddressTextBox.Background = Brushes.Black;
+            ServerPasswordTextBox.Background = Brushes.Black;
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.White);
             PathToLogTextBox.Foreground = new SolidColorBrush(Colors.White);
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.White);
@@ -294,6 +321,17 @@ namespace NWNLogRotator
             NotificationsCheckBox.Foreground = new SolidColorBrush(Colors.White);
             CustomEmotesCheckBox.Foreground = new SolidColorBrush(Colors.White);
             FilterLinesCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            LauncherGroupBox.Foreground = new SolidColorBrush(Colors.White);
+            PathToClientLabel.Foreground = new SolidColorBrush(Colors.White);
+            PathToClientTextBox.Foreground = new SolidColorBrush(Colors.White);
+            RunClientOnLaunchCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            CloseAfterGenerationCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            ServerAddressLabel.Foreground = new SolidColorBrush(Colors.White);
+            ServerAddressTextBox.Foreground = new SolidColorBrush(Colors.White);
+            ServerPasswordLabel.Foreground = new SolidColorBrush(Colors.White);
+            ServerPasswordTextBox.Foreground = new SolidColorBrush(Colors.White);
+            DMCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            HintLabel.Foreground = new SolidColorBrush(Colors.White);
 
             _settings.UseTheme = "dark";
         }
@@ -308,12 +346,18 @@ namespace NWNLogRotator
             SilentCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             SaveSettingsButton.Background = Brushes.White;
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.Black);
+            LaunchClientButton.Background = Brushes.White;
+            LaunchClientButton.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryTextBox.Background = Brushes.White;
             PathToLogTextBox.Background = Brushes.White;
             ServerNameTextBox.Background = Brushes.White;
             ServerNameColorTextBox.Background = Brushes.White;
             CustomEmotesTextBox.Background = Brushes.White;
             FilterLinesTextBox.Background = Brushes.White;
+            PathToClientLabel.Background = Brushes.White;
+            PathToClientTextBox.Background = Brushes.White;
+            ServerAddressTextBox.Background = Brushes.White;
+            ServerPasswordTextBox.Background = Brushes.White;
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.Black);
             PathToLogTextBox.Foreground = new SolidColorBrush(Colors.Black);
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.Black);
@@ -334,6 +378,17 @@ namespace NWNLogRotator
             NotificationsCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             CustomEmotesCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             FilterLinesCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            LauncherGroupBox.Foreground = new SolidColorBrush(Colors.Black);
+            PathToClientLabel.Foreground = new SolidColorBrush(Colors.Black);
+            PathToClientTextBox.Foreground = new SolidColorBrush(Colors.Black);
+            RunClientOnLaunchCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            CloseAfterGenerationCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            ServerAddressLabel.Foreground = new SolidColorBrush(Colors.Black);
+            ServerAddressTextBox.Foreground = new SolidColorBrush(Colors.Black);
+            ServerPasswordLabel.Foreground = new SolidColorBrush(Colors.Black);
+            ServerPasswordTextBox.Foreground = new SolidColorBrush(Colors.Black);
+            DMCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            HintLabel.Foreground = new SolidColorBrush(Colors.Black);
 
             _settings.UseTheme = "light";
         }
@@ -360,6 +415,11 @@ namespace NWNLogRotator
                     if (_messageBoxResult == MessageBoxResult.Yes)
                         System.Diagnostics.Process.Start(_filepathandname);
 
+                    if(_settings.CloseOnLogGenerated == true)
+                    {
+                        Process.GetCurrentProcess().Kill();
+                    }
+
                     return true;
                 }
                 else
@@ -369,6 +429,49 @@ namespace NWNLogRotator
             }
 
             return false;
+        }
+
+        private void LaunchClient()
+        {
+            _settings = CurrentSettings_Get();
+            var theLaunchPath = Path.GetDirectoryName(_settings.PathToClient);
+            var theLaunchExe = Path.GetFileName(_settings.PathToClient);
+            var theLaunchParameters = "";
+
+            if (theLaunchPath != "")
+            {
+                if (_settings.DM == true)
+                {
+                    theLaunchParameters += "  -dmc";
+                }
+                if (_settings.ServerAddress != "")
+                {
+                    theLaunchParameters += " +connect " + _settings.ServerAddress;
+                    if (_settings.ServerPassword != "")
+                    {
+                        theLaunchParameters += "  +password " + _settings.ServerPassword;
+                    }
+                }
+            }
+            if(theLaunchPath != "")
+            {
+                var theLaunchString = "/c START /w /d " + theLaunchPath + " " + theLaunchExe + theLaunchParameters;
+                //Process.Start(theLaunchString);
+                var p = new System.Diagnostics.Process();
+                p.StartInfo.FileName = "cmd.exe";
+                p.StartInfo.Arguments = theLaunchString;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
+            } 
+            else
+            {
+                MessageBoxResult _messageBoxResult = MessageBox.Show("Please configure the launch options prior to launching!",
+                            "Success!",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+            }
         }
 
         private void LoadTray_Handler()
@@ -547,6 +650,33 @@ namespace NWNLogRotator
                 default:
                     break;
             }
+        }
+
+        private void Image_MouseDown3(object sender, MouseButtonEventArgs e)
+        {
+            var fileDialog = new System.Windows.Forms.OpenFileDialog();
+            fileDialog.InitialDirectory = _settings.PathToLog;
+            fileDialog.Filter = "exe file (*.exe)|*.exe";
+            fileDialog.FilterIndex = 1;
+            fileDialog.RestoreDirectory = true;
+            var result = fileDialog.ShowDialog();
+            switch (result)
+            {
+                case System.Windows.Forms.DialogResult.OK:
+                    var file = fileDialog.FileName;
+                    PathToClientTextBox.Text = file;
+                    PathToClientTextBox.ToolTip = file;
+                    break;
+                case System.Windows.Forms.DialogResult.Cancel:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            LaunchClient();
         }
     }
 }

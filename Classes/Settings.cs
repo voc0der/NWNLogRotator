@@ -16,6 +16,12 @@
         public bool Notifications;
         public string CustomEmotes;
         public string FilterLines;
+        public string PathToClient;
+        public bool RunClientOnLaunch;
+        public bool CloseOnLogGenerated;
+        public string ServerAddress;
+        public string ServerPassword;
+        public bool DM;
 
         // create singleton
         public static Settings _instance = new Settings();
@@ -37,6 +43,12 @@
             this.Notifications = false;
             this.CustomEmotes = "";
             this.FilterLines = "";
+            this.PathToClient = "";
+            this.RunClientOnLaunch = false;
+            this.CloseOnLogGenerated = false;
+            this.ServerAddress = "";
+            this.ServerPassword = "";
+            this.DM = false;
         }
 
         // binding
@@ -53,7 +65,13 @@
                         bool SaveBackup,
                         bool Notifications,
                         string CustomEmotes,
-                        string FilterLines)
+                        string FilterLines,
+                        string PathToClient,
+                        bool RunClientOnLaunch,
+                        bool CloseOnLogGenerated,
+                        string ServerAddress,
+                        string ServerPassword,
+                        bool DM)
         {
             this.OutputDirectory = OutputDirectory;
             this.PathToLog = PathToLog;
@@ -69,6 +87,12 @@
             this.Notifications = Notifications;
             this.CustomEmotes = CustomEmotes;
             this.FilterLines = FilterLines;
+            this.PathToClient = PathToClient;
+            this.RunClientOnLaunch = RunClientOnLaunch;
+            this.CloseOnLogGenerated = CloseOnLogGenerated;
+            this.ServerAddress = ServerAddress;
+            this.ServerPassword = ServerPassword;
+            this.DM = DM;
         }
 
         // get singleton
