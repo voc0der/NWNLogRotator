@@ -449,7 +449,15 @@ namespace NWNLogRotator
         private void LaunchClient()
         {
             _settings = CurrentSettings_Get();
-            var theLaunchPath = Path.GetDirectoryName(_settings.PathToClient);
+            var theLaunchPath = "";
+            try
+            {
+                theLaunchPath = Path.GetDirectoryName(_settings.PathToClient);
+            }
+            catch
+            {
+                theLaunchPath = "";
+            }
             var theLaunchParameters = "";
 
             if (theLaunchPath != "")
