@@ -25,11 +25,11 @@ namespace NWNLogRotator
         Settings _settings;
         System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
         Notification notification = new Notification();
+        private int ClientLauncherState = 0;
 
         public MainWindow()
         {
             InitializeComponent();
-
             SetupApplication();
         }
 
@@ -50,40 +50,55 @@ namespace NWNLogRotator
         {
             var Status = NWNProcessStatus_Get();
 
-            if (Status == true)
+            if (Status > 0)
             {
-                NWNStatusTextBlock.Text = "nwmain is active!";
+                NWNStatusTextBlock.Text = "Client is active!";
                 NWNStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
-                await Task.Delay(10000);
-                IterateNWN_Watcher(true);
+                if (Status == 1)
+                {
+                    await Task.Delay(10000);
+                    IterateNWN_Watcher(true);
+                }
             }
             else
             {
+                NWNStatusTextBlock.Text = "Client not found!";
+                NWNStatusTextBlock.Foreground = new SolidColorBrush(Colors.Red);
                 if (PreviousStatus == true)
                 {
                     _settings = CurrentSettings_Get();
                     if (NWNLog_Save(_settings) == true)
                         UpdateResultsPane(1);
                 }
-                NWNStatusTextBlock.Text = "nwmain not found!";
-                NWNStatusTextBlock.Foreground = new SolidColorBrush(Colors.Red);
                 await Task.Delay(10000);
                 IterateNWN_Watcher(false);
+                ClientLauncherState = 0;
             }
         }
 
-        private bool NWNProcessStatus_Get()
+        private int NWNProcessStatus_Get()
         {
-            Process[] processlist = Process.GetProcesses();
-
-            foreach (Process theProcess in processlist)
+            if(ClientLauncherState == 1)
             {
-                if (theProcess.ProcessName.IndexOf("nwmain") != -1)
-                {
-                    return true;
-                }
+                return 2;
+            } 
+            else if (ClientLauncherState == 2)
+            {
+                return 0;
             }
-            return false;
+            else
+            {
+                Process[] processlist = Process.GetProcesses();
+
+                foreach (Process theProcess in processlist)
+                {
+                    if (theProcess.ProcessName.IndexOf("nwmain") != -1)
+                    {
+                        return 1;
+                    }
+                }
+                return 0;
+            }      
         }
 
         private Settings CurrentSettings_Get()
@@ -435,40 +450,53 @@ namespace NWNLogRotator
         {
             _settings = CurrentSettings_Get();
             var theLaunchPath = Path.GetDirectoryName(_settings.PathToClient);
-            var theLaunchExe = Path.GetFileName(_settings.PathToClient);
             var theLaunchParameters = "";
 
             if (theLaunchPath != "")
             {
                 if (_settings.DM == true)
                 {
-                    theLaunchParameters += "  -dmc";
+                    theLaunchParameters += " -dmc";
                 }
                 if (_settings.ServerAddress != "")
                 {
-                    theLaunchParameters += " +connect " + _settings.ServerAddress;
+                    theLaunchParameters += "+connect " + _settings.ServerAddress;
                     if (_settings.ServerPassword != "")
                     {
-                        theLaunchParameters += "  +password " + _settings.ServerPassword;
+                        theLaunchParameters += " +password " + _settings.ServerPassword;
                     }
                 }
             }
-            if(theLaunchPath != "")
+            if(theLaunchPath != "" && File.Exists(_settings.PathToClient))
             {
-                var theLaunchString = "/c START /w /d " + theLaunchPath + " " + theLaunchExe + theLaunchParameters;
-                //Process.Start(theLaunchString);
-                var p = new System.Diagnostics.Process();
-                p.StartInfo.FileName = "cmd.exe";
-                p.StartInfo.Arguments = theLaunchString;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
-                p.Start();
+                try
+                {
+                    var p = new System.Diagnostics.Process();
+                    p.StartInfo.FileName = _settings.PathToClient;
+                    p.StartInfo.Arguments = theLaunchParameters;
+                    p.StartInfo.WorkingDirectory = theLaunchPath;
+                    p.StartInfo.RedirectStandardOutput = false;
+                    p.StartInfo.UseShellExecute = true;
+                    p.StartInfo.CreateNoWindow = true;
+                    ClientLauncherState = 1;
+                    IterateNWN_Watcher(false);
+                    p.Start();
+                    p.WaitForExit();
+                    ClientLauncherState = 2;
+                    IterateNWN_Watcher(true);
+                }
+                catch (Exception ex)
+                {
+                    MessageBoxResult _messageBoxResult = MessageBox.Show("An issue occured when trying to open the client: " + ex.Message,
+                            "Client Not Found!",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                }
             } 
             else
             {
-                MessageBoxResult _messageBoxResult = MessageBox.Show("Please configure the launch options prior to launching!",
-                            "Success!",
+                MessageBoxResult _messageBoxResult = MessageBox.Show("Please configure the launch options, and verify the client path is correct prior to launching!",
+                            "Configure Launch Options",
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
             }

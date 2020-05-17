@@ -103,9 +103,17 @@ namespace NWNLogRotator.Classes
                 "</style>" +
             "</head>";
 
-            string logTitle = "<h4>[<span class='logheader'>" + ServerName + " Log</span>] "
-           + "<span class='actors'>Date/Time</span>: " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt")
-           + "</h4>";
+            string logTitle;
+            if (ServerName != "")
+            {
+                 logTitle = "<h4>[<span class='logheader'>" + ServerName + " Log</span>] ";
+            }
+            else
+            {
+                 logTitle = "<h4>[<span class='logheader'>Log</span>] ";
+            }
+            logTitle += "<span class='actors'>Date/Time</span>: " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
+            logTitle += "</h4>";
             string postLog = "</span></body></html>";
             return "<html>" + HTMLHeader + logTitle + ParsedNWNLog + "<body class='logbody'><span class='default'>" + postLog;
         }
