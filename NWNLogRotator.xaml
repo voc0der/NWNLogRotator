@@ -23,7 +23,7 @@
             <TextBox x:Name="FilterLinesTextBox" HorizontalAlignment="Left" Height="17" Margin="180,172,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" RenderTransformOrigin="0.965,0.275" Visibility="Collapsed" />
         </GroupBox>
         <CheckBox x:Name="EventTextCheckBox" Content="Remove Event Text" Grid.Column="2" HorizontalAlignment="Right" Margin="0,250,309.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"/>
-        <CheckBox x:Name="CombatTextCheckBox" Content="Remove Combat Text" Grid.Column="2" HorizontalAlignment="Right" Margin="0,275,295.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609"/>
+        <CheckBox x:Name="CombatTextCheckBox" Content="Remove Combat Text" Grid.Column="2" HorizontalAlignment="Right" Margin="0,275,296.333,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609"/>
         <Label x:Name="PathToLogLabel" Content="Path to Log:" HorizontalAlignment="Left" Margin="11.667,106,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Grid.Column="1" Grid.ColumnSpan="2"/>
         <TextBox x:Name="PathToLogTextBox" HorizontalAlignment="Left" Height="23" Margin="73,111,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="314" Grid.Column="2" RenderTransformOrigin="0.965,0.275"/>
         <Label x:Name="MinimumRowsLabel" Content="lines minimum to save log:" HorizontalAlignment="Left" Margin="38,163,0,0" VerticalAlignment="Top" Grid.Column="2" RenderTransformOrigin="0.44,2.721"/>
