@@ -37,7 +37,6 @@ namespace NWNLogRotator
         {
             LoadSettings_Handler();
             IterateNWN_Watcher(false);
-            LoadTray_Handler();
         }
 
         private Settings Settings_Get()
@@ -338,7 +337,9 @@ namespace NWNLogRotator
 
             UpdateResultsPane(3);
 
-            if(_settings.RunClientOnLaunch)
+            LoadTray_Handler();
+
+            if (_settings.RunClientOnLaunch)
                 LaunchClient();
         }
 
@@ -506,7 +507,7 @@ namespace NWNLogRotator
             return false;
         }
 
-        private void LaunchClient()
+        private async void LaunchClient()
         {
             _settings = CurrentSettings_Get();
             var theLaunchPath = "";
@@ -548,10 +549,13 @@ namespace NWNLogRotator
                     p.StartInfo.CreateNoWindow = true;
                     ClientLauncherState = 1;
                     IterateNWN_Watcher(false);
-                    p.Start();
-                    p.WaitForExit();
-                    ClientLauncherState = 2;
-                    IterateNWN_Watcher(true);
+                    await Task.Run(() =>
+                    {
+                        p.Start();
+                        p.WaitForExit();
+                        ClientLauncherState = 2;
+                        IterateNWN_Watcher(true);
+                    });
                 }
                 catch (Exception ex)
                 {
