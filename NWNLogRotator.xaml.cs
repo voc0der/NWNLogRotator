@@ -1,6 +1,6 @@
 ﻿/*  
     *  AUTHOR: Ravenmyst
-    *  DATE: 05/16/2020
+    *  DATE: 05/23/2020
     *  LICENSE: MIT
 */
 
@@ -35,8 +35,8 @@ namespace NWNLogRotator
 
         private void SetupApplication()
         {
-            IterateNWN_Watcher(false);
             LoadSettings_Handler();
+            IterateNWN_Watcher(false);
             LoadTray_Handler();
         }
 
@@ -46,37 +46,75 @@ namespace NWNLogRotator
             return _settings;
         }
 
+        private SolidColorBrush Color_Get(string UseTheme, bool OnColor)
+        {
+            if(OnColor == true)
+            {
+                if (_settings.UseTheme == "light")
+                {
+                    return new SolidColorBrush(Colors.DarkGreen);
+                }
+                else if (_settings.UseTheme == "dark")
+                {
+                    return new SolidColorBrush(Colors.LawnGreen);
+                }
+            }
+            else
+            {
+                if (_settings.UseTheme == "light")
+                {
+                    return new SolidColorBrush(Colors.DarkRed);
+                }
+                else if (_settings.UseTheme == "dark")
+                {
+                    return new SolidColorBrush(Colors.Red);
+                }
+            }
+            
+            return new SolidColorBrush(Colors.Gray);
+        }
+
         private async void IterateNWN_Watcher(bool PreviousStatus)
         {
-            var Status = NWNProcessStatus_Get();
+            _settings = CurrentSettings_Get();
+            var OnColor = Color_Get(_settings.UseTheme, true);
+            var OffColor = Color_Get(_settings.UseTheme, false);
+            string ProcessName = "nwmain";
+            int IterateDelay = 10000;
+            if(_settings.ServerMode == true)
+            {
+                ProcessName = "nwserver";
+                IterateDelay = 5000;
+            }
+            var Status = NWNProcessStatus_Get(ProcessName);
 
             if (Status > 0)
             {
-                NWNStatusTextBlock.Text = "Client is active!";
-                NWNStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                NWNStatusTextBlock.Text = ProcessName + " is active!";
+                NWNStatusTextBlock.Foreground = OnColor;
+
                 if (Status == 1)
                 {
-                    await Task.Delay(10000);
+                    await Task.Delay(IterateDelay);
                     IterateNWN_Watcher(true);
                 }
             }
             else
             {
-                NWNStatusTextBlock.Text = "Client not found!";
-                NWNStatusTextBlock.Foreground = new SolidColorBrush(Colors.Red);
+                NWNStatusTextBlock.Text = ProcessName + " not found!";
+                NWNStatusTextBlock.Foreground = OffColor;
                 if (PreviousStatus == true)
                 {
-                    _settings = CurrentSettings_Get();
                     if (NWNLog_Save(_settings) == true)
                         UpdateResultsPane(1);
                 }
-                await Task.Delay(10000);
+                await Task.Delay(IterateDelay);
                 IterateNWN_Watcher(false);
                 ClientLauncherState = 0;
             }
         }
 
-        private int NWNProcessStatus_Get()
+        private int NWNProcessStatus_Get(string ProcessName)
         {
             if(ClientLauncherState == 1)
             {
@@ -92,7 +130,7 @@ namespace NWNLogRotator
 
                 foreach (Process theProcess in processlist)
                 {
-                    if (theProcess.ProcessName.IndexOf("nwmain") != -1)
+                    if (theProcess.ProcessName.IndexOf(ProcessName) != -1)
                     {
                         return 1;
                     }
@@ -139,6 +177,7 @@ namespace NWNLogRotator
             string ServerAddress = ServerAddressTextBox.Text;
             string ServerPassword = ServerPasswordTextBox.Text;
             bool DM = DMCheckBox.IsChecked.GetValueOrDefault();
+            bool ServerMode = ServerModeRadioButton.IsChecked.GetValueOrDefault();
 
             _settings = new Settings(OutputDirectory,
                                               PathToLog,
@@ -159,7 +198,8 @@ namespace NWNLogRotator
                                               CloseOnLogGenerated,
                                               ServerAddress,
                                               ServerPassword,
-                                              DM
+                                              DM,
+                                              ServerMode
                                             );
 
             return _settings;
@@ -197,40 +237,44 @@ namespace NWNLogRotator
 
         public async void UpdateResultsPane(int result)
         {
+            _settings = CurrentSettings_Get();
+            var OnColor = Color_Get(_settings.UseTheme, true);
+            var OffColor = Color_Get(_settings.UseTheme, false);
+
             switch (result)
             {
                 case -1:
                     EventStatusTextBlock.Text = "";
-                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    EventStatusTextBlock.Foreground = OnColor;
                     break;
                 case 1:
                     EventStatusTextBlock.Text = "Log Saved Successfully!";
-                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    EventStatusTextBlock.Foreground = OnColor;
                     await Task.Delay(2000);
                     EventStatusTextBlock.Text = "";
                     break;
                 case 2:
                     EventStatusTextBlock.Text = "Settings Saved Successfully!";
-                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    EventStatusTextBlock.Foreground = OnColor;
                     await Task.Delay(1000);
                     EventStatusTextBlock.Text = "";
                     break;
                 case 3:
                     EventStatusTextBlock.Text = "Settings Loaded Successfully!";
-                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    EventStatusTextBlock.Foreground = OnColor;
                     await Task.Delay(2000);
                     System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
                     FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
                     string version = fvi.FileVersion;
                     version = "v" + version.Substring(2, version.Length - 2);
                     EventStatusTextBlock.Text = "Version " + version;
-                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    EventStatusTextBlock.Foreground = OnColor;
                     await Task.Delay(1000);
                     EventStatusTextBlock.Text = "";
                     break;
                 case 4:
                     EventStatusTextBlock.Text = "Loading..";
-                    EventStatusTextBlock.Foreground = new SolidColorBrush(Colors.LawnGreen);
+                    EventStatusTextBlock.Foreground = OnColor;
                     break;
             }
         }
@@ -274,6 +318,15 @@ namespace NWNLogRotator
             ServerAddressTextBox.Text = _settings.ServerAddress;
             ServerPasswordTextBox.Text = _settings.ServerPassword;
             DMCheckBox.IsChecked = _settings.DM;
+            if(_settings.ServerMode == false)
+            {
+                ClientModeRadioButton.IsChecked = true;
+            }
+            else
+            {
+                ServerModeRadioButton.IsChecked = true;
+            }
+            
             if (_settings.UseTheme == "light")
             {
                 ActivateLightTheme();
@@ -316,6 +369,7 @@ namespace NWNLogRotator
             PathToClientTextBox.Background = Brushes.Black;
             ServerAddressTextBox.Background = Brushes.Black;
             ServerPasswordTextBox.Background = Brushes.Black;
+            MainStatusBar.Background = Brushes.Black;
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.White);
             PathToLogTextBox.Foreground = new SolidColorBrush(Colors.White);
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.White);
@@ -346,7 +400,10 @@ namespace NWNLogRotator
             ServerPasswordLabel.Foreground = new SolidColorBrush(Colors.White);
             ServerPasswordTextBox.Foreground = new SolidColorBrush(Colors.White);
             DMCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            ClientModeRadioButton.Foreground = new SolidColorBrush(Colors.White);
+            ServerModeRadioButton.Foreground = new SolidColorBrush(Colors.White);
             HintLabel.Foreground = new SolidColorBrush(Colors.White);
+            
 
             _settings.UseTheme = "dark";
         }
@@ -373,6 +430,7 @@ namespace NWNLogRotator
             PathToClientTextBox.Background = Brushes.White;
             ServerAddressTextBox.Background = Brushes.White;
             ServerPasswordTextBox.Background = Brushes.White;
+            MainStatusBar.Background = Brushes.White;
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.Black);
             PathToLogTextBox.Foreground = new SolidColorBrush(Colors.Black);
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.Black);
@@ -403,6 +461,8 @@ namespace NWNLogRotator
             ServerPasswordLabel.Foreground = new SolidColorBrush(Colors.Black);
             ServerPasswordTextBox.Foreground = new SolidColorBrush(Colors.Black);
             DMCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            ClientModeRadioButton.Foreground = new SolidColorBrush(Colors.Black);
+            ServerModeRadioButton.Foreground = new SolidColorBrush(Colors.Black);
             HintLabel.Foreground = new SolidColorBrush(Colors.Black);
 
             _settings.UseTheme = "light";

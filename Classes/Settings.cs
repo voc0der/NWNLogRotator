@@ -22,6 +22,7 @@
         public string ServerAddress;
         public string ServerPassword;
         public bool DM;
+        public bool ServerMode;
 
         // create singleton
         public static Settings _instance = new Settings();
@@ -49,6 +50,7 @@
             this.ServerAddress = "";
             this.ServerPassword = "";
             this.DM = false;
+            this.ServerMode = false;
         }
 
         // binding
@@ -71,7 +73,8 @@
                         bool CloseOnLogGenerated,
                         string ServerAddress,
                         string ServerPassword,
-                        bool DM)
+                        bool DM,
+                        bool ServerMode)
         {
             this.OutputDirectory = OutputDirectory;
             this.PathToLog = PathToLog;
@@ -93,6 +96,7 @@
             this.ServerAddress = ServerAddress;
             this.ServerPassword = ServerPassword;
             this.DM = DM;
+            this.ServerMode = ServerMode;
         }
 
         // get singleton

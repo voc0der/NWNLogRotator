@@ -11,7 +11,7 @@ namespace NWNLogRotator.Components
     public partial class FileHandler : Component
     {
         Settings _settings;
-        int _expectedSettingsCount = 20;
+        int _expectedSettingsCount = 21;
 
         public FileHandler()
         {
@@ -63,7 +63,8 @@ namespace NWNLogRotator.Components
                                         "CloseOnLogGenerated=" + _settings.CloseOnLogGenerated + "\n" +
                                         "ServerAddress=" + _settings.ServerAddress + "\n" +
                                         "ServerPassword=" + _settings.ServerPassword + "\n" +
-                                        "DM=" + _settings.DM + "\n";
+                                        "DM=" + _settings.DM + "\n" +
+                                        "ServerMode=" + _settings.ServerMode;
             return NewSettingsFile;
         }
 
@@ -113,6 +114,7 @@ namespace NWNLogRotator.Components
             string ServerAddress = "";
             string ServerPassword = "";
             bool DM = false;
+            bool ServerMode = false;
 
             int Count = 0;
 
@@ -220,6 +222,11 @@ namespace NWNLogRotator.Components
                     DM = bool.Parse(ParameterValue);
                     Count += 1;
                 }
+                if (line.IndexOf("ServerMode=") != -1)
+                {
+                    ServerMode = bool.Parse(ParameterValue);
+                    Count += 1;
+                }
             }
 
             _settings = new Settings(OutputDirectory,
@@ -241,7 +248,8 @@ namespace NWNLogRotator.Components
                                               CloseOnLogGenerated,
                                               ServerAddress,
                                               ServerPassword,
-                                              DM
+                                              DM,
+                                              ServerMode
                                             );
             if(Count == 0)
             {
