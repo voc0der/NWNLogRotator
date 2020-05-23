@@ -553,9 +553,9 @@ namespace NWNLogRotator
                     {
                         p.Start();
                         p.WaitForExit();
-                        ClientLauncherState = 2;
-                        IterateNWN_Watcher(true);
                     });
+                    ClientLauncherState = 2;
+                    IterateNWN_Watcher(true);
                 }
                 catch (Exception ex)
                 {
