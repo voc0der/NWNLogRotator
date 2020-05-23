@@ -19,6 +19,8 @@ Important: Open Windows Explorer and enter %HOMEPATH%, and the last directory th
 | Output Directory | C:\Program Files (x86)\Neverwinter Nights\logs\ | New logs stored in default 1.69 log directory |
 | Path to Log | C:\Users\\_USER_\Documents\Neverwinter Nights\logs\nwClientLog1.txt | Get log from Steam EE default log directory |
 | Path to Log | C:\Program Files (x86)\Neverwinter Nights\logs\nwClientLog1.txt | Get log from 1.69 default log directory |
+| Player Mode | True | NWNLogRotator will look for the player client |
+| Server Mode | True | NWNLogRotator will look for server client |
 | Server Name | Test | Server logs will be written to OutputDirectory\Test |
 | Server Name Color | FFCC00 | The server name in the log appears yellow |
 | Server Name Color | FF0000 | The server name in the log appears red |
