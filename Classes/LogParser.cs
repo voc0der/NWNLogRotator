@@ -222,9 +222,12 @@ namespace NWNLogRotator.Classes
             "Quick bar",
             "[ERROR TOO MANY INSTRUCTIONS]",
             "*** ValidateGFFResource sent by user.",
+            "Modifying colours doesn't cost gold.",
+            "Ignore the crafting roll and gold message for robes."
         };
 
-        private static string timestampMatch = @".+?(?=.*)"; //@"^\[\w\w\w\s\w\w\w\s\d\d\s\d\d:\d\d:\d\d\]\s";
+        private static string timestampMatch = @".+?(?=.*)"; 
+        private static string timestampExactMatch = @"\[\w\w\w\s\w\w\w\s\d\d\s\d\d:\d\d:\d\d\]\s";
 
         private List<Regex> combatLines = new List<Regex>
         {
@@ -274,6 +277,28 @@ namespace NWNLogRotator.Classes
             new Regex( @"Error\:\s?\d{1,}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
             new Regex( @"gog\:\s?authentication\s?failed\:\s?\d{1,}\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
             new Regex( timestampMatch+@"Script\s.*,\sOID\:.*,\sTag\:\s.*,\sERROR\:\sTOO MANY INSTRUCTIONS\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            // Crafting-related removing.
+            new Regex( timestampMatch+@"\[(?:Applying|Removing) crafting effects\]\s*?\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( timestampMatch+@".*?\:\sJump\s\d+\s(?:part|colou?r)s\s(?:forward|backward)\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( timestampMatch+@".*?\:\sSelect\sthe\scolou?r\stype\sthat\syou\swant\sto\schange\.\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( timestampMatch+@"Lost\sItem\:\s[A-z\s\(\)\d]+(?=\r\n)", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( timestampMatch+@"Colou?r\sset\sto\:\s[A-z\s\(\)\d]+\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( timestampMatch+@"Current Colou?r(\stype)?\:\s[A-z\s\(\)\d]+\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( timestampMatch+@"Current\spart\:\s\d+(\(\d+\))?\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( timestampMatch+@".*?\:\s(?:Next|Previous|Change)\sColou?r\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( timestampMatch+@".*?\:\s(?:Next|Previous|Change)\sColou?r\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( timestampMatch+@".*?\:\sChange\s(?:Right|Left)?\s?[A-z]+\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( timestampMatch+@".*?\:\s(Next|Previous) part\r\n", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase ),
+            new Regex( @"\r\n(?=\r\n)", RegexOptions.Compiled | RegexOptions.Multiline ),
+            // Try compound statements, then individual lines if they still remain.
+            new Regex( timestampMatch+@".*?\:\sChange\s(?:Cloth|Metal|Leather)\s\d+\r\n"+timestampExactMatch+@".*?\:\sBack\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( timestampMatch+@".*?\:\sWhich\spart\sdo\syou\s\want\sto\schange\?\r\n("+timestampExactMatch+@".*?\:\s(?:Right|Left)\s?[A-z]*?\r\n)?"+timestampExactMatch+@".*?\:\sBack\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( timestampMatch+@".*?\:\sWhat\sdo\syou\swant\sto\smodify\?\r\n("+timestampExactMatch+@".*?\:\s(?:Armour|Weapon)\s?(?:Colours|Appearance)\r\n)?"+timestampExactMatch+@".*?\:\sBack\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            // Fallback compounds
+            new Regex( timestampMatch+@".*?\:\sWhich\spart\sdo\syou\s\want\sto\schange\?\r\n"+timestampExactMatch+@".*?\:\s((?:Right|Left)\s?[A-z]*?|Neck|Back|Belt|Helmet|Armour)\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( timestampMatch+@".*?\:\sChange\s(?:Cloth|Metal|Leather)\s\d+\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( timestampMatch+@".*?\:\sWhat\sdo\syou\swant\sto\smodify\?\r\n"+timestampExactMatch+@".*?\:\s(?:Armour|Weapon)\s?(?:Colours|Appearance)\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( @"\r\n(?=\r\n)", RegexOptions.Compiled | RegexOptions.Multiline ),
         };
     }
 }

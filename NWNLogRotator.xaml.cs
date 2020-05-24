@@ -405,7 +405,6 @@ namespace NWNLogRotator
             ServerModeRadioButton.Foreground = new SolidColorBrush(Colors.White);
             HintLabel.Foreground = new SolidColorBrush(Colors.White);
             
-
             _settings.UseTheme = "dark";
         }
 
