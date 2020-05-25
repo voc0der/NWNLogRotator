@@ -9,7 +9,7 @@ namespace NWNLogRotator.Classes
 {
     class LogParser
     {
-        public string ParseLog(Stream inputStream, bool removeCombat, bool removeEvents, string ServerName, string ServerNameColor, string CustomEmotes, string FilterLines)
+        public string ParseLog(Stream inputStream, bool removeCombat, bool removeEvents, string ServerName, string ServerNameColor, string CustomEmotes, string FilterLines, bool ServerMode)
         {
             var reader = new StreamReader(inputStream, Encoding.GetEncoding("iso-8859-1"));
             var removeExps = new List<Regex>();
@@ -62,7 +62,11 @@ namespace NWNLogRotator.Classes
             foreach (var exp in removeExps)
                 text = exp.Replace(text, "");
 
-            
+            if (ServerMode == true)
+            {
+                foreach (var exp in serverReplacesOrdered)
+                    text = exp.Item1.Replace(text, exp.Item2);
+            }
 
             formatReplacesOrdered = formatReplacesWithUserOverride(CustomEmotes);
 
@@ -99,14 +103,14 @@ namespace NWNLogRotator.Classes
                 HTMLHeader += ServerNameColor;
             }
             HTMLHeader += " }" +
-            ".default { color: #FFFFFF }" +
-            ".timestamp { color: #B1A2BD; }" +
-            ".actors { color: #8F7FFF; }" +
-            ".tells { color: #0F0; }" +
-            ".whispers { color: #808080; }" +
-            ".emotes { color: #ffaed6; }" +
-        "</style>" +
-    "</head>";
+                    ".default { color: #FFFFFF }" +
+                    ".timestamp { color: #B1A2BD; }" +
+                    ".actors { color: #8F7FFF; }" +
+                    ".tells { color: #0F0; }" +
+                    ".whispers { color: #808080; }" +
+                    ".emotes { color: #ffaed6; }" +
+                "</style>" +
+            "</head>";
 
             string logTitle;
             if (ServerName != "")
@@ -306,6 +310,18 @@ namespace NWNLogRotator.Classes
             new Regex(timestampMatch + @".*?\:\sChange\s(?:Cloth|Metal|Leather)\s\d+\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
             new Regex(timestampMatch + @".*?\:\sWhat\sdo\syou\swant\sto\smodify\?\r\n" + timestampExactMatch + @".*?\:\s(?:Armour|Weapon)\s?(?:Colours|Appearance)\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
             new Regex(@"\r\n(?=\r\n)", RegexOptions.Compiled | RegexOptions.Multiline),
+        };
+        private List<Tuple<Regex, string>> serverReplacesOrdered = new List<Tuple<Regex, string>>
+        {
+            new Tuple<Regex, string> ( new Regex(@"(\-\-\-\-\sServer\sOptions\s\-\-\-\-)([^|]*)(\-\-\-\-\sEnd\sServer\sOptions\s\-\-\-\-)", RegexOptions.Compiled), "<span class='whispers'>$1</span><span class='tells'>$2</span><span class='whispers'>$3</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"\]\s(.*?)\s(Joined\sas\s(?:Game\sMaster|Player)\s\d+)(?=\r\n)", RegexOptions.Compiled), "] <span class='actors'>$1</span> $2" ),
+            new Tuple<Regex, string> ( new Regex(@"\]\s(.*?)\s(Left\sas\sa\s(?:Game\sMaster|Player))\s(\(\d+\splayers\sleft\))(?=\r\n)", RegexOptions.Compiled), "] <span class='actors'>$1</span> $2 <span class='emotes'>$3</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Your cryptographic public identity is\:\s)(.*?)(?=\r\n)", RegexOptions.Compiled), "$1<span class='emotes'>$2</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Our\spublic\saddress\sas\sseen\sby\sthe\smasterserver\:)\s(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5})", RegexOptions.Compiled), "$1 <span class='emotes'>$2</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Connection\sAttempt\smade\sby\s)(.*?)(?=(\r\n|$))", RegexOptions.Compiled), "<span class='whispers'>$1</span><span class='actors'>$2</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(SpellLikeAbilityReady\: Could not find valid ability in list.*?)(?=\r\n)", RegexOptions.Compiled), "<span class='whispers'>$1</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Event\sadded\swhile\spaused\:\s*?EventId\:\s\d\s*?CallerId\:\s\d+\s*?ObjectId\:\s*?\d+)", RegexOptions.Compiled), "<span class='emotes'>$1</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Server Shutting Down)", RegexOptions.Compiled), "<span class='whispers'>$1</span>" ),
         };
     }
 }

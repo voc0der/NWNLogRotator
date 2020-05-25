@@ -336,7 +336,7 @@ namespace NWNLogRotator.Components
             }
 
             LogParser instance = new LogParser();
-            result = instance.ParseLog(fs, _run_settings.CombatText, _run_settings.EventText, _run_settings.ServerName, _run_settings.ServerNameColor, _run_settings.CustomEmotes, _run_settings.FilterLines);
+            result = instance.ParseLog(fs, _run_settings.CombatText, _run_settings.EventText, _run_settings.ServerName, _run_settings.ServerNameColor, _run_settings.CustomEmotes, _run_settings.FilterLines, _run_settings.ServerMode);
             fs.Close();
 
             // maintain minimum row lines requirement
