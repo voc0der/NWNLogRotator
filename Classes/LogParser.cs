@@ -145,7 +145,7 @@ namespace NWNLogRotator.Classes
                         string tempLeftBracket = theEmotePair.Substring(0, 1);
                         string tempRightBracket = theEmotePair.Substring(1, 1);
                         string theRegEx;
-                        theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell)).*\\" + tempRightBracket;
+                        theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell)).*?\\" + tempRightBracket;
 
                         Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled | RegexOptions.Multiline), "<span class='emotes'>$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
@@ -154,7 +154,7 @@ namespace NWNLogRotator.Classes
                     {
                         string tempBracket = theEmotePair.Substring(0, 1);
                         string theRegEx;
-                        theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell)).*\\" + tempBracket;
+                        theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell)).*?\\" + tempBracket;
 
                         Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled | RegexOptions.Multiline), "<span class='emotes'>$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
@@ -186,7 +186,7 @@ namespace NWNLogRotator.Classes
         private List<Tuple<Regex, string>> formatReplacesOrderedTwo = new List<Tuple<Regex, string>>
         {
             // emotes 
-            new Tuple<Regex, string>( new Regex(@"(\*.*\*)",RegexOptions.Compiled | RegexOptions.Multiline ), "<span class='emotes'>$1</span>")
+            new Tuple<Regex, string>( new Regex(@"(\*.*?\*)",RegexOptions.Compiled | RegexOptions.Multiline ), "<span class='emotes'>$1</span>")
         };
 
         private List<Tuple<Regex, string>> formatReplacesOrderedThree = new List<Tuple<Regex, string>>
