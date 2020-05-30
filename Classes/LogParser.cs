@@ -276,6 +276,7 @@ namespace NWNLogRotator.Classes
             new Regex( timestampMatch+@"\s{1}You cannot rest so soon after exerting yourself.\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
             new Regex( timestampMatch+@"\s{1}Equipping this armor has disabled your monk abilities.\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
             new Regex( timestampMatch+@"\s{1}No resting is allowed in this area.\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex( timestampMatch+@"\s[A-z\s]*?enters rage.\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
         };
         private List<Regex> garbageLines = new List<Regex>
         {
