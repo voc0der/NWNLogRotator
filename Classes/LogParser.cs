@@ -78,11 +78,11 @@ namespace NWNLogRotator.Classes
             text = HTMLPackageLog_Get(text, ServerName, ServerNameColor);
             return text;
         }
-        public bool ActorOccurences_Get(string ParsedNWNLog, int MinimumRowsCount)
+        public bool LineCount_Get(string ParsedNWNLog, int MinimumRowsCount)
         {
-            Match ActorOccurences = Regex.Match(ParsedNWNLog, @"<span class=\'actors\'>");
+            Match LineCount = Regex.Match(ParsedNWNLog, @"<br />");
 
-            if (ActorOccurences.Length >= MinimumRowsCount)
+            if (LineCount.Length >= MinimumRowsCount)
             {
                 return true;
             }
@@ -91,7 +91,6 @@ namespace NWNLogRotator.Classes
                 return false;
             }
         }
-
         private string HTMLPackageLog_Get(string ParsedNWNLog, string ServerName, string ServerNameColor)
         {
             string HTMLHeader = "<head>" +

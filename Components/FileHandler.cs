@@ -319,7 +319,7 @@ namespace NWNLogRotator.Components
             string filepath = FilePath_Get(_run_settings);
             string filename = FileNameGenerator_Get(_dateTime);
             string backupfilename = filename.Remove(filename.Length - 5, 5) + ".txt";
-            bool ActorThresholdMet = true;
+            bool hasenoughlines = false;
 
             FileStream fs;
             try
@@ -340,8 +340,8 @@ namespace NWNLogRotator.Components
             fs.Close();
 
             // maintain minimum row lines requirement
-            ActorThresholdMet = instance.ActorOccurences_Get(result, _run_settings.MinimumRowsCount);
-            if (ActorThresholdMet == false)
+            hasenoughlines = instance.LineCount_Get(result, _run_settings.MinimumRowsCount);
+            if (hasenoughlines == false)
             {
                 MessageBox.Show("This NWN Log did not meet the 'Minimum Rows' requirement. The specified log file was not saved!",
                                 "Minimum Rows Information",
