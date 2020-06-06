@@ -32,7 +32,7 @@
         {
             this.OutputDirectory = "C:\\nwnlogs";
             this.PathToLog = "C:\\nwnlogs\\nwClientLog1.txt";
-            this.MinimumRowsCount = 10;
+            this.MinimumRowsCount = 5;
             this.ServerName = "";
             this.ServerNameColor = "";
             this.EventText = false;

@@ -343,10 +343,13 @@ namespace NWNLogRotator.Components
             hasenoughlines = instance.LineCount_Get(result, _run_settings.MinimumRowsCount);
             if (hasenoughlines == false)
             {
-                MessageBox.Show("This NWN Log did not meet the 'Minimum Rows' requirement. The specified log file was not saved!",
+                if (_run_settings.Silent == false)
+                {
+                    MessageBox.Show("This NWN Log did not meet the 'Minimum Rows' requirement. The specified log file was not saved!",
                                 "Minimum Rows Information",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information);
+                }
                 return "";
             }
             

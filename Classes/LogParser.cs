@@ -50,32 +50,52 @@ namespace NWNLogRotator.Classes
             else
                 text = reader.ReadToEnd();
 
-            foreach (var exp in coreRemoves)
+            foreach (var exp in gloabalRemoves)
                 text = text.Replace(exp, "");
 
+            char[] newRow = { '\n' };
+            string[] textAsList = text.Split(newRow);
+
             removeExps.AddRange(garbageLines);
-            Match HasCrafting = Regex.Match(text, @"\[(?:Applying|Removing) crafting effects\]\s*?\r\n");
-            if (HasCrafting.Length > 0) {
+            Match HasCrafting = Regex.Match(text, @"^\[(?:Applying|Removing) crafting effects\]\s*?$", RegexOptions.Multiline);
+            if (HasCrafting.Length > 0)
+            {
                 removeExps.AddRange(craftingLines);
             }
             if (removeCombat) removeExps.AddRange(combatLines);
-            foreach (var exp in removeExps)
-                text = exp.Replace(text, "");
 
-            if (ServerMode == true)
+            StringBuilder parsedText = new StringBuilder();
+            string lineText = "";
+            foreach (var line in textAsList)
             {
-                foreach (var exp in serverReplacesOrdered)
-                    text = exp.Item1.Replace(text, exp.Item2);
+                lineText = line;
+                if (!string.IsNullOrWhiteSpace(lineText))
+                {
+                    foreach (var exp in removeExps)
+                        lineText = exp.Replace(lineText, "");
+
+                    if (ServerMode == true)
+                    {
+                        foreach (var exp in serverReplacesOrdered)
+                            lineText = exp.Item1.Replace(lineText, exp.Item2);
+                    }
+
+                    formatReplacesOrdered = formatReplacesWithUserOverride(CustomEmotes);
+
+                    foreach (var exp in formatReplacesOrdered)
+                        lineText = exp.Item1.Replace(lineText, exp.Item2);
+
+                    if (!string.IsNullOrWhiteSpace(lineText))
+                    {
+                        lineText += "<br />";
+                        parsedText.Append(lineText);
+                    }
+                }
             }
 
-            formatReplacesOrdered = formatReplacesWithUserOverride(CustomEmotes);
-
-            foreach (var exp in formatReplacesOrdered)
-                text = exp.Item1.Replace(text, exp.Item2);
-
             reader.Close();
-
-            text = HTMLPackageLog_Get(text, ServerName, ServerNameColor);
+            
+            text = HTMLPackageLog_Get(parsedText.ToString(), ServerName, ServerNameColor);
             return text;
         }
         public bool LineCount_Get(string ParsedNWNLog, int MinimumRowsCount)
@@ -146,7 +166,7 @@ namespace NWNLogRotator.Classes
                         string theRegEx;
                         theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell)).*?\\" + tempRightBracket;
 
-                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled | RegexOptions.Multiline), "<span class='emotes'>$1</span>");
+                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), "<span class='emotes'>$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
                     else if (theEmotePair.Length == 1)
@@ -155,14 +175,12 @@ namespace NWNLogRotator.Classes
                         string theRegEx;
                         theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell)).*?\\" + tempBracket;
 
-                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled | RegexOptions.Multiline), "<span class='emotes'>$1</span>");
+                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), "<span class='emotes'>$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
                 }
                 formatReplacesOrderedReturn.AddRange(additionalEmotesList);
             }
-
-            formatReplacesOrderedReturn.AddRange(formatReplacesOrderedThree);
 
             return formatReplacesOrderedReturn;
         }
@@ -171,31 +189,26 @@ namespace NWNLogRotator.Classes
 
         private List<Tuple<Regex, string>> formatReplacesOrderedOne = new List<Tuple<Regex, string>>
         {
-            new Tuple<Regex, string> ( new Regex(@"\[{1}[A-z]{3}\s[A-z]{3}\s[0-9]{2}\s", RegexOptions.Compiled | RegexOptions.Multiline ), "<span class='timestamp'>[" ),
-            new Tuple<Regex, string> ( new Regex(@"\:{1}[0-9]*]{1}",RegexOptions.Compiled | RegexOptions.Multiline ), "]</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"\[{1}[A-z]{3}\s[A-z]{3}\s[0-9]{2}\s", RegexOptions.Compiled), "<span class='timestamp'>[" ),
+            new Tuple<Regex, string> ( new Regex(@"\:{1}[0-9]*]{1}",RegexOptions.Compiled), "]</span>" ),
             // actors
-            new Tuple<Regex, string>( new Regex(@"\]<\/span>((...).*: )",RegexOptions.Compiled | RegexOptions.Multiline ), "]</span><span class='actors'>$1</span>" ),
+            new Tuple<Regex, string>( new Regex(@"\]<\/span>((...).*: )",RegexOptions.Compiled), "]</span><span class='actors'>$1</span>" ),
             // tells
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Tell])(.*.*)",RegexOptions.Compiled | RegexOptions.Multiline ), "</span><span class='tells'> $1:$2</span><br />"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Tell])(.*.*)",RegexOptions.Compiled), "</span><span class='tells'> $1:$2</span><br />"),
             // whispers 
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Whisper])(.*.*)",RegexOptions.Compiled | RegexOptions.Multiline ), "</span><span class='whispers'> $1:$2</span><br />"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Whisper])(.*.*)",RegexOptions.Compiled), "</span><span class='whispers'> $1:$2</span><br />"),
         };
 
 
         private List<Tuple<Regex, string>> formatReplacesOrderedTwo = new List<Tuple<Regex, string>>
         {
             // emotes 
-            new Tuple<Regex, string>( new Regex(@"(\*.*?\*)",RegexOptions.Compiled | RegexOptions.Multiline ), "<span class='emotes'>$1</span>")
+            new Tuple<Regex, string>( new Regex(@"(\*.*?\*)",RegexOptions.Compiled), "<span class='emotes'>$1</span>")
         };
 
-        private List<Tuple<Regex, string>> formatReplacesOrderedThree = new List<Tuple<Regex, string>>
+        private List<String> gloabalRemoves = new List<String>
         {
-            // html formatting
-            new Tuple<Regex, string>( new Regex(@"\r\n",RegexOptions.Compiled | RegexOptions.Multiline ), "<br />")
-        };
-
-        private List<string> coreRemoves = new List<string>
-        {
+            "\r",
             "[CHAT WINDOW TEXT] ",
         };
 
@@ -235,91 +248,92 @@ namespace NWNLogRotator.Classes
         };
 
         private static string timestampMatch = @".+?(?=.*)";
-        private static string timestampExactMatch = @"\[\w\w\w\s\w\w\w\s\d\d\s\d\d:\d\d:\d\d\]\s";
 
         private List<Regex> combatLines = new List<Regex>
         {
-            new Regex( timestampMatch+@"\*{1}hit\*{1}.*\s\:\s\(\d{1,}\s[+-]\s\d{1,}\s\=\s\d{1,}.*\){1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"damages\s.*\:\s{1}\d{1,}\s{1}\({1}\d{1,}\s{1}.*\){1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\*{1}parried\*{1}.*\({1}\d{1,}.*\){1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}[a-zA-Z]*\:{1}\s{1}Damage\s{1}[a-zA-Z]*\s{1}absorbs\s{1}.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\*{1}target concealed\:{1}.*\:{1}\s{1}\({1}\d{1,}.*\){1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\*{1}critical hit\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\*{1}resisted\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"Immune\s{1}to\s{1}Critical\s{1}Hits\.{1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\*{1}miss\*{1}.*\s\:\s\(\d{1,}\s{1}.*\d{1,}\s\=\s\d{1,}\)\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\*{1}success\*{1}\s{1}\:{1}\s{1}\(\d{1,}.*\){1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\*{1}failure\*{1}.*\s\:\s{1}\({1}.*\){1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\:\s{1}Initiative\s{1}Roll\s{1}\:\s\d{1,}\s\:\s\(\d{1,}\s[+-]\s{1}\d{1,}\s{1}\={1}\s{1}\d{1,}\){1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\:{1}\s{1}Damage Immunity\s{1}absorbs.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\:{1}\s{1}Immune to Sneak Attacks\.{1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\:{1}\s{1}Immune to Negative Levels\.{1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\:{1}\s{1}Spell Level Absorption absorbs\s{1}\d{1,}.*\:{1}\s{1}\d{1,}.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}[a-zA-Z]*cast.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}[a-zA-Z]*uses.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}[a-zA-Z]*enables.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"[a-zA-Z]*\s{1}attempts\s{1}to\s{1}.*\:\s{1}.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"[a-zA-Z]*\:{1}\s{1}Healed\s{1}\d{1,}\s{1}hit.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"[a-zA-Z]*\:{1}\sImmune to [a-zA-Z]*.*\.{1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}Dispel\s{1}Magic\s{1}\:{1}\s{1}[a-zA-z]*.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}Experience Points Gained\:{1}\s{1,}\d{1,}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"There are signs of recent fighting here...\*{1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"Stale temporary properties detected, cleaning item\.{1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}\[Check for loot\:{1}\s{1}\d{1,}.*\]{1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}You.{1}ve reached your maximum level.\s{1}.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}Devastating Critical Hit!\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1,}Done resting\.{1}.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1,}You triggered a Trap!{1}.*\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}You cannot target a creature you cannot see or do not have a line of sight to\.{1}\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}Weapon equipped as a one-handed weapon.\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}You cannot rest so soon after exerting yourself.\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}Equipping this armor has disabled your monk abilities.\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s{1}No resting is allowed in this area.\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
-            new Regex( timestampMatch+@"\s[A-z\s]*?enters rage.\r\n", RegexOptions.Compiled | RegexOptions.Multiline ),
+            new Regex(timestampMatch+@"\*{1}hit\*{1}.*\s\:\s\(\d{1,}\s[+-]\s\d{1,}\s\=\s\d{1,}.*\){1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"damages\s.*\:\s{1}\d{1,}\s{1}\({1}\d{1,}\s{1}.*\){1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}parried\*{1}.*\({1}\d{1,}.*\){1}\r\n", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*\:{1}\s{1}Damage\s{1}[a-zA-Z]*\s{1}absorbs\s{1}.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}target concealed\:{1}.*\:{1}\s{1}\({1}\d{1,}.*\){1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}critical hit\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}resisted\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"Immune\s{1}to\s{1}Critical\s{1}Hits\.{1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}miss\*{1}.*\s\:\s\(\d{1,}\s{1}.*\d{1,}\s\=\s\d{1,}\)", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}success\*{1}\s{1}\:{1}\s{1}\(\d{1,}.*\){1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}failure\*{1}.*\s\:\s{1}\({1}.*\){1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\:\s{1}Initiative\s{1}Roll\s{1}\:\s\d{1,}\s\:\s\(\d{1,}\s[+-]\s{1}\d{1,}\s{1}\={1}\s{1}\d{1,}\){1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\:{1}\s{1}Damage Immunity\s{1}absorbs.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\:{1}\s{1}Immune to Sneak Attacks\.{1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\:{1}\s{1}Immune to Negative Levels\.{1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\:{1}\s{1}Spell Level Absorption absorbs\s{1}\d{1,}.*\:{1}\s{1}\d{1,}.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*cast.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*uses.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*enables.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"[a-zA-Z]*\s{1}attempts\s{1}to\s{1}.*\:\s{1}.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"[a-zA-Z]*\:{1}\s{1}Healed\s{1}\d{1,}\s{1}hit.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"[a-zA-Z]*\:{1}\sImmune to [a-zA-Z]*.*\.{1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}Dispel\s{1}Magic\s{1}\:{1}\s{1}[a-zA-z]*.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}Experience Points Gained\:{1}\s{1,}\d{1,}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"There are signs of recent fighting here...\*{1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"Stale temporary properties detected, cleaning item\.{1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}\[Check for loot\:{1}\s{1}\d{1,}.*\]{1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}You.{1}ve reached your maximum level.\s{1}.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}Devastating Critical Hit!", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1,}Done resting\.{1}.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1,}You triggered a Trap!{1}.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}You cannot target a creature you cannot see or do not have a line of sight to\.{1}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}Weapon equipped as a one-handed weapon.", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}You cannot rest so soon after exerting yourself.", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}Equipping this armor has disabled your monk abilities.", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}No resting is allowed in this area.", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s[A-z\s]*?enters rage.", RegexOptions.Compiled),
         };
         private List<Regex> garbageLines = new List<Regex>
         {
-            new Regex( @"nwsync\:\s?Storage\s?at\s?[0-9:A-z\,= ]{10,}\r\n", RegexOptions.Compiled),
-            new Regex( @"nwsync\:\s?Migrations\s?currently\s?applied\:\s?\d{1,}\r\n", RegexOptions.Compiled),
-            new Regex( @"nwsync\:\s?Shard\s?\d{1,}\s?available,\sSpace\sUsed\:\s?\d{1,}\sKB\r\n", RegexOptions.Compiled),
-            new Regex( @"Game\s?is\s?using\s?local\s?port\:\s?\d{1,}\r\n", RegexOptions.Compiled),
-            new Regex( @"Error\:\s?\d{1,}\r\n", RegexOptions.Compiled),
-            new Regex( @"GOG\:\s?Authentication\s?failed\:\s?\d{1,}\r\n", RegexOptions.Compiled),
-            new Regex( timestampMatch+@"Script\s.*,\sOID\:.*,\sTag\:\s.*,\sERROR\:\sTOO MANY INSTRUCTIONS\r\n", RegexOptions.Compiled),
-            new Regex( @"\r\n(?=\r\n)", RegexOptions.Compiled),
+            new Regex(@"((?!\[\w{3}\s\w{3}\s\d{2}\s\d{2}\:\d{2}:\d\d\]\s)\[.*?\]\s[A-z\'\s]+\:\s\[(Talk|Tell|Shout|Whisper)\])\s.*", RegexOptions.Compiled | RegexOptions.Singleline),
+            new Regex(@"nwsync\:\s?Storage\s?at\s?[0-9:A-z\,= ]{10,}", RegexOptions.Compiled),
+            new Regex(@"nwsync\:\s?Migrations\s?currently\s?applied\:\s?\d{1,}", RegexOptions.Compiled),
+            new Regex(@"nwsync\:\s?Shard\s?\d{1,}\s?available,\sSpace\sUsed\:\s?\d{1,}\sKB", RegexOptions.Compiled),
+            new Regex(@"Game\s?is\s?using\s?local\s?port\:\s?\d{1,}", RegexOptions.Compiled),
+            new Regex(@"Error\:\s?\d{1,}", RegexOptions.Compiled),
+            new Regex(@"GOG\:\s?Authentication\s?failed\:\s?\d{1,}", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"Script\s.*,\sOID\:.*,\sTag\:\s.*,\sERROR\:\sTOO MANY INSTRUCTIONS", RegexOptions.Compiled),
         };
         private List<Regex> craftingLines = new List<Regex>
         {
-            new Regex(timestampMatch + @"\[(?:Applying|Removing) crafting effects\]\s*?\r\n"),
-            new Regex(timestampMatch + @".*?\:\sJump\s\d+\s(?:part|colou?r)s\s(?:forward|backward)\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @".*?\:\sSelect\sthe\scolou?r\stype\sthat\syou\swant\sto\schange\.\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @"Lost\sItem\:\s[A-z\s\(\)\d]+(?=\r\n)", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @"Colou?r\sset\sto\:\s[A-z\s\(\)\d]+\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @"Current Colou?r(\stype)?\:\s[A-z\s\(\)\d]+\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @"Current\spart\:\s\d+(\(\d+\))?\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @".*?\:\s(?:Next|Previous|Change)\sColou?r\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @".*?\:\s(?:Next|Previous|Change)\sColou?r\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @".*?\:\sChange\s(?:Right|Left)?\s?[A-z]+\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @".*?\:\s(Next|Previous) part\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(timestampMatch + @"\[(?:Applying|Removing) crafting effects\]\s*?"),
+            new Regex(timestampMatch + @".*?\:\sJump\s\d+\s(?:part|colou?r)s\s(?:forward|backward)", RegexOptions.Compiled),
+            new Regex(timestampMatch + @".*?\:\sSelect\sthe\scolou?r\stype\sthat\syou\swant\sto\schange\.", RegexOptions.Compiled),
+            new Regex(timestampMatch + @"Lost\sItem\:\s[A-z\s\(\)\d]+", RegexOptions.Compiled),
+            new Regex(timestampMatch + @"Colou?r\sset\sto\:\s[A-z\s\(\)\d]+", RegexOptions.Compiled),
+            new Regex(timestampMatch + @"Current Colou?r(\stype)?\:\s[A-z\s\(\)\d]+", RegexOptions.Compiled | RegexOptions.Singleline),
+            new Regex(timestampMatch + @"Current\spart\:\s\d+(\(\d+\))?", RegexOptions.Compiled),
+            new Regex(timestampMatch + @".*?\:\s(?:Next|Previous|Change)\sColou?r", RegexOptions.Compiled),
+            new Regex(timestampMatch + @".*?\:\s(?:Next|Previous|Change)\sColou?r", RegexOptions.Compiled),
+            new Regex(timestampMatch + @".*?\:\sChange\s(?:Right|Left)?\s?[A-z]+", RegexOptions.Compiled),
+            new Regex(timestampMatch + @".*?\:\s(Next|Previous) part", RegexOptions.Compiled),
+            /*
             // Try compound statements, then individual lines if they still remain.
-            new Regex(timestampMatch + @".*?\:\sChange\s(?:Cloth|Metal|Leather)\s\d+\r\n" + timestampExactMatch + @".*?\:\sBack\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @".*?\:\sWhich\spart\sdo\syou\s\want\sto\schange\?\r\n(" + timestampExactMatch + @".*?\:\s(?:Right|Left)\s?[A-z]*?\r\n)?" + timestampExactMatch + @".*?\:\sBack\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @".*?\:\sWhat\sdo\syou\swant\sto\smodify\?\r\n(" + timestampExactMatch + @".*?\:\s(?:Armour|Weapon)\s?(?:Colours|Appearance)\r\n)?" + timestampExactMatch + @".*?\:\sBack\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(timestampMatch + @".*?\:\sChange\s(?:Cloth|Metal|Leather)\s\d+" + timestampExactMatch + @".*?\:\sBack", RegexOptions.Compiled),
+            new Regex(timestampMatch + @".*?\:\sWhich\spart\sdo\syou\s\want\sto\schange\?(" + timestampExactMatch + @".*?\:\s(?:Right|Left)\s?[A-z]*?)?" + timestampExactMatch + @".*?\:\sBack", RegexOptions.Compiled),
+            new Regex(timestampMatch + @".*?\:\sWhat\sdo\syou\swant\sto\smodify\?(" + timestampExactMatch + @".*?\:\s(?:Armour|Weapon)\s?(?:Colours|Appearance))?" + timestampExactMatch + @".*?\:\sBack", RegexOptions.Compiled),
             // Fallback compounds
-            new Regex(timestampMatch + @".*?\:\sWhich\spart\sdo\syou\s\want\sto\schange\?\r\n" + timestampExactMatch + @".*?\:\s((?:Right|Left)\s?[A-z]*?|Neck|Back|Belt|Helmet|Armour)\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @".*?\:\sChange\s(?:Cloth|Metal|Leather)\s\d+\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(timestampMatch + @".*?\:\sWhat\sdo\syou\swant\sto\smodify\?\r\n" + timestampExactMatch + @".*?\:\s(?:Armour|Weapon)\s?(?:Colours|Appearance)\r\n", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"\r\n(?=\r\n)", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(timestampMatch + @".*?\:\sWhich\spart\sdo\syou\s\want\sto\schange\?" + timestampExactMatch + @".*?\:\s((?:Right|Left)\s?[A-z]*?|Neck|Back|Belt|Helmet|Armour)", RegexOptions.Compiled),
+            new Regex(timestampMatch + @".*?\:\sChange\s(?:Cloth|Metal|Leather)\s\d+", RegexOptions.Compiled),
+            new Regex(timestampMatch + @".*?\:\sWhat\sdo\syou\swant\sto\smodify\?" + timestampExactMatch + @".*?\:\s(?:Armour|Weapon)\s?(?:Colours|Appearance)", RegexOptions.Compiled),
+            new Regex(@"", RegexOptions.Compiled),
+            */
         };
         private List<Tuple<Regex, string>> serverReplacesOrdered = new List<Tuple<Regex, string>>
         {
             new Tuple<Regex, string> ( new Regex(@"(\-\-\-\-\sServer\sOptions\s\-\-\-\-)([^|]*)(\-\-\-\-\sEnd\sServer\sOptions\s\-\-\-\-)", RegexOptions.Compiled), "<span class='whispers'>$1</span><span class='tells'>$2</span><span class='whispers'>$3</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"\]\s(.*?)\s(Joined\sas\s(?:Game\sMaster|Player)\s\d+)(?=\r\n)", RegexOptions.Compiled), "] <span class='actors'>$1</span> $2" ),
-            new Tuple<Regex, string> ( new Regex(@"\]\s(.*?)\s(Left\sas\sa\s(?:Game\sMaster|Player))\s(\(\d+\splayers\sleft\))(?=\r\n)", RegexOptions.Compiled), "] <span class='actors'>$1</span> $2 <span class='emotes'>$3</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"(Your cryptographic public identity is\:\s)(.*?)(?=\r\n)", RegexOptions.Compiled), "$1<span class='emotes'>$2</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"\]\s(.*?)\s(Joined\sas\s(?:Game\sMaster|Player)\s\d+)", RegexOptions.Compiled), "] <span class='actors'>$1</span> $2" ),
+            new Tuple<Regex, string> ( new Regex(@"\]\s(.*?)\s(Left\sas\sa\s(?:Game\sMaster|Player))\s(\(\d+\splayers\sleft\))", RegexOptions.Compiled), "] <span class='actors'>$1</span> $2 <span class='emotes'>$3</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Your cryptographic public identity is\:\s)(.*?)", RegexOptions.Compiled), "$1<span class='emotes'>$2</span>" ),
             new Tuple<Regex, string> ( new Regex(@"(Our\spublic\saddress\sas\sseen\sby\sthe\smasterserver\:)\s(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5})", RegexOptions.Compiled), "$1 <span class='emotes'>$2</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"(Connection\sAttempt\smade\sby\s)(.*?)(?=(\r\n|$))", RegexOptions.Compiled), "<span class='whispers'>$1</span><span class='actors'>$2</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"(SpellLikeAbilityReady\: Could not find valid ability in list.*?)(?=\r\n)", RegexOptions.Compiled), "<span class='whispers'>$1</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Connection\sAttempt\smade\sby\s)(.*?)(?=(|$))", RegexOptions.Compiled), "<span class='whispers'>$1</span><span class='actors'>$2</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(SpellLikeAbilityReady\: Could not find valid ability in list.*?)", RegexOptions.Compiled), "<span class='whispers'>$1</span>" ),
             new Tuple<Regex, string> ( new Regex(@"(Event\sadded\swhile\spaused\:\s*?EventId\:\s\d\s*?CallerId\:\s\d+\s*?ObjectId\:\s*?\d+)", RegexOptions.Compiled), "<span class='emotes'>$1</span>" ),
             new Tuple<Regex, string> ( new Regex(@"(Server Shutting Down)", RegexOptions.Compiled), "<span class='whispers'>$1</span>" ),
         };
