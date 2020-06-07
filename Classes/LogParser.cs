@@ -11,7 +11,6 @@ namespace NWNLogRotator.Classes
     {
         public string ParseLog(Stream inputStream, bool removeCombat, bool removeEvents, string ServerName, string ServerNameColor, string CustomEmotes, string FilterLines, bool ServerMode)
         {
-            var reader = new StreamReader(inputStream, Encoding.GetEncoding("iso-8859-1"));
             var removeExps = new List<Regex>();
 
             string[] filterLinesArray = FilterLines.Split(',');
@@ -36,20 +35,22 @@ namespace NWNLogRotator.Classes
             }
 
             string text;
-            if (removeEvents)
+            using (var reader = new StreamReader(inputStream, Encoding.GetEncoding("iso-8859-1")))
             {
-                StringBuilder cleanTextBuilder = new StringBuilder();
-                while (!reader.EndOfStream)
+                if (removeEvents)
                 {
-                    var line = reader.ReadLine();
-                    if (!eventLines.Any(x => line.Contains(x)))
-                        cleanTextBuilder.AppendLine(line);
+                    StringBuilder cleanTextBuilder = new StringBuilder();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        if (!eventLines.Any(x => line.Contains(x)))
+                            cleanTextBuilder.AppendLine(line);
+                    }
+                    text = cleanTextBuilder.ToString();
                 }
-                text = cleanTextBuilder.ToString();
+                else
+                    text = reader.ReadToEnd();
             }
-            else
-                text = reader.ReadToEnd();
-
             foreach (var exp in gloabalRemoves)
                 text = text.Replace(exp, "");
 
@@ -94,7 +95,6 @@ namespace NWNLogRotator.Classes
 
             var parsedText = processedLines.Where(x => x != null).Aggregate((x, y) => x + y);
 
-            reader.Close();
             
             text = HTMLPackageLog_Get(parsedText, ServerName, ServerNameColor);
             return text;
