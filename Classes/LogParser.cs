@@ -64,11 +64,11 @@ namespace NWNLogRotator.Classes
             }
             if (removeCombat) removeExps.AddRange(combatLines);
 
-            StringBuilder parsedText = new StringBuilder();
-            string lineText = "";
-            foreach (var line in textAsList)
+            formatReplacesOrdered = formatReplacesWithUserOverride(CustomEmotes);
+
+            var processedLines = textAsList.AsParallel().Select(line =>
             {
-                lineText = line;
+                var lineText = line;
                 if (!string.IsNullOrWhiteSpace(lineText))
                 {
                     foreach (var exp in removeExps)
@@ -80,22 +80,23 @@ namespace NWNLogRotator.Classes
                             lineText = exp.Item1.Replace(lineText, exp.Item2);
                     }
 
-                    formatReplacesOrdered = formatReplacesWithUserOverride(CustomEmotes);
-
                     foreach (var exp in formatReplacesOrdered)
                         lineText = exp.Item1.Replace(lineText, exp.Item2);
 
                     if (!string.IsNullOrWhiteSpace(lineText))
                     {
                         lineText += "<br />";
-                        parsedText.Append(lineText);
+                        return lineText;
                     }
                 }
-            }
+                return null;
+            });
+
+            var parsedText = processedLines.Where(x => x != null).Aggregate((x, y) => x + y);
 
             reader.Close();
             
-            text = HTMLPackageLog_Get(parsedText.ToString(), ServerName, ServerNameColor);
+            text = HTMLPackageLog_Get(parsedText, ServerName, ServerNameColor);
             return text;
         }
         public bool LineCount_Get(string ParsedNWNLog, int MinimumRowsCount)
