@@ -291,7 +291,8 @@ namespace NWNLogRotator.Classes
         };
         private List<Regex> garbageLines = new List<Regex>
         {
-            new Regex(@"((?!\[\w{3}\s\w{3}\s\d{2}\s\d{2}\:\d{2}:\d\d\]\s)\[.*?\]\s[A-z\'\s]+\:\s\[(Talk|Tell|Shout|Whisper)\])\s.*", RegexOptions.Compiled | RegexOptions.Singleline),
+            new Regex(@"\[[A-z0-9\s]+\]\s.*?\:\s\[(?:Talk|Shout|Whisper|Tell)\]\s.*", RegexOptions.Compiled),
+            new Regex(@"\[\w{3}\s\w{3}\s\d{2}\s\d{2}\:\d{2}:\d\d\]\s\[(?:Talk|Shout|Whisper|Tell)\]\s.*", RegexOptions.Compiled),
             new Regex(@"nwsync\:\s?Storage\s?at\s?[0-9:A-z\,= ]{10,}", RegexOptions.Compiled),
             new Regex(@"nwsync\:\s?Migrations\s?currently\s?applied\:\s?\d{1,}", RegexOptions.Compiled),
             new Regex(@"nwsync\:\s?Shard\s?\d{1,}\s?available,\sSpace\sUsed\:\s?\d{1,}\sKB", RegexOptions.Compiled),
