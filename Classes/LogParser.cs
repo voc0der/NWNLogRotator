@@ -73,7 +73,8 @@ namespace NWNLogRotator.Classes
                 if (!string.IsNullOrWhiteSpace(lineText))
                 {
                     foreach (var exp in removeExps)
-                        lineText = exp.Replace(lineText, "");
+                        if (removeExps.Any(x => x.IsMatch(lineText)))
+                            return null;
 
                     if (ServerMode == true)
                     {
@@ -84,18 +85,13 @@ namespace NWNLogRotator.Classes
                     foreach (var exp in formatReplacesOrdered)
                         lineText = exp.Item1.Replace(lineText, exp.Item2);
 
-                    if (!string.IsNullOrWhiteSpace(lineText))
-                    {
-                        lineText += "<br />";
-                        return lineText;
-                    }
+                    return lineText;
                 }
                 return null;
             });
 
-            var parsedText = processedLines.Where(x => x != null).Aggregate((x, y) => x + y);
+            var parsedText = processedLines.Where(x => x != null).Aggregate((x, y) => x + "<br />" + y);
 
-            
             text = HTMLPackageLog_Get(parsedText, ServerName, ServerNameColor);
             return text;
         }
