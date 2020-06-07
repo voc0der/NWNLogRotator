@@ -86,7 +86,6 @@ namespace NWNLogRotator.Classes
                     lineText = exp.Item1.Replace(lineText, exp.Item2);
 
                 return lineText;
-
             });
 
             var parsedText = processedLines.Where(x => x != null).Aggregate((x, y) => x + "<br />" + y);
@@ -190,9 +189,9 @@ namespace NWNLogRotator.Classes
             // actors
             new Tuple<Regex, string>( new Regex(@"\]<\/span>((...).*: )",RegexOptions.Compiled), "]</span><span class='actors'>$1</span>" ),
             // tells
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Tell])(.*.*)",RegexOptions.Compiled), "</span><span class='tells'> $1:$2</span><br />"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Tell])(.*.*)",RegexOptions.Compiled), "</span><span class='tells'> $1:$2</span>"),
             // whispers 
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Whisper])(.*.*)",RegexOptions.Compiled), "</span><span class='whispers'> $1:$2</span><br />"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Whisper])(.*.*)",RegexOptions.Compiled), "</span><span class='whispers'> $1:$2</span>"),
         };
 
 
@@ -243,59 +242,63 @@ namespace NWNLogRotator.Classes
             "Ignore the crafting roll and gold message for robes."
         };
 
-        private static string timestampMatch = @".+?(?=.*)";
+        private static string timestampMatch = @"^.+?(?=.*)";
 
         private List<Regex> combatLines = new List<Regex>
         {
-            new Regex(timestampMatch+@"\*{1}hit\*{1}.*\s\:\s\(\d{1,}\s[+-]\s\d{1,}\s\=\s\d{1,}.*\){1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"damages\s.*\:\s{1}\d{1,}\s{1}\({1}\d{1,}\s{1}.*\){1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\*{1}parried\*{1}.*\({1}\d{1,}.*\){1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*\:{1}\s{1}Damage\s{1}[a-zA-Z]*\s{1}absorbs\s{1}.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\*{1}target concealed\:{1}.*\:{1}\s{1}\({1}\d{1,}.*\){1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\*{1}critical hit\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\*{1}resisted\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"Immune\s{1}to\s{1}Critical\s{1}Hits\.{1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\*{1}miss\*{1}.*\s\:\s\(\d{1,}\s{1}.*\d{1,}\s\=\s\d{1,}\)", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\*{1}success\*{1}\s{1}\:{1}\s{1}\(\d{1,}.*\){1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\*{1}failure\*{1}.*\s\:\s{1}\({1}.*\){1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\:\s{1}Initiative\s{1}Roll\s{1}\:\s\d{1,}\s\:\s\(\d{1,}\s[+-]\s{1}\d{1,}\s{1}\={1}\s{1}\d{1,}\){1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\:{1}\s{1}Damage Immunity\s{1}absorbs.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\:{1}\s{1}Immune to Sneak Attacks\.{1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\:{1}\s{1}Immune to Negative Levels\.{1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\:{1}\s{1}Spell Level Absorption absorbs\s{1}\d{1,}.*\:{1}\s{1}\d{1,}.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*cast.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*uses.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*enables.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"[a-zA-Z]*\s{1}attempts\s{1}to\s{1}.*\:\s{1}.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"[a-zA-Z]*\:{1}\s{1}Healed\s{1}\d{1,}\s{1}hit.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"[a-zA-Z]*\:{1}\sImmune to [a-zA-Z]*.*\.{1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}Dispel\s{1}Magic\s{1}\:{1}\s{1}[a-zA-z]*.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}Experience Points Gained\:{1}\s{1,}\d{1,}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"There are signs of recent fighting here...\*{1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"Stale temporary properties detected, cleaning item\.{1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}\[Check for loot\:{1}\s{1}\d{1,}.*\]{1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}You.{1}ve reached your maximum level.\s{1}.*", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}hit\*{1}.*\s\:\s\(\d{1,}\s[+-]\s\d{1,}\s\=\s\d{1,}.*\){1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"damages\s.*\:\s{1}\d{1,}\s{1}\({1}\d{1,}\s{1}.*\){1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}parried\*{1}.*\({1}\d{1,}.*\){1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*\:{1}\s{1}Damage\s{1}[a-zA-Z]*\s{1}absorbs\s{1}.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}target concealed\:{1}.*\:{1}\s{1}\({1}\d{1,}.*\){1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}critical hit\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}resisted\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"Immune\s{1}to\s{1}Critical\s{1}Hits\.{1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}miss\*{1}.*\s\:\s\(\d{1,}\s{1}.*\d{1,}\s\=\s\d{1,}\)$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}success\*{1}\s{1}\:{1}\s{1}\(\d{1,}.*\){1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}failure\*{1}.*\s\:\s{1}\({1}.*\){1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\:\s{1}Initiative\s{1}Roll\s{1}\:\s\d{1,}\s\:\s\(\d{1,}\s[+-]\s{1}\d{1,}\s{1}\={1}\s{1}\d{1,}\){1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\:{1}\s{1}Damage Immunity\s{1}absorbs.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\:{1}\s{1}Immune to Sneak Attacks\.{1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\:{1}\s{1}Immune to Negative Levels\.{1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\:{1}\s{1}Spell Level Absorption absorbs\s{1}\d{1,}.*\:{1}\s{1}\d{1,}.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*cast.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*uses.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}[a-zA-Z]*enables.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"[a-zA-Z]*\s{1}attempts\s{1}to\s{1}.*\:\s{1}.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"[a-zA-Z]*\:{1}\s{1}Healed\s{1}\d{1,}\s{1}hit.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"[a-zA-Z]*\:{1}\sImmune to [a-zA-Z]*.*\.{1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}Dispel\s{1}Magic\s{1}\:{1}\s{1}[a-zA-z]*.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}Experience Points Gained\:{1}\s{1,}\d{1,}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"There are signs of recent fighting here...\*{1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"Stale temporary properties detected, cleaning item\.{1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}\[Check for loot\:{1}\s{1}\d{1,}.*\]{1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}You.{1}ve reached your maximum level.\s{1}.*$", RegexOptions.Compiled),
             new Regex(timestampMatch+@"\s{1}Devastating Critical Hit!", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1,}Done resting\.{1}.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1,}You triggered a Trap!{1}.*", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}You cannot target a creature you cannot see or do not have a line of sight to\.{1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}Weapon equipped as a one-handed weapon.", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}You cannot rest so soon after exerting yourself.", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}Equipping this armor has disabled your monk abilities.", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s{1}No resting is allowed in this area.", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\s[A-z\s]*?enters rage.", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1,}Done resting\.{1}.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1,}You triggered a Trap!{1}.*$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}You cannot target a creature you cannot see or do not have a line of sight to\.{1}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}Weapon equipped as a one-handed weapon.$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}You cannot rest so soon after exerting yourself.$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}Equipping this armor has disabled your monk abilities.$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s{1}No resting is allowed in this area.$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\s[A-z\s]*?enters rage.$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"Overhealed\s\d+\shit\spoints\.$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\+\d+\sXP$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"Adventuring\sBonus\:\sAdventure\sMode\s\(\+\d+\sdelayed\sXP\)$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@".*?\s\:\sEpic\sDodge\s*?\:\sAttack\sevaded$", RegexOptions.Compiled),
         };
         private List<Regex> garbageLines = new List<Regex>
         {
-            new Regex(@"\[[A-z0-9\s]+\]\s.*?\:\s\[(?:Talk|Shout|Whisper|Tell)\]\s.*", RegexOptions.Compiled),
-            new Regex(@"\[\w{3}\s\w{3}\s\d{2}\s\d{2}\:\d{2}:\d\d\]\s\[(?:Talk|Shout|Whisper|Tell)\]\s.*", RegexOptions.Compiled),
-            new Regex(@"nwsync\:\s?Storage\s?at\s?[0-9:A-z\,= ]{10,}", RegexOptions.Compiled),
-            new Regex(@"nwsync\:\s?Migrations\s?currently\s?applied\:\s?\d{1,}", RegexOptions.Compiled),
-            new Regex(@"nwsync\:\s?Shard\s?\d{1,}\s?available,\sSpace\sUsed\:\s?\d{1,}\sKB", RegexOptions.Compiled),
-            new Regex(@"Game\s?is\s?using\s?local\s?port\:\s?\d{1,}", RegexOptions.Compiled),
-            new Regex(@"Error\:\s?\d{1,}", RegexOptions.Compiled),
-            new Regex(@"GOG\:\s?Authentication\s?failed\:\s?\d{1,}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"Script\s.*,\sOID\:.*,\sTag\:\s.*,\sERROR\:\sTOO MANY INSTRUCTIONS", RegexOptions.Compiled),
+            new Regex(@"^\[?[A-z0-9\s\.\']+\]?\s?.*?\:\s\[(?:Talk|Shout|Whisper|Tell)\]\s.*$", RegexOptions.Compiled),
+            new Regex(@"^\[\w{3}\s\w{3}\s\d{2}\s\d{2}\:\d{2}:\d\d\]\s\[(?:Talk|Shout|Whisper|Tell)\]\s.*$", RegexOptions.Compiled),
+            new Regex(@"^nwsync\:\s?Storage\s?at\s?[0-9:A-z\,= ]{10,}$", RegexOptions.Compiled),
+            new Regex(@"^nwsync\:\s?Migrations\s?currently\s?applied\:\s?\d{1,}$", RegexOptions.Compiled),
+            new Regex(@"^nwsync\:\s?Shard\s?\d{1,}\s?available,\sSpace\sUsed\:\s?\d{1,}\sKB$", RegexOptions.Compiled),
+            new Regex(@"^Game\s?is\s?using\s?local\s?port\:\s?\d{1,}$", RegexOptions.Compiled),
+            new Regex(@"^Error\:\s?\d{1,}$", RegexOptions.Compiled),
+            new Regex(@"^GOG\:\s?Authentication\s?failed\:\s?\d{1,}$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"Script\s.*,\sOID\:.*,\sTag\:\s.*,\sERROR\:\sTOO MANY INSTRUCTIONS$", RegexOptions.Compiled),
         };
         private List<Regex> craftingLines = new List<Regex>
         {
