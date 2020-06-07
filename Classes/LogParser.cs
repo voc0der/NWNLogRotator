@@ -70,24 +70,23 @@ namespace NWNLogRotator.Classes
             var processedLines = textAsList.AsParallel().Select(line =>
             {
                 var lineText = line;
-                if (!string.IsNullOrWhiteSpace(lineText))
+                if (string.IsNullOrWhiteSpace(lineText)) 
+                    return null;
+
+                if (removeExps.Any(x => x.IsMatch(lineText)))
+                        return null;
+
+                if (ServerMode == true)
                 {
-                    foreach (var exp in removeExps)
-                        if (removeExps.Any(x => x.IsMatch(lineText)))
-                            return null;
-
-                    if (ServerMode == true)
-                    {
-                        foreach (var exp in serverReplacesOrdered)
-                            lineText = exp.Item1.Replace(lineText, exp.Item2);
-                    }
-
-                    foreach (var exp in formatReplacesOrdered)
+                    foreach (var exp in serverReplacesOrdered)
                         lineText = exp.Item1.Replace(lineText, exp.Item2);
-
-                    return lineText;
                 }
-                return null;
+
+                foreach (var exp in formatReplacesOrdered)
+                    lineText = exp.Item1.Replace(lineText, exp.Item2);
+
+                return lineText;
+
             });
 
             var parsedText = processedLines.Where(x => x != null).Aggregate((x, y) => x + "<br />" + y);
