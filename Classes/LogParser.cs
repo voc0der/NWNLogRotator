@@ -254,7 +254,7 @@ namespace NWNLogRotator.Classes
         {
             new Regex(timestampMatch+@"\*{1}hit\*{1}.*\s\:\s\(\d{1,}\s[+-]\s\d{1,}\s\=\s\d{1,}.*\){1}", RegexOptions.Compiled),
             new Regex(timestampMatch+@"damages\s.*\:\s{1}\d{1,}\s{1}\({1}\d{1,}\s{1}.*\){1}", RegexOptions.Compiled),
-            new Regex(timestampMatch+@"\*{1}parried\*{1}.*\({1}\d{1,}.*\){1}\r\n", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"\*{1}parried\*{1}.*\({1}\d{1,}.*\){1}", RegexOptions.Compiled),
             new Regex(timestampMatch+@"\s{1}[a-zA-Z]*\:{1}\s{1}Damage\s{1}[a-zA-Z]*\s{1}absorbs\s{1}.*", RegexOptions.Compiled),
             new Regex(timestampMatch+@"\*{1}target concealed\:{1}.*\:{1}\s{1}\({1}\d{1,}.*\){1}", RegexOptions.Compiled),
             new Regex(timestampMatch+@"\*{1}critical hit\*\s{1}\:{1}\s{1}\({1}\d{1,}.*\){1}", RegexOptions.Compiled),
