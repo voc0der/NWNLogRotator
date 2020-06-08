@@ -58,11 +58,7 @@ namespace NWNLogRotator.Classes
             string[] textAsList = text.Split(newRow);
 
             removeExps.AddRange(garbageLines);
-            Match HasCrafting = Regex.Match(text, @"^\[(?:Applying|Removing) crafting effects\]\s*?$", RegexOptions.Multiline);
-            if (HasCrafting.Length > 0)
-            {
-                removeExps.AddRange(craftingLines);
-            }
+
             if (removeCombat) removeExps.AddRange(combatLines);
 
             formatReplacesOrdered = formatReplacesWithUserOverride(CustomEmotes);
@@ -70,11 +66,11 @@ namespace NWNLogRotator.Classes
             var processedLines = textAsList.AsParallel().Select(line =>
             {
                 var lineText = line;
-                if (string.IsNullOrWhiteSpace(lineText)) 
+                if (string.IsNullOrWhiteSpace(lineText))
                     return null;
 
                 if (removeExps.Any(x => x.IsMatch(lineText)))
-                        return null;
+                    return null;
 
                 if (ServerMode == true)
                 {
@@ -89,6 +85,14 @@ namespace NWNLogRotator.Classes
             });
 
             var parsedText = processedLines.Where(x => x != null).Aggregate((x, y) => x + "<br />" + y);
+
+            // Stateful crafting parsing if neccessary
+            Match HasCrafting = Regex.Match(text, @"^" + timestampExactMatch + @"\[Applying\scrafting\seffects\]\s*?$", RegexOptions.Multiline);
+            if (HasCrafting.Length > 0)
+            {
+                foreach (var exp in craftingLines)
+                    parsedText = exp.Replace(parsedText, "");
+            }
 
             text = HTMLPackageLog_Get(parsedText, ServerName, ServerNameColor);
             return text;
@@ -194,7 +198,6 @@ namespace NWNLogRotator.Classes
             new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Whisper])(.*.*)",RegexOptions.Compiled), "</span><span class='whispers'> $1:$2</span>"),
         };
 
-
         private List<Tuple<Regex, string>> formatReplacesOrderedTwo = new List<Tuple<Regex, string>>
         {
             // emotes 
@@ -239,10 +242,16 @@ namespace NWNLogRotator.Classes
             "[ERROR TOO MANY INSTRUCTIONS]",
             "*** ValidateGFFResource sent by user.",
             "Modifying colours doesn't cost gold.",
-            "Ignore the crafting roll and gold message for robes."
+            "Ignore the crafting roll and gold message for robes.",
+            "[NB: this lootbag will be deleted in 2 minutes!]",
         };
 
         private static string timestampMatch = @"^.+?(?=.*)";
+        private static string timestampExactMatch = @"\[\w{3}\s\w{3}\s\d{2}\s\d{2}\:\d{2}:\d\d\]\s";
+        private static string timestampStatefulMatch = @"\<span\sclass\=\'timestamp\'\>\[\d+\:\d+\]\<\/span\>\s*?(\<span\sclass\=\'actors\'\>\s)?";
+        private static string nameMatch = @"[A-z0-9\s\.\']+";
+        private static string nameStatefulMatch = @"[A-z0-9\s\.\']+\:\s\<\/span\>";
+
 
         private List<Regex> combatLines = new List<Regex>
         {
@@ -287,11 +296,13 @@ namespace NWNLogRotator.Classes
             new Regex(timestampMatch+@"\+\d+\sXP$", RegexOptions.Compiled),
             new Regex(timestampMatch+@"Adventuring\sBonus\:\sAdventure\sMode\s\(\+\d+\sdelayed\sXP\)$", RegexOptions.Compiled),
             new Regex(timestampMatch+@".*?\s\:\sEpic\sDodge\s*?\:\sAttack\sevaded$", RegexOptions.Compiled),
+            new Regex(timestampMatch+@"You\srested\s\d+\%\sYou\shave\sto\swait\s\d+\sminutes\sbefore\syou\scan\srest\sagain\.$", RegexOptions.Compiled),
         };
+
         private List<Regex> garbageLines = new List<Regex>
         {
-            new Regex(@"^\[?[A-z0-9\s\.\']+\]?\s?.*?\:\s\[(?:Talk|Shout|Whisper|Tell)\]\s.*$", RegexOptions.Compiled),
-            new Regex(@"^\[\w{3}\s\w{3}\s\d{2}\s\d{2}\:\d{2}:\d\d\]\s\[(?:Talk|Shout|Whisper|Tell)\]\s.*$", RegexOptions.Compiled),
+            new Regex(@"^\[?" + nameMatch + @"\]?\s?.*?\:\s\[(?:Talk|Shout|Whisper|Tell)\]\s.*$", RegexOptions.Compiled),
+            new Regex(@"^"+ timestampExactMatch + @"\[(?:Talk|Shout|Whisper|Tell)\]\s.*$", RegexOptions.Compiled),
             new Regex(@"^nwsync\:\s?Storage\s?at\s?[0-9:A-z\,= ]{10,}$", RegexOptions.Compiled),
             new Regex(@"^nwsync\:\s?Migrations\s?currently\s?applied\:\s?\d{1,}$", RegexOptions.Compiled),
             new Regex(@"^nwsync\:\s?Shard\s?\d{1,}\s?available,\sSpace\sUsed\:\s?\d{1,}\sKB$", RegexOptions.Compiled),
@@ -300,31 +311,30 @@ namespace NWNLogRotator.Classes
             new Regex(@"^GOG\:\s?Authentication\s?failed\:\s?\d{1,}$", RegexOptions.Compiled),
             new Regex(timestampMatch+@"Script\s.*,\sOID\:.*,\sTag\:\s.*,\sERROR\:\sTOO MANY INSTRUCTIONS$", RegexOptions.Compiled),
         };
+
         private List<Regex> craftingLines = new List<Regex>
         {
-            new Regex(timestampMatch + @"\[(?:Applying|Removing) crafting effects\]\s*?"),
-            new Regex(timestampMatch + @".*?\:\sJump\s\d+\s(?:part|colou?r)s\s(?:forward|backward)", RegexOptions.Compiled),
-            new Regex(timestampMatch + @".*?\:\sSelect\sthe\scolou?r\stype\sthat\syou\swant\sto\schange\.", RegexOptions.Compiled),
-            new Regex(timestampMatch + @"Lost\sItem\:\s[A-z\s\(\)\d]+", RegexOptions.Compiled),
-            new Regex(timestampMatch + @"Colou?r\sset\sto\:\s[A-z\s\(\)\d]+", RegexOptions.Compiled),
-            new Regex(timestampMatch + @"Current Colou?r(\stype)?\:\s[A-z\s\(\)\d]+", RegexOptions.Compiled | RegexOptions.Singleline),
-            new Regex(timestampMatch + @"Current\spart\:\s\d+(\(\d+\))?", RegexOptions.Compiled),
-            new Regex(timestampMatch + @".*?\:\s(?:Next|Previous|Change)\sColou?r", RegexOptions.Compiled),
-            new Regex(timestampMatch + @".*?\:\s(?:Next|Previous|Change)\sColou?r", RegexOptions.Compiled),
-            new Regex(timestampMatch + @".*?\:\sChange\s(?:Right|Left)?\s?[A-z]+", RegexOptions.Compiled),
-            new Regex(timestampMatch + @".*?\:\s(Next|Previous) part", RegexOptions.Compiled),
-            /*
+            new Regex(timestampStatefulMatch+@"\[(?:Applying|Removing) crafting effects\]\s*?<br />(?<=<br />)"),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"Jump\s\d+\s(?:part|colou?r)s\s(?:forward|backward)<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"Select\sthe\scolou?r\stype\sthat\syou\swant\sto\schange\.<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+@"Lost\sItem\:\s\<\/span\>[A-z\s\(\)\d]+<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+@"Colou?r\sset\sto\:\s\<\/span\>[A-z\s\(\)\d]+.*?<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+@"Current Colou?r(\stype)?\:\s\<\/span\>[A-z\s\(\)\d]+<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+@"Current\s[Pp]art\:\s\<\/span\>\d+(\(\d+\))?<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"(?:Next|Previous|Change)\sColou?r<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"(?:Next|Previous|Change)\sColou?r<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"Change\s(?:Right|Left)?\s?[A-z]+<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"(Next|Previous) part<br />(?<=<br />)", RegexOptions.Compiled),
             // Try compound statements, then individual lines if they still remain.
-            new Regex(timestampMatch + @".*?\:\sChange\s(?:Cloth|Metal|Leather)\s\d+" + timestampExactMatch + @".*?\:\sBack", RegexOptions.Compiled),
-            new Regex(timestampMatch + @".*?\:\sWhich\spart\sdo\syou\s\want\sto\schange\?(" + timestampExactMatch + @".*?\:\s(?:Right|Left)\s?[A-z]*?)?" + timestampExactMatch + @".*?\:\sBack", RegexOptions.Compiled),
-            new Regex(timestampMatch + @".*?\:\sWhat\sdo\syou\swant\sto\smodify\?(" + timestampExactMatch + @".*?\:\s(?:Armour|Weapon)\s?(?:Colours|Appearance))?" + timestampExactMatch + @".*?\:\sBack", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"Change\s(?:Cloth|Metal|Leather)\s\d+<br />"+timestampStatefulMatch+nameStatefulMatch+@"Back<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"Which\spart\sdo\syou\s\want\sto\schange\?<br />("+timestampStatefulMatch+nameStatefulMatch+@"(?:Right|Left)\s?[A-z]*?<br />)?"+timestampStatefulMatch+nameStatefulMatch+@"Back<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"What\sdo\syou\swant\sto\smodify\?<br />("+timestampStatefulMatch+nameStatefulMatch+@"(?:Armour|Weapon)\s?(?:Colours|Appearance)<br />)?"+timestampStatefulMatch+nameStatefulMatch+@"Back<br />(?<=<br />)", RegexOptions.Compiled),
             // Fallback compounds
-            new Regex(timestampMatch + @".*?\:\sWhich\spart\sdo\syou\s\want\sto\schange\?" + timestampExactMatch + @".*?\:\s((?:Right|Left)\s?[A-z]*?|Neck|Back|Belt|Helmet|Armour)", RegexOptions.Compiled),
-            new Regex(timestampMatch + @".*?\:\sChange\s(?:Cloth|Metal|Leather)\s\d+", RegexOptions.Compiled),
-            new Regex(timestampMatch + @".*?\:\sWhat\sdo\syou\swant\sto\smodify\?" + timestampExactMatch + @".*?\:\s(?:Armour|Weapon)\s?(?:Colours|Appearance)", RegexOptions.Compiled),
-            new Regex(@"", RegexOptions.Compiled),
-            */
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"Which\spart\sdo\syou\s\want\sto\schange\?<br />"+timestampStatefulMatch+nameStatefulMatch+@"((?:Right|Left)\s?[A-z]*?|Neck|Back|Belt|Helmet|Armour)<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"Change\s(?:Cloth|Metal|Leather)\s\d+<br />(?<=<br />)", RegexOptions.Compiled),
+            new Regex(timestampStatefulMatch+nameStatefulMatch+@"What\sdo\syou\swant\sto\smodify\?<br />"+timestampStatefulMatch+nameStatefulMatch+@"(?:Armour|Weapon)\s?(?:Colours|Appearance)<br />(?<=<br />)", RegexOptions.Compiled),
         };
+
         private List<Tuple<Regex, string>> serverReplacesOrdered = new List<Tuple<Regex, string>>
         {
             new Tuple<Regex, string> ( new Regex(@"(\-\-\-\-\sServer\sOptions\s\-\-\-\-)([^|]*)(\-\-\-\-\sEnd\sServer\sOptions\s\-\-\-\-)", RegexOptions.Compiled), "<span class='whispers'>$1</span><span class='tells'>$2</span><span class='whispers'>$3</span>" ),
