@@ -99,9 +99,9 @@ namespace NWNLogRotator.Classes
         }
         public bool LineCount_Get(string ParsedNWNLog, int MinimumRowsCount)
         {
-            Match LineCount = Regex.Match(ParsedNWNLog, @"<br />");
+            MatchCollection LineCount = Regex.Matches(ParsedNWNLog, @"\<br\s\/>");
 
-            if (LineCount.Length >= MinimumRowsCount)
+            if (LineCount.Count >= MinimumRowsCount)
             {
                 return true;
             }
@@ -188,7 +188,7 @@ namespace NWNLogRotator.Classes
 
         private List<Tuple<Regex, string>> formatReplacesOrderedOne = new List<Tuple<Regex, string>>
         {
-            new Tuple<Regex, string> ( new Regex(@"\[{1}[A-z]{3}\s[A-z]{3}\s[0-9]{2}\s", RegexOptions.Compiled), "<span class='timestamp'>[" ),
+            new Tuple<Regex, string> ( new Regex(@"\[\w{3}\s\w{3}\s*?\d{1,}\s", RegexOptions.Compiled), "<span class='timestamp'>[" ),
             new Tuple<Regex, string> ( new Regex(@"\:{1}[0-9]*]{1}",RegexOptions.Compiled), "]</span>" ),
             // actors
             new Tuple<Regex, string>( new Regex(@"\]<\/span>((...).*: )",RegexOptions.Compiled), "]</span><span class='actors'>$1</span>" ),
@@ -247,7 +247,7 @@ namespace NWNLogRotator.Classes
         };
 
         private static string timestampMatch = @"^.+?(?=.*)";
-        private static string timestampExactMatch = @"\[\w{3}\s\w{3}\s\d{2}\s\d{2}\:\d{2}:\d\d\]\s";
+        private static string timestampExactMatch = @"\[\w{3}\s\w{3}\s*?\d{1,}\s\d{2}\:\d{2}\:\d{2}\]\s";
         private static string timestampStatefulMatch = @"\<span\sclass\=\'timestamp\'\>\[\d+\:\d+\]\<\/span\>\s*?(\<span\sclass\=\'actors\'\>\s)?";
         private static string nameMatch = @"[A-z0-9\s\.\']+";
         private static string nameStatefulMatch = @"[A-z0-9\s\.\']+\:\s\<\/span\>";
