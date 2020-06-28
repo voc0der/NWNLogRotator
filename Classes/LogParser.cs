@@ -258,6 +258,9 @@ namespace NWNLogRotator.Classes
             "You have multiple items equipped or spell effects active that give an Armor AC bonus and the effects will not stack.",
             "Top Down Camera Activated",
             "Driving Camera Activated",
+            "Your journal has been updated.",
+            "First login after reset or relog after 1 minute",
+            "Your public CDKEY is ",
         };
 
         private static string lineStartMatch = @"(?<=\n|^)";
