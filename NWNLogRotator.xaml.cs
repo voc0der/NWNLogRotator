@@ -26,6 +26,7 @@ namespace NWNLogRotator
         System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
         Notification notification = new Notification();
         private int ClientLauncherState = 0;
+        private string ProcessName = "nwmain";
 
         public MainWindow()
         {
@@ -78,13 +79,9 @@ namespace NWNLogRotator
             _settings = CurrentSettings_Get();
             var OnColor = Color_Get(_settings.UseTheme, true);
             var OffColor = Color_Get(_settings.UseTheme, false);
-            string ProcessName = "nwmain";
-            int IterateDelay = 10000;
+            int IterateDelay = 5000;
             if(_settings.ServerMode == true)
-            {
                 ProcessName = "nwserver";
-                IterateDelay = 5000;
-            }
             var Status = NWNProcessStatus_Get(ProcessName);
 
             if (Status > 0)
@@ -108,8 +105,8 @@ namespace NWNLogRotator
                         UpdateResultsPane(1);
                 }
                 await Task.Delay(IterateDelay);
-                IterateNWN_Watcher(false);
                 ClientLauncherState = 0;
+                IterateNWN_Watcher(false);
             }
         }
 
@@ -546,15 +543,21 @@ namespace NWNLogRotator
                     p.StartInfo.RedirectStandardOutput = false;
                     p.StartInfo.UseShellExecute = true;
                     p.StartInfo.CreateNoWindow = true;
-                    ClientLauncherState = 1;
-                    IterateNWN_Watcher(false);
+                    if (Path.GetFileName(_settings.PathToClient) == ProcessName + ".exe")
+                    {
+                        ClientLauncherState = 1;
+                        IterateNWN_Watcher(false);
+                    }
                     await Task.Run(() =>
                     {
                         p.Start();
                         p.WaitForExit();
                     });
-                    ClientLauncherState = 2;
-                    IterateNWN_Watcher(true);
+                    if( Path.GetFileName(_settings.PathToClient) == ProcessName + ".exe")
+                    {
+                        ClientLauncherState = 2;
+                        IterateNWN_Watcher(true);
+                    }
                 }
                 catch (Exception ex)
                 {

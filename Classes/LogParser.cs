@@ -90,7 +90,15 @@ namespace NWNLogRotator.Classes
                 return lineText;
             });
 
-            var parsedText = processedLines.Where(x => x != null).Aggregate((x, y) => x + "<br />" + y);
+            var parsedText = "";
+            try
+            {
+                parsedText = processedLines.Where(x => x != null).Aggregate((x, y) => x + "<br />" + y);
+            }
+            catch
+            {
+                parsedText = "";
+            }
 
             // Stateful crafting parsing if neccessary
             Match HasCrafting = Regex.Match(text, @"^" + timestampExactMatch + @"\[Applying\scrafting\seffects\]\s*?$", RegexOptions.Multiline);
