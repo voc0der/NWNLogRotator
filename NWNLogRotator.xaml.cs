@@ -473,6 +473,11 @@ namespace NWNLogRotator
             FileHandler instance = new FileHandler();
             string _filepathandname = instance.ReadNWNLogAndInvokeParser(_settings);
 
+            if (_settings.CloseOnLogGenerated == true)
+            {
+                Process.GetCurrentProcess().Kill();
+            }
+
             if (_filepathandname != "")
             {
                 if(_settings.Notifications == true)
@@ -489,11 +494,6 @@ namespace NWNLogRotator
 
                     if (_messageBoxResult == MessageBoxResult.Yes)
                         System.Diagnostics.Process.Start(_filepathandname);
-
-                    if(_settings.CloseOnLogGenerated == true)
-                    {
-                        Process.GetCurrentProcess().Kill();
-                    }
 
                     return true;
                 }
