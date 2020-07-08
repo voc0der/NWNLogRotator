@@ -1,6 +1,6 @@
 # NWNLogRotator
 Automatically colorizes and saves Neverwinter Nights chat logs into beautiful HTML. Enhanced Edition and 1.69 compatible.
-##### <a href="http://htmlpreview.github.io/?https://github.com/notsigma/NWN-Log-Rotator/blob/master/output/NWNLogExample.html">Click here</a> for an example of a parsed log. 
+##### <a href="http://htmlpreview.github.io/?https://github.com/notsigma/NWNLogRotator-Node.js/blob/master/output/NWNLogExample.html">Click here</a> for an example of a parsed log. 
 ##### <a href="https://www.youtube.com/watch?v=gspLCJM7JuU">Click here</a> to see a usage video.
 
 # Download
