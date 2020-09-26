@@ -1,5 +1,7 @@
 # NWNLogRotator
-Transforms and parses any Neverwinter Nights chat log into beautiful HTML. Written in C# .NET. NWNLogRotator is both Enhanced Edition and 1.69 compatible. <a href="http://htmlpreview.github.io/?https://github.com/notsigma/NWN-Log-Rotator/blob/master/output/NWNLogExample.html">Click here</a> for an example of a parsed log.
+Automatically colorizes and saves Neverwinter Nights chat logs into beautiful HTML. Enhanced Edition and 1.69 compatible.
+##### <a href="http://htmlpreview.github.io/?https://github.com/notsigma/NWNLogRotator-Node.js/blob/master/output/NWNLogExample.html">Click here</a> for an example of a parsed log. 
+##### <a href="https://www.youtube.com/watch?v=gspLCJM7JuU">Click here</a> to see a usage video.
 
 # Download
 Latest version can be found <a href="https://github.com/notsigma/NWNLogRotator/releases/latest">here</a>.
@@ -33,4 +35,9 @@ Important: Open Windows Explorer and enter %HOMEPATH%, and the last directory th
 # Other Notes
 1) This application may warn you that the publisher is not signed or verified, but if you click 'More Info' it will allow you to run anyways.
 2) Make sure you save your configuration settings or some options may not do what you expected!
-3) Make sure you have logging enabled if you cannot find a log file. The setting to enable logging is located in nwnplayer.ini as ClientEntireChatWindowLogging = 1 under [Game Options].
+3) Make sure you have logging enabled if you cannot find a log file. 1.69 and EE differ in how to enable chat logging.
+   * For 1.69, it is located in nwnplayer.ini as ClientEntireChatWindowLogging = 1 under [Game Options].
+   * For EE, it is located in settings.tml with a few more options.
+     * [game.log.chat.all] enabled = true (all client chat window messages in the log)
+     * [game.log.chat.emotes] enabled = true (all graphic emotes are logged as their text equivalent)
+     * [game.log.chat.text] enabled = false (if true, then the text part of the chat window is logged; if both this and chat.all are set to true, then the text chat will duplicate in the log)
