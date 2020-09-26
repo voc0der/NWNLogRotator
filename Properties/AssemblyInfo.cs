@@ -8,7 +8,7 @@ using System.Windows;
 [assembly: AssemblyTitle("NWNLogRotator")]
 [assembly: AssemblyDescription("Transforms and parses any Neverwinter Nights chat log into beautiful HTML. Written in C# .NET. NWNLogRotator is both Enhanced Edition and 1.69 compatible.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ravenmyst")]
+[assembly: AssemblyCompany("notsigma")]
 [assembly: AssemblyProduct("NWNLogRotator")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
@@ -49,5 +49,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.0.5.6")]
-[assembly: AssemblyFileVersion("0.0.5.6")]
+[assembly: AssemblyVersion("0.0.5.7")]
+[assembly: AssemblyFileVersion("0.0.5.7")]

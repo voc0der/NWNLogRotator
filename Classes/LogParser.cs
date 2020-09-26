@@ -234,6 +234,7 @@ namespace NWNLogRotator.Classes
         private List<string> eventLines = new List<string>
         {
             "[Event]",
+            "[Server]",
             "Minimum Tumble AC Bonus:",
             "No Monk/Shield AC Bonus:",
             "You are light sensitive!",

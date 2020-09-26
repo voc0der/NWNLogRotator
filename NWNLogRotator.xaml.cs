@@ -1,5 +1,5 @@
 ﻿/*  
-    *  AUTHOR: Ravenmyst
+    *  AUTHOR: notsigma
     *  DATE: 05/23/2020
     *  LICENSE: MIT
 */
@@ -30,6 +30,11 @@ namespace NWNLogRotator
 
         public MainWindow()
         {
+            if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location)).Length > 1)
+            {
+                MessageBox.Show("There is already an instance of NWNLogRotator running!");
+                Process.GetCurrentProcess().Kill();
+            }
             InitializeComponent();
             SetupApplication();
         }
