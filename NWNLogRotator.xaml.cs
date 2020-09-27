@@ -536,6 +536,10 @@ namespace NWNLogRotator
                         theLaunchParameters += " +password " + _settings.ServerPassword;
                     }
                 }
+                if (_settings.PathToClient.ToLower().Contains("steam.exe"))
+                {
+                    theLaunchParameters = " -gameidlaunch 704450" + theLaunchParameters;
+                }
             }
             if(theLaunchPath != "" && File.Exists(_settings.PathToClient))
             {
