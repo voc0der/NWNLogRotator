@@ -96,6 +96,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="LauncherConfiguration.xaml.cs">
+      <DependentUpon>LauncherConfiguration.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ServerConfiguration.xaml.cs">
+      <DependentUpon>ServerConfiguration.xaml</DependentUpon>
+    </Compile>
+    <Page Include="LauncherConfiguration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="NWNLogRotator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -117,6 +127,10 @@
       <DependentUpon>NWNLogRotator.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ServerConfiguration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

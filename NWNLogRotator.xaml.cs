@@ -16,6 +16,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 
 namespace NWNLogRotator
 {
@@ -145,16 +146,8 @@ namespace NWNLogRotator
             string OutputDirectory = OutputDirectoryTextBox.Text;
             string PathToLog = PathToLogTextBox.Text;
             int MinimumRowsToInteger = int.Parse(MinimumRowsCountSlider.Value.ToString());
-            string ServerName = "";
-            if (ServerNameCheckBox.IsChecked == true && ServerNameTextBox.Text != "")
-            {
-                ServerName = ServerNameTextBox.Text;
-            }
-            string ServerNameColor = "";
-            if (ServerNameCheckBox.IsChecked == true && ServerNameTextBox.Text != "")
-            {
-                ServerNameColor = ServerNameColorTextBox.Text;
-            }
+            string ServerName = _settings.ServerName;
+            string ServerNameColor = _settings.ServerNameColor;
             bool EventText = EventTextCheckBox.IsChecked.GetValueOrDefault();
             bool CombatText = CombatTextCheckBox.IsChecked.GetValueOrDefault();
             string UseTheme = _settings.UseTheme;
@@ -172,12 +165,12 @@ namespace NWNLogRotator
             {
                 FilterLines = FilterLinesTextBox.Text;
             }
-            string PathToClient = PathToClientTextBox.Text;
-            bool RunClientOnLaunch = RunClientOnLaunchCheckBox.IsChecked.GetValueOrDefault();
-            bool CloseOnLogGenerated = CloseAfterGenerationCheckBox.IsChecked.GetValueOrDefault();
-            string ServerAddress = ServerAddressTextBox.Text;
-            string ServerPassword = ServerPasswordTextBox.Text;
-            bool DM = DMCheckBox.IsChecked.GetValueOrDefault();
+            string PathToClient = _settings.PathToClient;
+            bool RunClientOnLaunch = _settings.RunClientOnLaunch;
+            bool CloseOnLogGenerated = _settings.CloseOnLogGenerated;
+            string ServerAddress = _settings.ServerAddress;
+            string ServerPassword = _settings.ServerPassword;
+            bool DM = _settings.DM;
             bool ServerMode = ServerModeRadioButton.IsChecked.GetValueOrDefault();
 
             _settings = new Settings(OutputDirectory,
@@ -287,16 +280,6 @@ namespace NWNLogRotator
             OutputDirectoryTextBox.Text = _settings.OutputDirectory;
             PathToLogTextBox.Text = _settings.PathToLog;
             MinimumRowsCountSlider.Value = _settings.MinimumRowsCount;
-            if (_settings.ServerName != "")
-            {
-                ServerNameCheckBox.IsChecked = true;
-                ServerNameTextBox.Text = _settings.ServerName;
-            }
-            if (_settings.ServerNameColor != "")
-            {
-                ServerNameColorCheckBox.IsChecked = true;
-                ServerNameColorTextBox.Text = _settings.ServerNameColor;
-            }
             EventTextCheckBox.IsChecked = _settings.EventText;
             CombatTextCheckBox.IsChecked = _settings.CombatText;
             SilentCheckBox.IsChecked = _settings.Silent;
@@ -313,12 +296,6 @@ namespace NWNLogRotator
                 FilterLinesCheckBox.IsChecked = true;
                 FilterLinesTextBox.Text = _settings.FilterLines;
             }
-            PathToClientTextBox.Text = _settings.PathToClient;
-            RunClientOnLaunchCheckBox.IsChecked = _settings.RunClientOnLaunch;
-            CloseAfterGenerationCheckBox.IsChecked = _settings.CloseOnLogGenerated;
-            ServerAddressTextBox.Text = _settings.ServerAddress;
-            ServerPasswordTextBox.Text = _settings.ServerPassword;
-            DMCheckBox.IsChecked = _settings.DM;
             if(_settings.ServerMode == false)
             {
                 ClientModeRadioButton.IsChecked = true;
@@ -362,29 +339,23 @@ namespace NWNLogRotator
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.White);
             LaunchClientButton.Background = Brushes.Black;
             LaunchClientButton.Foreground = new SolidColorBrush(Colors.White);
+            LauncherConfigurationButton.Background = Brushes.Black;
+            LauncherConfigurationButton.Foreground = new SolidColorBrush(Colors.White);
+            ServerConfigurationButton.Background = Brushes.Black;
+            ServerConfigurationButton.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryTextBox.Background = Brushes.Black;
             PathToLogTextBox.Background = Brushes.Black;
-            ServerNameTextBox.Background = Brushes.Black;
-            ServerNameColorTextBox.Background = Brushes.Black;
             CustomEmotesTextBox.Background = Brushes.Black;
             FilterLinesTextBox.Background = Brushes.Black;
-            PathToClientLabel.Background = Brushes.Black;
-            PathToClientTextBox.Background = Brushes.Black;
-            ServerAddressTextBox.Background = Brushes.Black;
-            ServerPasswordTextBox.Background = Brushes.Black;
             MainStatusBar.Background = Brushes.Black;
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.White);
             PathToLogTextBox.Foreground = new SolidColorBrush(Colors.White);
+            SettingsTextBlock.Text = "Dark Mode";
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.White);
             PathToLogLabel.Foreground = new SolidColorBrush(Colors.White);
-            ServerNameTextBox.Foreground = new SolidColorBrush(Colors.White);
-            ServerNameColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             CustomEmotesTextBox.Foreground = new SolidColorBrush(Colors.White);
             FilterLinesTextBox.Foreground = new SolidColorBrush(Colors.White);
-            FlagGroupBox.Foreground = new SolidColorBrush(Colors.White);
-            ServerNameCheckBox.Foreground = new SolidColorBrush(Colors.White);
-            ServerNameColorCheckBox.Foreground = new SolidColorBrush(Colors.White);
             EventTextCheckBox.Foreground = new SolidColorBrush(Colors.White);
             CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.White);
             MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.White);
@@ -393,16 +364,6 @@ namespace NWNLogRotator
             NotificationsCheckBox.Foreground = new SolidColorBrush(Colors.White);
             CustomEmotesCheckBox.Foreground = new SolidColorBrush(Colors.White);
             FilterLinesCheckBox.Foreground = new SolidColorBrush(Colors.White);
-            LauncherGroupBox.Foreground = new SolidColorBrush(Colors.White);
-            PathToClientLabel.Foreground = new SolidColorBrush(Colors.White);
-            PathToClientTextBox.Foreground = new SolidColorBrush(Colors.White);
-            RunClientOnLaunchCheckBox.Foreground = new SolidColorBrush(Colors.White);
-            CloseAfterGenerationCheckBox.Foreground = new SolidColorBrush(Colors.White);
-            ServerAddressLabel.Foreground = new SolidColorBrush(Colors.White);
-            ServerAddressTextBox.Foreground = new SolidColorBrush(Colors.White);
-            ServerPasswordLabel.Foreground = new SolidColorBrush(Colors.White);
-            ServerPasswordTextBox.Foreground = new SolidColorBrush(Colors.White);
-            DMCheckBox.Foreground = new SolidColorBrush(Colors.White);
             ClientModeRadioButton.Foreground = new SolidColorBrush(Colors.White);
             ServerModeRadioButton.Foreground = new SolidColorBrush(Colors.White);
             HintLabel.Foreground = new SolidColorBrush(Colors.White);
@@ -422,29 +383,23 @@ namespace NWNLogRotator
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.Black);
             LaunchClientButton.Background = Brushes.White;
             LaunchClientButton.Foreground = new SolidColorBrush(Colors.Black);
+            ServerConfigurationButton.Background = Brushes.White;
+            ServerConfigurationButton.Foreground = new SolidColorBrush(Colors.Black);
+            LauncherConfigurationButton.Background = Brushes.White;
+            LauncherConfigurationButton.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryTextBox.Background = Brushes.White;
             PathToLogTextBox.Background = Brushes.White;
-            ServerNameTextBox.Background = Brushes.White;
-            ServerNameColorTextBox.Background = Brushes.White;
             CustomEmotesTextBox.Background = Brushes.White;
             FilterLinesTextBox.Background = Brushes.White;
-            PathToClientLabel.Background = Brushes.White;
-            PathToClientTextBox.Background = Brushes.White;
-            ServerAddressTextBox.Background = Brushes.White;
-            ServerPasswordTextBox.Background = Brushes.White;
             MainStatusBar.Background = Brushes.White;
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.Black);
             PathToLogTextBox.Foreground = new SolidColorBrush(Colors.Black);
+            SettingsTextBlock.Text = "Light Mode";
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.Black);
             PathToLogLabel.Foreground = new SolidColorBrush(Colors.Black);
-            ServerNameTextBox.Foreground = new SolidColorBrush(Colors.Black);
-            ServerNameColorTextBox.Foreground = new SolidColorBrush(Colors.Black);
             CustomEmotesTextBox.Foreground = new SolidColorBrush(Colors.Black);
             FilterLinesTextBox.Foreground = new SolidColorBrush(Colors.Black);
-            FlagGroupBox.Foreground = new SolidColorBrush(Colors.Black);
-            ServerNameCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-            ServerNameColorCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             EventTextCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.Black);
@@ -453,16 +408,6 @@ namespace NWNLogRotator
             NotificationsCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             CustomEmotesCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             FilterLinesCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-            LauncherGroupBox.Foreground = new SolidColorBrush(Colors.Black);
-            PathToClientLabel.Foreground = new SolidColorBrush(Colors.Black);
-            PathToClientTextBox.Foreground = new SolidColorBrush(Colors.Black);
-            RunClientOnLaunchCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-            CloseAfterGenerationCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-            ServerAddressLabel.Foreground = new SolidColorBrush(Colors.Black);
-            ServerAddressTextBox.Foreground = new SolidColorBrush(Colors.Black);
-            ServerPasswordLabel.Foreground = new SolidColorBrush(Colors.Black);
-            ServerPasswordTextBox.Foreground = new SolidColorBrush(Colors.Black);
-            DMCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             ClientModeRadioButton.Foreground = new SolidColorBrush(Colors.Black);
             ServerModeRadioButton.Foreground = new SolidColorBrush(Colors.Black);
             HintLabel.Foreground = new SolidColorBrush(Colors.Black);
@@ -611,6 +556,14 @@ namespace NWNLogRotator
             }
         }
 
+        private void SaveSettings(Settings _settings)
+        {
+            FileHandler instance = new FileHandler();
+            instance.SaveSettingsIni(_settings);
+
+            UpdateResultsPane(2);
+        }
+
         private void SettingsTextBlock_MouseEnter(object sender, MouseEventArgs e)
         {
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Hand;
@@ -630,33 +583,7 @@ namespace NWNLogRotator
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _settings = CurrentSettings_Get();
-
-            FileHandler instance = new FileHandler();
-            instance.SaveSettingsIni(_settings);
-
-            UpdateResultsPane(2);
-        }
-
-        private void ServerNameCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            ServerNameTextBox.Visibility = Visibility.Visible;
-        }
-
-        private void ServerNameCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ServerNameTextBox.Text = "";
-            ServerNameTextBox.Visibility = Visibility.Collapsed;
-        }
-
-        private void ServerNameColorCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            ServerNameColorTextBox.Visibility = Visibility.Visible;
-        }
-
-        private void ServerNameColorCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ServerNameColorTextBox.Text = "";
-            ServerNameColorTextBox.Visibility = Visibility.Collapsed;
+            SaveSettings(_settings);
         }
 
         private void CustomEmotesCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -763,31 +690,42 @@ namespace NWNLogRotator
             }
         }
 
-        private void Image_MouseDown3(object sender, MouseButtonEventArgs e)
-        {
-            var fileDialog = new System.Windows.Forms.OpenFileDialog();
-            fileDialog.InitialDirectory = _settings.PathToLog;
-            fileDialog.Filter = "exe file (*.exe)|*.exe";
-            fileDialog.FilterIndex = 1;
-            fileDialog.RestoreDirectory = true;
-            var result = fileDialog.ShowDialog();
-            switch (result)
-            {
-                case System.Windows.Forms.DialogResult.OK:
-                    var file = fileDialog.FileName;
-                    PathToClientTextBox.Text = file;
-                    PathToClientTextBox.ToolTip = file;
-                    break;
-                case System.Windows.Forms.DialogResult.Cancel:
-                    break;
-                default:
-                    break;
-            }
-        }
-
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             LaunchClient();
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            _settings = CurrentSettings_Get();
+            ServerConfiguration ServerConfigurationPopUp = new ServerConfiguration(_settings);
+            ServerConfigurationPopUp.Owner = Window.GetWindow(this);
+            Grid.Effect = new BlurEffect();
+            ServerConfigurationPopUp.ShowDialog();
+            Settings __settings = ServerConfigurationPopUp.Settings_Get();
+            bool __closed = ServerConfigurationPopUp.Closed_Get();
+            if (_settings != __settings && !__closed)
+            {
+                _settings = __settings;
+                SaveSettings(_settings);
+            }
+            Grid.Effect = null;
+        }
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            _settings = CurrentSettings_Get();
+            LauncherConfiguration LauncherConfigurationPopUp = new LauncherConfiguration(_settings);
+            LauncherConfigurationPopUp.Owner = Window.GetWindow(this);
+            Grid.Effect = new BlurEffect();
+            LauncherConfigurationPopUp.ShowDialog();
+            Settings __settings = LauncherConfigurationPopUp.Settings_Get();
+            bool __closed = LauncherConfigurationPopUp.Closed_Get();
+            if( _settings != __settings && !__closed )
+            {
+                _settings = __settings;
+                SaveSettings(_settings);
+            }
+            Grid.Effect = null;
         }
     }
 }

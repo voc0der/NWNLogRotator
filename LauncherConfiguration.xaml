@@ -1,0 +1,23 @@
+﻿<Window x:Class="NWNLogRotator.LauncherConfiguration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NWNLogRotator"
+        mc:Ignorable="d"
+        Title="Launcher Settings" Height="215" Width="415" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid x:Name="Grid" Margin="0,0,4.333,0.667">
+        <CheckBox x:Name="RunClientOnLaunchCheckBox" Content="Auto Start" HorizontalAlignment="Right" Margin="0,83,298,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604"/>
+        <CheckBox x:Name="CloseAfterGenerationCheckBox" Content="Auto Close" HorizontalAlignment="Right" Margin="0,104,294,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604"/>
+        <Label x:Name="PathToClientLabel" Content="Path to Client:" HorizontalAlignment="Left" Margin="4,4,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
+        <TextBox x:Name="PathToClientTextBox" HorizontalAlignment="Left" Height="20" Margin="94,6,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="262" RenderTransformOrigin="0.965,0.275"/>
+        <Image x:Name="PathToClientImage" HorizontalAlignment="Left" Height="16" Margin="361,10,0,0" VerticalAlignment="Top" Width="16" RenderTransformOrigin="2.303,1.51" Source="Assets/Images/AssociationEditor_16x.png" MouseDown="Image_MouseDown3"/>
+        <TextBox x:Name="ServerAddressTextBox" HorizontalAlignment="Left" Height="17" Margin="106,32,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="263" RenderTransformOrigin="0.965,0.275"/>
+        <Label x:Name="ServerAddressLabel" Content="Server Address:" HorizontalAlignment="Left" Margin="4,27,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
+        <Label x:Name="ServerPasswordLabel" Content="Server Password (optional):" HorizontalAlignment="Left" Margin="4,51,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
+        <TextBox x:Name="ServerPasswordTextBox" HorizontalAlignment="Left" Height="17" Margin="162,56,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="206" RenderTransformOrigin="0.965,0.275"/>
+        <CheckBox x:Name="DMCheckBox" Content="DM" HorizontalAlignment="Right" Margin="0,125,332,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604"/>
+        <Button x:Name="SaveSettingsButton" Content="Save Settings" HorizontalAlignment="Left" Margin="277,135,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
+
+    </Grid>
+</Window>

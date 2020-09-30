@@ -138,10 +138,11 @@ namespace NWNLogRotator.Classes
                     ".default { color: #FFFFFF }" +
                     ".timestamp { color: #B1A2BD; }" +
                     ".actors { color: #8F7FFF; }" +
-                    ".tells { color: #0F0; }" +
+                    ".shouts { color: #F0DBA5 }" +
+                    ".tells { color: #00FF00; }" +
                     ".whispers { color: #808080; }" +
-                    ".party { color: #E5C062; }" +
-                    ".emotes { color: #ffaed6; }" +
+                    ".party { color: #FFAED6; }" +
+                    ".emotes { color: #E8F4F8; }" +
                 "</style>" +
             "</head>";
 
@@ -207,6 +208,8 @@ namespace NWNLogRotator.Classes
             new Tuple<Regex, string> ( new Regex(@"\:{1}[0-9]*]{1}",RegexOptions.Compiled), "]</span>" ),
             // actors
             new Tuple<Regex, string>( new Regex(@"\]<\/span>((...).*: )",RegexOptions.Compiled), "]</span><span class='actors'>$1</span>" ),
+            // shouts
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Shout])(.*.*)",RegexOptions.Compiled), "</span><span class='shouts'> $1:$2</span>"),
             // tells
             new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Tell])(.*.*)",RegexOptions.Compiled), "</span><span class='tells'> $1:$2</span>"),
             // whispers 
