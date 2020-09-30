@@ -11,7 +11,7 @@ namespace NWNLogRotator.Components
     public partial class FileHandler : Component
     {
         Settings _settings;
-        int _expectedSettingsCount = 21;
+        int _expectedSettingsCount = 30;
 
         public FileHandler()
         {
@@ -64,7 +64,16 @@ namespace NWNLogRotator.Components
                                         "ServerAddress=" + _settings.ServerAddress + "\n" +
                                         "ServerPassword=" + _settings.ServerPassword + "\n" +
                                         "DM=" + _settings.DM + "\n" +
-                                        "ServerMode=" + _settings.ServerMode;
+                                        "ServerMode=" + _settings.ServerMode + "\n" +
+                                        "BackgroundColor=" + _settings.BackgroundColor + "\n" +
+                                        "TimestampColor=" + _settings.TimestampColor + "\n" +
+                                        "DefaultColor=" + _settings.DefaultColor + "\n" +
+                                        "ActorColor=" + _settings.ActorColor + "\n" +
+                                        "PartyColor=" + _settings.PartyColor + "\n" +
+                                        "EmoteColor=" + _settings.EmoteColor + "\n" +
+                                        "ShoutColor=" + _settings.ShoutColor + "\n" +
+                                        "TellColor=" + _settings.TellColor + "\n" +
+                                        "WhisperColor=" + _settings.WhisperColor;
             return NewSettingsFile;
         }
 
@@ -115,15 +124,15 @@ namespace NWNLogRotator.Components
             string ServerPassword = "";
             bool DM = false;
             bool ServerMode = false;
-            string BackgroundColor = "";
-            string TimestampColor = "";
-            string DefaultColor = "";
-            string ActorColor = "";
-            string PartyColor = "";
-            string EmoteColor = "";
-            string ShoutColor = "";
-            string TellColor = "";
-            string WhisperColor = "";
+            string BackgroundColor = "000000";
+            string TimestampColor = "B1A2BD";
+            string DefaultColor = "FFFFFF";
+            string ActorColor = "8F7FFF";
+            string PartyColor = "FFAED6";
+            string EmoteColor = "E8F4F8";
+            string ShoutColor = "F0DBA5";
+            string TellColor = "00FF00";
+            string WhisperColor = "808080";
 
             int Count = 0;
 
@@ -236,6 +245,51 @@ namespace NWNLogRotator.Components
                     ServerMode = bool.Parse(ParameterValue);
                     Count += 1;
                 }
+                if (line.IndexOf("BackgroundColor=") != -1)
+                {
+                    BackgroundColor = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("TimestampColor=") != -1)
+                {
+                    TimestampColor = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("DefaultColor=") != -1)
+                {
+                    DefaultColor = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("ActorColor=") != -1)
+                {
+                    ActorColor = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("PartyColor=") != -1)
+                {
+                    PartyColor = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("EmoteColor=") != -1)
+                {
+                    EmoteColor = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("ShoutColor=") != -1)
+                {
+                    ShoutColor = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("TellColor=") != -1)
+                {
+                    TellColor = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("WhisperColor=") != -1)
+                {
+                    WhisperColor = ParameterValue;
+                    Count += 1;
+                }
             }
 
             _settings = new Settings(OutputDirectory,
@@ -258,7 +312,16 @@ namespace NWNLogRotator.Components
                                               ServerAddress,
                                               ServerPassword,
                                               DM,
-                                              ServerMode
+                                              ServerMode,
+                                              BackgroundColor,
+                                              TimestampColor,
+                                              DefaultColor,
+                                              ActorColor,
+                                              PartyColor,
+                                              EmoteColor,
+                                              ShoutColor,
+                                              TellColor,
+                                              WhisperColor
                                             );
             if(Count == 0)
             {

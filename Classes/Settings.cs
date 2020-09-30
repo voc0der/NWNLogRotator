@@ -23,6 +23,15 @@
         public string ServerPassword;
         public bool DM;
         public bool ServerMode;
+        public string BackgroundColor;
+        public string TimestampColor;
+        public string DefaultColor;
+        public string ActorColor;
+        public string PartyColor;
+        public string EmoteColor;
+        public string ShoutColor;
+        public string TellColor;
+        public string WhisperColor;
 
         // create singleton
         public static Settings _instance = new Settings();
@@ -51,6 +60,15 @@
             this.ServerPassword = "";
             this.DM = false;
             this.ServerMode = false;
+            this.BackgroundColor = "000000";
+            this.TimestampColor = "B1A2BD";
+            this.DefaultColor = "FFFFFF";
+            this.ActorColor = "8F7FFF";
+            this.PartyColor = "FFAED6";
+            this.EmoteColor = "E8F4F8";
+            this.ShoutColor = "F0DBA5";
+            this.TellColor = "00FF00";
+            this.WhisperColor = "808080";
         }
 
         // binding
@@ -74,7 +92,16 @@
                         string ServerAddress,
                         string ServerPassword,
                         bool DM,
-                        bool ServerMode)
+                        bool ServerMode,
+                        string BackgroundColor,
+                        string TimestampColor,
+                        string DefaultColor,
+                        string ActorColor,
+                        string PartyColor,
+                        string EmoteColor,
+                        string ShoutColor,
+                        string TellColor,
+                        string WhisperColor)
         {
             this.OutputDirectory = OutputDirectory;
             this.PathToLog = PathToLog;
@@ -97,6 +124,15 @@
             this.ServerPassword = ServerPassword;
             this.DM = DM;
             this.ServerMode = ServerMode;
+            this.BackgroundColor = BackgroundColor;
+            this.TimestampColor = TimestampColor;
+            this.DefaultColor = DefaultColor;
+            this.ActorColor = ActorColor;
+            this.PartyColor = PartyColor;
+            this.EmoteColor = EmoteColor;
+            this.ShoutColor = ShoutColor;
+            this.TellColor = TellColor;
+            this.WhisperColor = WhisperColor;
         }
 
         // get singleton

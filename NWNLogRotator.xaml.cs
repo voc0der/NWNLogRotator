@@ -172,6 +172,15 @@ namespace NWNLogRotator
             string ServerPassword = _settings.ServerPassword;
             bool DM = _settings.DM;
             bool ServerMode = ServerModeRadioButton.IsChecked.GetValueOrDefault();
+            string BackgroundColor = _settings.BackgroundColor;
+            string TimestampColor = _settings.TimestampColor;
+            string DefaultColor = _settings.DefaultColor;
+            string ActorColor = _settings.ActorColor;
+            string PartyColor = _settings.PartyColor;
+            string EmoteColor = _settings.EmoteColor;
+            string ShoutColor = _settings.ShoutColor;
+            string TellColor = _settings.TellColor;
+            string WhisperColor = _settings.WhisperColor;
 
             _settings = new Settings(OutputDirectory,
                                               PathToLog,
@@ -193,7 +202,16 @@ namespace NWNLogRotator
                                               ServerAddress,
                                               ServerPassword,
                                               DM,
-                                              ServerMode
+                                              ServerMode,
+                                              BackgroundColor,
+                                              TimestampColor,
+                                              DefaultColor,
+                                              ActorColor,
+                                              PartyColor,
+                                              EmoteColor,
+                                              ShoutColor,
+                                              TellColor,
+                                              WhisperColor
                                             );
 
             return _settings;

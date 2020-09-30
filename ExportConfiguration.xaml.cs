@@ -143,30 +143,46 @@ namespace NWNLogRotator
             string ServerPassword = _settings.ServerPassword;
             bool DM = _settings.DM;
             bool ServerMode = _settings.ServerMode;
+            string BackgroundColor = _settings.BackgroundColor;
+            string TimestampColor = _settings.TimestampColor;
+            string DefaultColor = _settings.DefaultColor;
+            string ActorColor = _settings.ActorColor;
+            string PartyColor = _settings.PartyColor;
+            string EmoteColor = _settings.EmoteColor;
+            string ShoutColor = _settings.ShoutColor;
+            string TellColor = _settings.TellColor;
+            string WhisperColor = _settings.WhisperColor;
 
-            _settings = new Settings(OutputDirectory,
-                                              PathToLog,
-                                              MinimumRowsToInteger,
-                                              ServerName,
-                                              ServerNameColor,
-                                              EventText,
-                                              CombatText,
-                                              UseTheme,
-                                              Silent,
-                                              Tray,
-                                              SaveBackup,
-                                              Notifications,
-                                              CustomEmotes,
-                                              FilterLines,
-                                              PathToClient,
-                                              RunClientOnLaunch,
-                                              CloseOnLogGenerated,
-                                              ServerAddress,
-                                              ServerPassword,
-                                              DM,
-                                              ServerMode
-                                            );
-
+            _settings = new Settings(   OutputDirectory,
+                                        PathToLog,
+                                        MinimumRowsToInteger,
+                                        ServerName,
+                                        ServerNameColor,
+                                        EventText,
+                                        CombatText,
+                                        UseTheme,
+                                        Silent,
+                                        Tray,
+                                        SaveBackup,
+                                        Notifications,
+                                        CustomEmotes,
+                                        FilterLines,
+                                        PathToClient,
+                                        RunClientOnLaunch,
+                                        CloseOnLogGenerated,
+                                        ServerAddress,
+                                        ServerPassword,
+                                        DM,
+                                        ServerMode,
+                                        BackgroundColor,
+                                        TimestampColor,
+                                        DefaultColor,
+                                        ActorColor,
+                                        PartyColor,
+                                        EmoteColor,
+                                        ShoutColor,
+                                        TellColor,
+                                        WhisperColor);
             return _settings;
         }
 
@@ -175,16 +191,6 @@ namespace NWNLogRotator
             _settings = CurrentSettings_Get();
             _closed = false;
             this.Close();
-        }
-
-        private void ServerNameColorSelectBox_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
-
-            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                // do some stuff with colors...
-            }
         }
     }
 }
