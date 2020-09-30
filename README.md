@@ -24,13 +24,9 @@ Important: Open Windows Explorer and enter %HOMEPATH%, and the last directory th
 | Player Mode | True | NWNLogRotator will look for the player client |
 | Server Mode | True | NWNLogRotator will look for server client |
 | Server Name | Test | Server logs will be written to OutputDirectory\Test |
-| Server Name Color | FFCC00 | The server name in the log appears yellow |
-| Server Name Color | FF0000 | The server name in the log appears red |
+| Server Name Color | FFCC00 | The server name in the log appears yellow (FFCC00) |
 | Custom Emotes | [],^ | [This will be an emote], ^This will be an emote^ |
 | Filter Lines | foo,bar | Any line that has the word foo or bar will be removed |
-| Auto Start | True,False | True will launch client on NWNLogRotator start |
-| Auto Close | True,False | True will close client on Log creation |
-| Theme | Dark, Light | Click on title, 'NWNLogRotator' to change Theme |
 
 # Other Notes
 1) This application may warn you that the publisher is not signed or verified, but if you click 'More Info' it will allow you to run anyways.
