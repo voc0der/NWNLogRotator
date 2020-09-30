@@ -129,7 +129,7 @@ namespace NWNLogRotator.Components
             string DefaultColor = "FFFFFF";
             string ActorColor = "8F7FFF";
             string PartyColor = "FFAED6";
-            string EmoteColor = "E8F4F8";
+            string EmoteColor = "A6DDCE";
             string ShoutColor = "F0DBA5";
             string TellColor = "00FF00";
             string WhisperColor = "808080";
@@ -408,7 +408,7 @@ namespace NWNLogRotator.Components
             }
 
             LogParser instance = new LogParser();
-            result = instance.ParseLog(fs, _run_settings.CombatText, _run_settings.EventText, _run_settings.ServerName, _run_settings.ServerNameColor, _run_settings.CustomEmotes, _run_settings.FilterLines, _run_settings.ServerMode);
+            result = instance.ParseLog(fs, _run_settings);
             fs.Close();
 
             // maintain minimum row lines requirement

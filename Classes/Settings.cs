@@ -65,7 +65,7 @@
             this.DefaultColor = "FFFFFF";
             this.ActorColor = "8F7FFF";
             this.PartyColor = "FFAED6";
-            this.EmoteColor = "E8F4F8";
+            this.EmoteColor = "A6DDCE";
             this.ShoutColor = "F0DBA5";
             this.TellColor = "00FF00";
             this.WhisperColor = "808080";

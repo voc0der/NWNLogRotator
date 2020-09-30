@@ -9,12 +9,12 @@ namespace NWNLogRotator.Classes
 {
     class LogParser
     {
-        public string ParseLog(Stream inputStream, bool removeCombat, bool removeEvents, string ServerName, string ServerNameColor, string CustomEmotes, string FilterLines, bool ServerMode)
+        public string ParseLog(Stream inputStream, Settings _run_settings)
         {
             var removeExps = new List<Regex>();
 
-            string[] filterLinesArray = FilterLines.Split(',');
-            if (!removeEvents && FilterLines != "")
+            string[] filterLinesArray = _run_settings.FilterLines.Split(',');
+            if (!_run_settings.EventText && _run_settings.FilterLines != "")
             {
                 eventLines = new List<String>();
                 foreach (string eventString in filterLinesArray)
@@ -22,9 +22,9 @@ namespace NWNLogRotator.Classes
                     string theEventString = eventString.Trim();
                     eventLines.Add(theEventString);
                 }
-                removeEvents = true;
+                _run_settings.EventText = true;
             }
-            else if (removeEvents && FilterLines != "")
+            else if (_run_settings.EventText && _run_settings.FilterLines != "")
             {
                 List<String> eventLinesTemp = new List<String>();
                 foreach (string theEvent in filterLinesArray)
@@ -37,7 +37,7 @@ namespace NWNLogRotator.Classes
             string text;
             using (var reader = new StreamReader(inputStream, Encoding.GetEncoding("iso-8859-1")))
             {
-                if (removeEvents)
+                if (_run_settings.EventText)
                 {
                     StringBuilder cleanTextBuilder = new StringBuilder();
                     while (!reader.EndOfStream)
@@ -65,9 +65,9 @@ namespace NWNLogRotator.Classes
             char[] newRow = { '\n' };
             string[] textAsList = text.Split(newRow);
 
-            if (removeCombat) removeExps.AddRange(combatLines);
+            if (_run_settings.CombatText) removeExps.AddRange(combatLines);
 
-            formatReplacesOrdered = formatReplacesWithUserOverride(CustomEmotes);
+            formatReplacesOrdered = formatReplacesWithUserOverride(_run_settings.CustomEmotes);
 
             var processedLines = textAsList.AsParallel().Select(line =>
             {
@@ -78,7 +78,7 @@ namespace NWNLogRotator.Classes
                 if (removeExps.Any(x => x.IsMatch(lineText)))
                     return null;
 
-                if (ServerMode == true)
+                if (_run_settings.ServerMode == true)
                 {
                     foreach (var exp in serverReplacesOrdered)
                         lineText = exp.Item1.Replace(lineText, exp.Item2);
@@ -108,7 +108,7 @@ namespace NWNLogRotator.Classes
                     parsedText = exp.Replace(parsedText, "");
             }
 
-            text = HTMLPackageLog_Get(parsedText, ServerName, ServerNameColor);
+            text = HTMLPackageLog_Get(parsedText, _run_settings);
             return text;
         }
         public bool LineCount_Get(string ParsedNWNLog, int MinimumRowsCount)
@@ -124,32 +124,32 @@ namespace NWNLogRotator.Classes
                 return false;
             }
         }
-        private string HTMLPackageLog_Get(string ParsedNWNLog, string ServerName, string ServerNameColor)
+        private string HTMLPackageLog_Get(string ParsedNWNLog, Settings _run_settings)
         {
             string HTMLHeader = "<head>" +
                 "<style>" +
                     ".logbody { background-color: #000000; font-family: Tahoma, Geneva, sans-serif; color: #FFFFFF; }";
             HTMLHeader += ".logheader { color: #";
-            if (ServerNameColor != "")
+            if (_run_settings.ServerNameColor != "")
             {
-                HTMLHeader += ServerNameColor;
+                HTMLHeader += _run_settings.ServerNameColor;
             }
             HTMLHeader += " }" +
-                    ".default { color: #FFFFFF }" +
-                    ".timestamp { color: #B1A2BD; }" +
-                    ".actors { color: #8F7FFF; }" +
-                    ".shouts { color: #F0DBA5 }" +
-                    ".tells { color: #00FF00; }" +
-                    ".whispers { color: #808080; }" +
-                    ".party { color: #FFAED6; }" +
-                    ".emotes { color: #E8F4F8; }" +
+                    ".default { color: #" + _run_settings.DefaultColor + " }" +
+                    ".timestamp { color: #" + _run_settings.TimestampColor + " }" +
+                    ".actors { color: #" + _run_settings.ActorColor + " }" +
+                    ".shouts { color: #" + _run_settings.ShoutColor + " }" +
+                    ".tells { color: #" + _run_settings.TellColor + " }" +
+                    ".whispers { color: #" + _run_settings.WhisperColor + " }" +
+                    ".party { color: #" + _run_settings.PartyColor + " }" +
+                    ".emotes { color: #" + _run_settings.EmoteColor + " }" +
                 "</style>" +
             "</head>";
 
             string logTitle;
-            if (ServerName != "")
+            if (_run_settings.ServerName != "")
             {
-                logTitle = "<h4>[<span class='logheader'>" + ServerName + " Log</span>] ";
+                logTitle = "<h4>[<span class='logheader'>" + _run_settings.ServerName + " Log</span>] ";
             }
             else
             {
@@ -179,7 +179,7 @@ namespace NWNLogRotator.Classes
                         string tempLeftBracket = theEmotePair.Substring(0, 1);
                         string tempRightBracket = theEmotePair.Substring(1, 1);
                         string theRegEx;
-                        theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party)).*?\\" + tempRightBracket;
+                        theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempRightBracket;
 
                         Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), "<span class='emotes'>$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
@@ -188,7 +188,7 @@ namespace NWNLogRotator.Classes
                     {
                         string tempBracket = theEmotePair.Substring(0, 1);
                         string theRegEx;
-                        theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party)).*?\\" + tempBracket;
+                        theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempBracket;
 
                         Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), "<span class='emotes'>$1</span>");
                         additionalEmotesList.Add(theCustomEmote);

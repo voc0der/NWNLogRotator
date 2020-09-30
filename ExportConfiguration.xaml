@@ -14,22 +14,23 @@
         <Button x:Name="SaveSettingsButton" Content="Save Settings" Margin="287,198,0,0" VerticalAlignment="Top" Click="Button_Click" RenderTransformOrigin="0.216,1.118" HorizontalAlignment="Left" Width="98"/>
         <Separator HorizontalAlignment="Left" Height="19" Margin="0,56,-21,0" VerticalAlignment="Top" Width="511"/>
         <Label x:Name="ActorColorTextBoxLabel" Content="Actor Color:" HorizontalAlignment="Left" Margin="69,72,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <TextBox x:Name="ActorColorTextBox" HorizontalAlignment="Left" Height="17" Margin="142,77,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
+        <TextBox x:Name="ActorColorTextBox" HorizontalAlignment="Left" Height="17" Margin="142,77,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
         <Label x:Name="PartyColorTextBoxLabel" Content="Party Color:" HorizontalAlignment="Left" Margin="71,98,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <TextBox x:Name="PartyColorTextBox" HorizontalAlignment="Left" Height="17" Margin="142,103,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
+        <TextBox x:Name="PartyColorTextBox" HorizontalAlignment="Left" Height="17" Margin="142,103,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
         <Label x:Name="EmoteColorTextBoxLabel" Content="Emote Color:" HorizontalAlignment="Left" Margin="64,125,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <TextBox x:Name="EmoteColorTextBox" HorizontalAlignment="Left" Margin="142,130,0,81.667" TextWrapping="Wrap" Text="" Width="50" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
+        <TextBox x:Name="EmoteColorTextBox" HorizontalAlignment="Left" Margin="142,130,0,82" TextWrapping="Wrap" Text="" Width="52" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
         <Label x:Name="TimestampColorTextBoxLabel" Content="Timestamp Color:" HorizontalAlignment="Left" Margin="39,151,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <TextBox x:Name="TimestampColorTextBox" HorizontalAlignment="Left" Height="17" Margin="142,157,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
+        <TextBox x:Name="TimestampColorTextBox" HorizontalAlignment="Left" Height="17" Margin="142,157,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
         <Label x:Name="ShoutColorTextBoxLabel" Content="Shout Color:" HorizontalAlignment="Left" Margin="238,72,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <TextBox x:Name="ShoutColorTextBox" HorizontalAlignment="Left" Height="17" Margin="313,77,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
+        <TextBox x:Name="ShoutColorTextBox" HorizontalAlignment="Left" Height="17" Margin="313,77,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
         <Label x:Name="TellColorTextBoxLabel" Content="Tell Color:" HorizontalAlignment="Left" Margin="252,98,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <TextBox x:Name="TellColorTextBox" HorizontalAlignment="Left" Height="17" Margin="314,103,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
+        <TextBox x:Name="TellColorTextBox" HorizontalAlignment="Left" Height="17" Margin="314,103,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
         <Label x:Name="WhisperColorTextBoxLabel" Content="Whisper Color:" HorizontalAlignment="Left" Margin="226,125,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <TextBox x:Name="WhisperColorTextBox" HorizontalAlignment="Left" Height="17" Margin="314,130,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
+        <TextBox x:Name="WhisperColorTextBox" HorizontalAlignment="Left" Height="17" Margin="314,130,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
         <Label x:Name="DefaultColorTextBoxLabel" Content="Default Color:" HorizontalAlignment="Left" Margin="231,151,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <TextBox x:Name="DefaultColorTextBox" HorizontalAlignment="Left" Height="17" Margin="314,157,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
+        <TextBox x:Name="DefaultColorTextBox" HorizontalAlignment="Left" Height="17" Margin="314,157,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
         <Label x:Name="BackgroundColorTextBoxLabel" Content="Background Color:" HorizontalAlignment="Left" Margin="34,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <TextBox x:Name="BackgroundColorTextBox" HorizontalAlignment="Left" Height="17" Margin="142,182,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
+        <TextBox x:Name="BackgroundColorTextBox" HorizontalAlignment="Left" Height="17" Margin="142,182,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
+        <Button x:Name="ResetSettingsButton" Content="Reset" Margin="212,198,0,0" VerticalAlignment="Top" Click="Button_Click2" RenderTransformOrigin="0.216,1.118" HorizontalAlignment="Left" Width="65"/>
     </Grid>
 </Window>

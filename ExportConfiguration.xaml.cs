@@ -99,6 +99,8 @@ namespace NWNLogRotator
             BackgroundColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             DefaultColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             DefaultColorTextBox.Foreground = new SolidColorBrush(Colors.White);
+            ResetSettingsButton.Background = Brushes.Black;
+            ResetSettingsButton.Foreground = new SolidColorBrush(Colors.White);
             SaveSettingsButton.Background = Brushes.Black;
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.White);
         }
@@ -111,6 +113,8 @@ namespace NWNLogRotator
             ServerNameTextBox.Foreground = new SolidColorBrush(Colors.Black);
             ServerNameColorTextBox.Foreground = new SolidColorBrush(Colors.Black);
 
+            ResetSettingsButton.Background = Brushes.White;
+            ResetSettingsButton.Foreground = new SolidColorBrush(Colors.Black);
             SaveSettingsButton.Background = Brushes.White;
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.Black);
         }
@@ -118,6 +122,15 @@ namespace NWNLogRotator
         {
             ServerNameTextBox.Text = _settings.ServerName;
             ServerNameColorTextBox.Text = _settings.ServerNameColor;
+            BackgroundColorTextBox.Text = _settings.BackgroundColor;
+            TimestampColorTextBox.Text = _settings.TimestampColor;
+            DefaultColorTextBox.Text = _settings.DefaultColor;
+            ActorColorTextBox.Text = _settings.ActorColor;
+            PartyColorTextBox.Text = _settings.PartyColor;
+            EmoteColorTextBox.Text = _settings.EmoteColor;
+            ShoutColorTextBox.Text = _settings.ShoutColor;
+            TellColorTextBox.Text = _settings.TellColor;
+            WhisperColorTextBox.Text = _settings.WhisperColor;
         }
 
         private Settings CurrentSettings_Get()
@@ -143,15 +156,15 @@ namespace NWNLogRotator
             string ServerPassword = _settings.ServerPassword;
             bool DM = _settings.DM;
             bool ServerMode = _settings.ServerMode;
-            string BackgroundColor = _settings.BackgroundColor;
-            string TimestampColor = _settings.TimestampColor;
-            string DefaultColor = _settings.DefaultColor;
-            string ActorColor = _settings.ActorColor;
-            string PartyColor = _settings.PartyColor;
-            string EmoteColor = _settings.EmoteColor;
-            string ShoutColor = _settings.ShoutColor;
-            string TellColor = _settings.TellColor;
-            string WhisperColor = _settings.WhisperColor;
+            string BackgroundColor = BackgroundColorTextBox.Text;
+            string TimestampColor = TimestampColorTextBox.Text;
+            string DefaultColor = DefaultColorTextBox.Text;
+            string ActorColor = ActorColorTextBox.Text;
+            string PartyColor = PartyColorTextBox.Text;
+            string EmoteColor = EmoteColorTextBox.Text;
+            string ShoutColor = ShoutColorTextBox.Text;
+            string TellColor = TellColorTextBox.Text;
+            string WhisperColor = WhisperColorTextBox.Text;
 
             _settings = new Settings(   OutputDirectory,
                                         PathToLog,
@@ -182,7 +195,8 @@ namespace NWNLogRotator
                                         EmoteColor,
                                         ShoutColor,
                                         TellColor,
-                                        WhisperColor);
+                                        WhisperColor
+                                   );
             return _settings;
         }
 
@@ -191,6 +205,21 @@ namespace NWNLogRotator
             _settings = CurrentSettings_Get();
             _closed = false;
             this.Close();
+        }
+
+        private void Button_Click2(object sender, RoutedEventArgs e)
+        {
+            var __settings = new Settings();
+            BackgroundColorTextBox.Text = __settings.BackgroundColor;
+            TimestampColorTextBox.Text = __settings.TimestampColor;
+            DefaultColorTextBox.Text = __settings.DefaultColor;
+            ActorColorTextBox.Text = __settings.ActorColor;
+            PartyColorTextBox.Text = __settings.PartyColor;
+            EmoteColorTextBox.Text = __settings.EmoteColor;
+            ShoutColorTextBox.Text = __settings.ShoutColor;
+            TellColorTextBox.Text = __settings.TellColor;
+            WhisperColorTextBox.Text = __settings.WhisperColor;
+            __settings = null;
         }
     }
 }
