@@ -6,8 +6,10 @@ Automatically colorizes and saves Neverwinter Nights chat logs into beautiful HT
 # Download
 Latest version can be found <a href="https://github.com/notsigma/NWNLogRotator/releases/latest">here</a>.
 
-# Screenshot
-![Screenshot of NWNLogRotator would be here](https://raw.githubusercontent.com/notsigma/NWNLogRotator/master/Assets/Images/screenshot_nwnlr1.png)
+# Screenshots
+![Screenshot of NWNLogRotator main would be here](https://raw.githubusercontent.com/notsigma/NWNLogRotator/master/Assets/Images/screenshot_nwnlr1.png)
+![Screenshot of NWNLogRotator export would be here](https://raw.githubusercontent.com/notsigma/NWNLogRotator/master/Assets/Images/screenshot_nwnlr2.png)
+![Screenshot of NWNLogRotator launcher would be here](https://raw.githubusercontent.com/notsigma/NWNLogRotator/master/Assets/Images/screenshot_nwnlr3.png)
 
 # Automation (How it works)
 While open, NWNLogRotator will process new logs automatically based on the status of whether Neverwinter Nights is running. Configure the directories to match with your Neverwinter Nights default log storage, and it will process them automatically.
