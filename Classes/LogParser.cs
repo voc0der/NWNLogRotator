@@ -128,7 +128,7 @@ namespace NWNLogRotator.Classes
         {
             string HTMLHeader = "<head>" +
                 "<style>" +
-                    ".logbody { background-color: #000000; font-family: Tahoma, Geneva, sans-serif; color: #FFFFFF; }";
+                    ".logbody { background-color: #" + _run_settings.BackgroundColor + "; font-family: Tahoma, Geneva, sans-serif; color: #FFFFFF; }";
             HTMLHeader += ".logheader { color: #";
             if (_run_settings.ServerNameColor != "")
             {

@@ -1,18 +1,7 @@
 ﻿using NWNLogRotator.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace NWNLogRotator
 {
@@ -203,8 +192,28 @@ namespace NWNLogRotator
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _settings = CurrentSettings_Get();
-            _closed = false;
-            this.Close();
+            if( _settings.BackgroundColor.Length == 6 &&
+               _settings.TimestampColor.Length == 6 &&
+               _settings.DefaultColor.Length == 6 &&
+               _settings.ActorColor.Length == 6 &&
+               _settings.PartyColor.Length == 6 &&
+               _settings.EmoteColor.Length == 6 &&
+               _settings.ShoutColor.Length == 6 &&
+               _settings.TellColor.Length == 6 &&
+               _settings.WhisperColor.Length == 6
+              )
+            {
+                _closed = false;
+                this.Close();
+            } 
+            else
+            {
+                MessageBoxResult _messageBoxResult = MessageBox.Show("Please make sure every color in the Export Options is six characters long.",
+                            "Invalid Export Color!",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
+            }
+            
         }
 
         private void Button_Click2(object sender, RoutedEventArgs e)
