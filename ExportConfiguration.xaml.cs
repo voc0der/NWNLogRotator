@@ -17,13 +17,13 @@ using System.Windows.Shapes;
 namespace NWNLogRotator
 {
     /// <summary>
-    /// Interaction logic for ServerConfiguration.xaml
+    /// Interaction logic for ExportConfiguration.xaml
     /// </summary>
-    public partial class ServerConfiguration : Window
+    public partial class ExportConfiguration : Window
     {
         public Settings _settings;
         public bool _closed = true;
-        public ServerConfiguration(Settings __settings)
+        public ExportConfiguration(Settings __settings)
         {
             InitializeComponent();
             SetupApplication(Settings_Set(__settings));
@@ -69,11 +69,13 @@ namespace NWNLogRotator
             ServerNameColorTextBox.Background = Brushes.Black;
             ActorColorTextBox.Background = Brushes.Black;
             PartyColorTextBox.Background = Brushes.Black;
-            EmotesColorTextBox.Background = Brushes.Black;
+            EmoteColorTextBox.Background = Brushes.Black;
             TimestampColorTextBox.Background = Brushes.Black;
             ShoutColorTextBox.Background = Brushes.Black;
-            TellsColorTextBox.Background = Brushes.Black;
+            TellColorTextBox.Background = Brushes.Black;
             WhisperColorTextBox.Background = Brushes.Black;
+            BackgroundColorTextBox.Background = Brushes.Black;
+            DefaultColorTextBox.Background = Brushes.Black;
 
             ServerNameTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             ServerNameColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
@@ -83,16 +85,20 @@ namespace NWNLogRotator
             ActorColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             PartyColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             PartyColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
-            EmotesColorTextBox.Foreground = new SolidColorBrush(Colors.White);
-            EmotesColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
+            EmoteColorTextBox.Foreground = new SolidColorBrush(Colors.White);
+            EmoteColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             TimestampColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             TimestampColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             ShoutColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             ShoutColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
-            TellsColorTextBox.Foreground = new SolidColorBrush(Colors.White);
-            TellsColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
+            TellColorTextBox.Foreground = new SolidColorBrush(Colors.White);
+            TellColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             WhisperColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             WhisperColorTextBox.Foreground = new SolidColorBrush(Colors.White);
+            BackgroundColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
+            BackgroundColorTextBox.Foreground = new SolidColorBrush(Colors.White);
+            DefaultColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
+            DefaultColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             SaveSettingsButton.Background = Brushes.Black;
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.White);
         }

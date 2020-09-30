@@ -698,12 +698,12 @@ namespace NWNLogRotator
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
             _settings = CurrentSettings_Get();
-            ServerConfiguration ServerConfigurationPopUp = new ServerConfiguration(_settings);
-            ServerConfigurationPopUp.Owner = Window.GetWindow(this);
+            ExportConfiguration ExportConfigurationPopUp = new ExportConfiguration(_settings);
+            ExportConfigurationPopUp.Owner = Window.GetWindow(this);
             Grid.Effect = new BlurEffect();
-            ServerConfigurationPopUp.ShowDialog();
-            Settings __settings = ServerConfigurationPopUp.Settings_Get();
-            bool __closed = ServerConfigurationPopUp.Closed_Get();
+            ExportConfigurationPopUp.ShowDialog();
+            Settings __settings = ExportConfigurationPopUp.Settings_Get();
+            bool __closed = ExportConfigurationPopUp.Closed_Get();
             if (_settings != __settings && !__closed)
             {
                 _settings = __settings;

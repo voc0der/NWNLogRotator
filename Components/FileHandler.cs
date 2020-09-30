@@ -115,6 +115,15 @@ namespace NWNLogRotator.Components
             string ServerPassword = "";
             bool DM = false;
             bool ServerMode = false;
+            string BackgroundColor = "";
+            string TimestampColor = "";
+            string DefaultColor = "";
+            string ActorColor = "";
+            string PartyColor = "";
+            string EmoteColor = "";
+            string ShoutColor = "";
+            string TellColor = "";
+            string WhisperColor = "";
 
             int Count = 0;
 

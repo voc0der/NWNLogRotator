@@ -99,8 +99,8 @@
     <Compile Include="LauncherConfiguration.xaml.cs">
       <DependentUpon>LauncherConfiguration.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ServerConfiguration.xaml.cs">
-      <DependentUpon>ServerConfiguration.xaml</DependentUpon>
+    <Compile Include="ExportConfiguration.xaml.cs">
+      <DependentUpon>ExportConfiguration.xaml</DependentUpon>
     </Compile>
     <Page Include="LauncherConfiguration.xaml">
       <SubType>Designer</SubType>
@@ -127,7 +127,7 @@
       <DependentUpon>NWNLogRotator.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ServerConfiguration.xaml">
+    <Page Include="ExportConfiguration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
