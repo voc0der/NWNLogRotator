@@ -70,6 +70,7 @@ namespace NWNLogRotator
             ServerNameColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             ServerNameTextBox.Foreground = new SolidColorBrush(Colors.White);
             ServerNameColorTextBox.Foreground = new SolidColorBrush(Colors.White);
+            ServerNameLabelTwo.Foreground = new SolidColorBrush(Colors.White);
             ActorColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             ActorColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             PartyColorTextBox.Foreground = new SolidColorBrush(Colors.White);

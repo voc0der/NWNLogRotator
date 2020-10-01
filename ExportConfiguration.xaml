@@ -9,7 +9,7 @@
     <Grid x:Name="Grid" Margin="0,0,-4.667,-0.333">
         <Label x:Name="ServerNameTextBoxLabel" Content="Server Name:" HorizontalAlignment="Left" Margin="61,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
         <Label x:Name="ServerNameColorTextBoxLabel" Content="Server Name Color:" HorizontalAlignment="Left" Margin="29,35,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <TextBox x:Name="ServerNameTextBox" HorizontalAlignment="Left" Height="17" Margin="142,13,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" RenderTransformOrigin="0.965,0.275"/>
+        <TextBox x:Name="ServerNameTextBox" HorizontalAlignment="Left" Height="17" Margin="142,13,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="88" RenderTransformOrigin="0.965,0.275"/>
         <TextBox x:Name="ServerNameColorTextBox" HorizontalAlignment="Left" Height="17" Margin="142,38,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
         <Button x:Name="SaveSettingsButton" Content="Save Settings" Margin="287,198,0,0" VerticalAlignment="Top" Click="Button_Click" RenderTransformOrigin="0.216,1.118" HorizontalAlignment="Left" Width="98"/>
         <Separator HorizontalAlignment="Left" Height="19" Margin="0,56,-21,0" VerticalAlignment="Top" Width="511"/>
@@ -32,5 +32,6 @@
         <Label x:Name="BackgroundColorTextBoxLabel" Content="Background Color:" HorizontalAlignment="Left" Margin="34,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
         <TextBox x:Name="BackgroundColorTextBox" HorizontalAlignment="Left" Height="17" Margin="142,182,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.965,0.275" MaxLength="6" />
         <Button x:Name="ResetSettingsButton" Content="Reset" Margin="212,198,0,0" VerticalAlignment="Top" Click="Button_Click2" RenderTransformOrigin="0.216,1.118" HorizontalAlignment="Left" Width="65"/>
+        <Label x:Name="ServerNameLabelTwo" Content="Logs will be saved in this Folder" HorizontalAlignment="Left" Margin="231,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Width="171" FontSize="10" FontStyle="Italic"/>
     </Grid>
 </Window>

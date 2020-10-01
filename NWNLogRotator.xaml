@@ -49,8 +49,8 @@
         <TextBox x:Name="CustomEmotesTextBox" HorizontalAlignment="Left" Height="17" Margin="186,9,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" Grid.Column="2" RenderTransformOrigin="0.965,0.275" MaxLength="6" Visibility="Collapsed" Grid.Row="1" />
         <Label x:Name="HintLabel" Content="Usage Tip: To configure multiple servers, copy NWNLogRotator.exe into another&#xD;&#xA;folder and configure that copy for the new server." HorizontalAlignment="Left" Margin="29,148,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Width="460" Height="42" Grid.ColumnSpan="3" Grid.Row="1" />
         <Button x:Name="LaunchClientButton" Content="Launch Client" Grid.Column="2" HorizontalAlignment="Left" Margin="150,121,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867" Click="Button_Click_3" Grid.Row="1"/>
-        <RadioButton x:Name="ClientModeRadioButton" Content="Player Mode" HorizontalAlignment="Left" Margin="79,103,0,0" VerticalAlignment="Top" Grid.Column="2"/>
-        <RadioButton x:Name="ServerModeRadioButton" Content="Server Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="228,103,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.187,0.523"/>
+        <RadioButton x:Name="ClientModeRadioButton" Content="Player Client Mode" HorizontalAlignment="Left" Margin="79,103,0,0" VerticalAlignment="Top" Grid.Column="2"/>
+        <RadioButton x:Name="ServerModeRadioButton" Content="Server Client Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="228,103,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.187,0.523"/>
         <Button x:Name="ServerConfigurationButton" Content="Export Settings" HorizontalAlignment="Left" Margin="40,79,0,0" VerticalAlignment="Top" Width="148" Click="Button_Click_4" Grid.Column="2" Grid.Row="1"/>
         <Button x:Name="LauncherConfigurationButton" Content="Launcher Settings" Grid.Column="2" HorizontalAlignment="Left" Margin="219,79,0,0" VerticalAlignment="Top" Width="149" Click="Button_Click_5" Grid.Row="1"/>
     </Grid>
