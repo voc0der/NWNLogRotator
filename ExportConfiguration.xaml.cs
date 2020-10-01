@@ -56,6 +56,8 @@ namespace NWNLogRotator
 
             ServerNameTextBox.Background = Brushes.Black;
             ServerNameColorTextBox.Background = Brushes.Black;
+            MyCharactersTextBox.Background = Brushes.Black;
+            MyColorTextBox.Background = Brushes.Black;
             ActorColorTextBox.Background = Brushes.Black;
             PartyColorTextBox.Background = Brushes.Black;
             EmoteColorTextBox.Background = Brushes.Black;
@@ -71,6 +73,10 @@ namespace NWNLogRotator
             ServerNameTextBox.Foreground = new SolidColorBrush(Colors.White);
             ServerNameColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             ServerNameLabelTwo.Foreground = new SolidColorBrush(Colors.White);
+            MyCharactersTextBox.Foreground = new SolidColorBrush(Colors.White);
+            MyCharactersTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
+            MyColorTextBox.Foreground = new SolidColorBrush(Colors.White);
+            MyColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             ActorColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             ActorColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             PartyColorTextBox.Foreground = new SolidColorBrush(Colors.White);
@@ -99,7 +105,6 @@ namespace NWNLogRotator
         {
             ServerNameTextBox.Background = Brushes.White;
             ServerNameColorTextBox.Background = Brushes.White;
-
             ServerNameTextBox.Foreground = new SolidColorBrush(Colors.Black);
             ServerNameColorTextBox.Foreground = new SolidColorBrush(Colors.Black);
 
@@ -121,6 +126,8 @@ namespace NWNLogRotator
             ShoutColorTextBox.Text = _settings.ShoutColor;
             TellColorTextBox.Text = _settings.TellColor;
             WhisperColorTextBox.Text = _settings.WhisperColor;
+            MyColorTextBox.Text = _settings.MyColor;
+            MyCharactersTextBox.Text = _settings.MyCharacters;
         }
 
         private Settings CurrentSettings_Get()
@@ -155,6 +162,8 @@ namespace NWNLogRotator
             string ShoutColor = ShoutColorTextBox.Text;
             string TellColor = TellColorTextBox.Text;
             string WhisperColor = WhisperColorTextBox.Text;
+            string MyColor = MyColorTextBox.Text;
+            string MyCharacters = MyCharactersTextBox.Text;
 
             _settings = new Settings(   OutputDirectory,
                                         PathToLog,
@@ -185,7 +194,9 @@ namespace NWNLogRotator
                                         EmoteColor,
                                         ShoutColor,
                                         TellColor,
-                                        WhisperColor
+                                        WhisperColor,
+                                        MyColor,
+                                        MyCharacters
                                    );
             return _settings;
         }

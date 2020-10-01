@@ -67,7 +67,7 @@ namespace NWNLogRotator.Classes
 
             if (_run_settings.CombatText) removeExps.AddRange(combatLines);
 
-            formatReplacesOrdered = formatReplacesWithUserOverride(_run_settings.CustomEmotes);
+            formatReplacesOrdered = formatReplacesWithUserOverride(_run_settings);
 
             var processedLines = textAsList.AsParallel().Select(line =>
             {
@@ -126,23 +126,28 @@ namespace NWNLogRotator.Classes
         }
         private string HTMLPackageLog_Get(string ParsedNWNLog, Settings _run_settings)
         {
+            string ServerNameColor = "";
+            if (_run_settings.ServerNameColor == "")
+            {
+                ServerNameColor = "#" + _run_settings.DefaultColor;
+            } 
+            else
+            {
+                ServerNameColor = "#" + _run_settings.ServerNameColor;
+            }
             string HTMLHeader = "<head>" +
                 "<style>" +
-                    ".logbody { background-color: #" + _run_settings.BackgroundColor + "; font-family: Tahoma, Geneva, sans-serif; color: #FFFFFF; }";
-            HTMLHeader += ".logheader { color: #";
-            if (_run_settings.ServerNameColor != "")
-            {
-                HTMLHeader += _run_settings.ServerNameColor;
-            }
-            HTMLHeader += " }" +
-                    ".default { color: #" + _run_settings.DefaultColor + " }" +
-                    ".timestamp { color: #" + _run_settings.TimestampColor + " }" +
-                    ".actors { color: #" + _run_settings.ActorColor + " }" +
-                    ".shouts { color: #" + _run_settings.ShoutColor + " }" +
-                    ".tells { color: #" + _run_settings.TellColor + " }" +
-                    ".whispers { color: #" + _run_settings.WhisperColor + " }" +
-                    ".party { color: #" + _run_settings.PartyColor + " }" +
-                    ".emotes { color: #" + _run_settings.EmoteColor + " }" +
+                    ".logbody { background-color: #" + _run_settings.BackgroundColor + "; font-family: Tahoma, Geneva, sans-serif; color: #" + _run_settings.DefaultColor + "; }" +
+                    ".logheader { color: " + ServerNameColor + " }" +
+                    ".default { color: #" + _run_settings.DefaultColor + "; }" +
+                    ".timestamp { color: #" + _run_settings.TimestampColor + "; }" +
+                    ".me { color: #" + _run_settings.MyColor + "; }" +
+                    ".actors { color: #" + _run_settings.ActorColor + "; }" +
+                    ".shouts { color: #" + _run_settings.ShoutColor + "; }" +
+                    ".tells { color: #" + _run_settings.TellColor + "; }" +
+                    ".whispers { color: #" + _run_settings.WhisperColor + "; }" +
+                    ".party { color: #" + _run_settings.PartyColor + "; }" +
+                    ".emotes { color: #" + _run_settings.EmoteColor + "; }" +
                 "</style>" +
             "</head>";
 
@@ -161,14 +166,31 @@ namespace NWNLogRotator.Classes
             return "<html>" + HTMLHeader + logTitle + ParsedNWNLog + "<body class='logbody'><span class='default'>" + postLog;
         }
 
-        private List<Tuple<Regex, string>> formatReplacesWithUserOverride(string CustomEmotes)
+        private List<Tuple<Regex, string>> formatReplacesWithUserOverride(Settings _run_settings)
         {
-            string[] emotesArray = CustomEmotes.Split(',');
+            string[] emotesArray = _run_settings.CustomEmotes.Split(',');
             List<Tuple<Regex, string>> formatReplacesOrderedReturn = new List<Tuple<Regex, string>>();
 
             formatReplacesOrderedReturn.AddRange(formatReplacesOrderedOne);
+
+            if (_run_settings.MyCharacters != "")
+            {
+                List<Tuple<Regex, string>> MyCharacterLines = new List<Tuple<Regex, string>>();
+                string theRegEx;
+                string[] MyCharacters = _run_settings.MyCharacters.Split(',');
+                foreach(string CharacterName in MyCharacters)
+                {
+                    theRegEx = @"\]<\/span>(\s*?" + CharacterName + @":\s)";
+                    Tuple<Regex, string> theMyCharacterLine = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), "]</span><span class='me'>$1</span>");
+                    MyCharacterLines.Add(theMyCharacterLine);
+                }
+                formatReplacesOrderedReturn.AddRange(MyCharacterLines);
+            }
+
             formatReplacesOrderedReturn.AddRange(formatReplacesOrderedTwo);
-            if (CustomEmotes.Length != 0)
+            formatReplacesOrderedReturn.AddRange(formatReplacesOrderedThree);
+
+            if (_run_settings.CustomEmotes.Length != 0)
             {
                 List<Tuple<Regex, string>> additionalEmotesList = new List<Tuple<Regex, string>>();
                 foreach (string emotePair in emotesArray)
@@ -206,6 +228,10 @@ namespace NWNLogRotator.Classes
         {
             new Tuple<Regex, string> ( new Regex(@"\[\w{3}\s\w{3}\s*?\d{1,}\s", RegexOptions.Compiled), "<span class='timestamp'>[" ),
             new Tuple<Regex, string> ( new Regex(@"\:{1}[0-9]*]{1}",RegexOptions.Compiled), "]</span>" ),
+        };
+
+        private List<Tuple<Regex, string>> formatReplacesOrderedTwo = new List<Tuple<Regex, string>>
+        {
             // actors
             new Tuple<Regex, string>( new Regex(@"\]<\/span>((...).*: )",RegexOptions.Compiled), "]</span><span class='actors'>$1</span>" ),
             // shouts
@@ -218,7 +244,7 @@ namespace NWNLogRotator.Classes
             new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Party])(.*.*)",RegexOptions.Compiled), "</span><span class='party'> $1:$2</span>"),
         };
 
-        private List<Tuple<Regex, string>> formatReplacesOrderedTwo = new List<Tuple<Regex, string>>
+        private List<Tuple<Regex, string>> formatReplacesOrderedThree = new List<Tuple<Regex, string>>
         {
             // emotes 
             new Tuple<Regex, string>( new Regex(@"(\*.*?\*)",RegexOptions.Compiled), "<span class='emotes'>$1</span>")

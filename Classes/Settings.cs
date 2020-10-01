@@ -32,6 +32,8 @@
         public string ShoutColor;
         public string TellColor;
         public string WhisperColor;
+        public string MyColor;
+        public string MyCharacters;
 
         // create singleton
         public static Settings _instance = new Settings();
@@ -69,6 +71,8 @@
             this.ShoutColor = "F0DBA5";
             this.TellColor = "00FF00";
             this.WhisperColor = "808080";
+            this.MyColor = "";
+            this.MyCharacters = "";
         }
 
         // binding
@@ -101,7 +105,9 @@
                         string EmoteColor,
                         string ShoutColor,
                         string TellColor,
-                        string WhisperColor)
+                        string WhisperColor,
+                        string MyColor,
+                        string MyCharacters)
         {
             this.OutputDirectory = OutputDirectory;
             this.PathToLog = PathToLog;
@@ -133,6 +139,8 @@
             this.ShoutColor = ShoutColor;
             this.TellColor = TellColor;
             this.WhisperColor = WhisperColor;
+            this.MyColor = MyColor;
+            this.MyCharacters = MyCharacters;
         }
 
         // get singleton

@@ -10,7 +10,7 @@ namespace NWNLogRotator.Components
     public partial class FileHandler : Component
     {
         Settings _settings;
-        int _expectedSettingsCount = 30;
+        int _expectedSettingsCount = 32;
 
         public FileHandler()
         {
@@ -72,7 +72,9 @@ namespace NWNLogRotator.Components
                                         "EmoteColor=" + _settings.EmoteColor + "\n" +
                                         "ShoutColor=" + _settings.ShoutColor + "\n" +
                                         "TellColor=" + _settings.TellColor + "\n" +
-                                        "WhisperColor=" + _settings.WhisperColor;
+                                        "WhisperColor=" + _settings.WhisperColor + "\n" +
+                                        "MyColor=" + _settings.MyColor + "\n" +
+                                        "MyCharacters=" + _settings.MyCharacters;
             return NewSettingsFile;
         }
 
@@ -132,6 +134,8 @@ namespace NWNLogRotator.Components
             string ShoutColor = "F0DBA5";
             string TellColor = "00FF00";
             string WhisperColor = "808080";
+            string MyColor = "";
+            string MyCharacters = "";
 
             int Count = 0;
 
@@ -289,6 +293,16 @@ namespace NWNLogRotator.Components
                     WhisperColor = ParameterValue;
                     Count += 1;
                 }
+                if (line.IndexOf("MyColor=") != -1)
+                {
+                    MyColor = ParameterValue;
+                    Count += 1;
+                }
+                if (line.IndexOf("MyCharacters=") != -1)
+                {
+                    MyCharacters = ParameterValue;
+                    Count += 1;
+                }
             }
 
             _settings = new Settings(OutputDirectory,
@@ -320,7 +334,9 @@ namespace NWNLogRotator.Components
                                               EmoteColor,
                                               ShoutColor,
                                               TellColor,
-                                              WhisperColor
+                                              WhisperColor,
+                                              MyColor,
+                                              MyCharacters
                                             );
             if(Count == 0)
             {

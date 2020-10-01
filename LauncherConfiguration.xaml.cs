@@ -133,6 +133,8 @@ namespace NWNLogRotator
             string ShoutColor = _settings.ShoutColor;
             string TellColor = _settings.TellColor;
             string WhisperColor = _settings.WhisperColor;
+            string MyColor = _settings.MyColor;
+            string MyCharacters = _settings.MyCharacters;
 
             _settings = new Settings(         OutputDirectory,
                                               PathToLog,
@@ -163,7 +165,9 @@ namespace NWNLogRotator
                                               EmoteColor,
                                               ShoutColor,
                                               TellColor,
-                                              WhisperColor
+                                              WhisperColor,
+                                              MyColor,
+                                              MyCharacters
                                             );
 
             return _settings;
