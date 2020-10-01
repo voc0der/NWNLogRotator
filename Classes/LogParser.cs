@@ -182,7 +182,7 @@ namespace NWNLogRotator.Classes
                 string[] MyCharacters = _run_settings.MyCharacters.Split(',');
                 foreach(string CharacterName in MyCharacters)
                 {
-                    theRegEx = @"<span class=""actors"">\s*?(" + CharacterName + @":?)\s*?</span>";
+                    theRegEx = @"<span class=""actors"">\s*?(" + CharacterName + @":?).*?</span>";
                     Tuple<Regex, string> theMyCharacterLine = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"<span class=""actors""> <span class=""me"">$1</span> </span>");
                     MyCharacterLines.Add(theMyCharacterLine);
                 }
