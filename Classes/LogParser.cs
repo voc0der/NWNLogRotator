@@ -154,16 +154,16 @@ namespace NWNLogRotator.Classes
             string logTitle;
             if (_run_settings.ServerName != "")
             {
-                logTitle = "<h4>[<span class='logheader'>" + _run_settings.ServerName + " Log</span>] ";
+                logTitle = @"<h4>[<span class=""logheader"">" + _run_settings.ServerName + " Log</span>] ";
             }
             else
             {
-                logTitle = "<h4>[<span class='logheader'>Log</span>] ";
+                logTitle = @"<h4>[<span class=""logheader"">Log</span>] ";
             }
-            logTitle += "<span class='actors'>Date/Time</span>: " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
+            logTitle += @"<span class=""actors"">Date/Time</span>: " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
             logTitle += "</h4>";
             string postLog = "</span></body></html>";
-            return "<html>" + HTMLHeader + logTitle + ParsedNWNLog + "<body class='logbody'><span class='default'>" + postLog;
+            return "<html>" + HTMLHeader + logTitle + ParsedNWNLog + @"<body class=""logbody""><span class=""default"">" + postLog;
         }
 
         private List<Tuple<Regex, string>> formatReplacesWithUserOverride(Settings _run_settings)
@@ -172,6 +172,8 @@ namespace NWNLogRotator.Classes
             List<Tuple<Regex, string>> formatReplacesOrderedReturn = new List<Tuple<Regex, string>>();
 
             formatReplacesOrderedReturn.AddRange(formatReplacesOrderedOne);
+            formatReplacesOrderedReturn.AddRange(formatReplacesOrderedTwo);
+            formatReplacesOrderedReturn.AddRange(formatReplacesOrderedThree);
 
             if (_run_settings.MyCharacters != "")
             {
@@ -180,15 +182,12 @@ namespace NWNLogRotator.Classes
                 string[] MyCharacters = _run_settings.MyCharacters.Split(',');
                 foreach(string CharacterName in MyCharacters)
                 {
-                    theRegEx = @"\]<\/span>(\s*?" + CharacterName + @":\s)";
-                    Tuple<Regex, string> theMyCharacterLine = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), "]</span><span class='me'>$1</span>");
+                    theRegEx = @"<span class=""actors"">\s*?(" + CharacterName + @":?)\s*?</span>";
+                    Tuple<Regex, string> theMyCharacterLine = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"<span class=""actors""> <span class=""me"">$1</span> </span>");
                     MyCharacterLines.Add(theMyCharacterLine);
                 }
                 formatReplacesOrderedReturn.AddRange(MyCharacterLines);
             }
-
-            formatReplacesOrderedReturn.AddRange(formatReplacesOrderedTwo);
-            formatReplacesOrderedReturn.AddRange(formatReplacesOrderedThree);
 
             if (_run_settings.CustomEmotes.Length != 0)
             {
@@ -203,7 +202,7 @@ namespace NWNLogRotator.Classes
                         string theRegEx;
                         theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempRightBracket;
 
-                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), "<span class='emotes'>$1</span>");
+                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""emotes"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
                     else if (theEmotePair.Length == 1)
@@ -212,7 +211,7 @@ namespace NWNLogRotator.Classes
                         string theRegEx;
                         theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempBracket;
 
-                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), "<span class='emotes'>$1</span>");
+                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""emotes"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
                 }
@@ -226,28 +225,28 @@ namespace NWNLogRotator.Classes
 
         private List<Tuple<Regex, string>> formatReplacesOrderedOne = new List<Tuple<Regex, string>>
         {
-            new Tuple<Regex, string> ( new Regex(@"\[\w{3}\s\w{3}\s*?\d{1,}\s", RegexOptions.Compiled), "<span class='timestamp'>[" ),
+            new Tuple<Regex, string> ( new Regex(@"\[\w{3}\s\w{3}\s*?\d{1,}\s", RegexOptions.Compiled), @"<span class=""timestamp"">[" ),
             new Tuple<Regex, string> ( new Regex(@"\:{1}[0-9]*]{1}",RegexOptions.Compiled), "]</span>" ),
         };
 
         private List<Tuple<Regex, string>> formatReplacesOrderedTwo = new List<Tuple<Regex, string>>
         {
             // actors
-            new Tuple<Regex, string>( new Regex(@"\]<\/span>((...).*: )",RegexOptions.Compiled), "]</span><span class='actors'>$1</span>" ),
+            new Tuple<Regex, string>( new Regex(@"\]<\/span>((...).*: )",RegexOptions.Compiled), @"]</span><span class=""actors"">$1</span>" ),
             // shouts
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Shout])(.*.*)",RegexOptions.Compiled), "</span><span class='shouts'> $1:$2</span>"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Shout])(.*.*)",RegexOptions.Compiled), @"</span><span class=""shouts""> $1:$2</span>"),
             // tells
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Tell])(.*.*)",RegexOptions.Compiled), "</span><span class='tells'> $1:$2</span>"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Tell])(.*.*)",RegexOptions.Compiled), @"</span><span class=""tells""> $1:$2</span>"),
             // whispers 
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Whisper])(.*.*)",RegexOptions.Compiled), "</span><span class='whispers'> $1:$2</span>"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Whisper])(.*.*)",RegexOptions.Compiled), @"</span><span class=""whispers""> $1:$2</span>"),
             // party
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Party])(.*.*)",RegexOptions.Compiled), "</span><span class='party'> $1:$2</span>"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Party])(.*.*)",RegexOptions.Compiled), @"</span><span class=""party""> $1:$2</span>"),
         };
 
         private List<Tuple<Regex, string>> formatReplacesOrderedThree = new List<Tuple<Regex, string>>
         {
             // emotes 
-            new Tuple<Regex, string>( new Regex(@"(\*.*?\*)",RegexOptions.Compiled), "<span class='emotes'>$1</span>")
+            new Tuple<Regex, string>( new Regex(@"(\*.*?\*)",RegexOptions.Compiled), @"<span class=""emotes"">$1</span>")
         };
 
         private List<String> gloabalRemoves = new List<String>
@@ -308,7 +307,7 @@ namespace NWNLogRotator.Classes
         private static string lineChatStartMatch = @"\[CHAT\sWINDOW\sTEXT\]\s";
         private static string timestampMatch = @"^.+?(?=.*)";
         private static string timestampExactMatch = @"\[\w{3}\s\w{3}\s*?\d{1,}\s\d{2}\:\d{2}\:\d{2}\]\s";
-        private static string timestampStatefulMatch = @"\<span\sclass\=\'timestamp\'\>\[\d+\:\d+\]\<\/span\>\s*?(\<span\sclass\=\'actors\'\>\s)?";
+        private static string timestampStatefulMatch = @"\<span\sclass\=\""timestamp\""\>\[\d+\:\d+\]\<\/span\>\s*?(\<span\sclass\=\""actors\""\>\s)?";
         private static string nameMatch = @"[A-z0-9\s\.\']+";
         private static string nameStatefulMatch = @"[A-z0-9\s\.\']+\:\s\<\/span\>";
 
@@ -396,15 +395,15 @@ namespace NWNLogRotator.Classes
 
         private List<Tuple<Regex, string>> serverReplacesOrdered = new List<Tuple<Regex, string>>
         {
-            new Tuple<Regex, string> ( new Regex(@"(\-\-\-\-\sServer\sOptions\s\-\-\-\-)([^|]*)(\-\-\-\-\sEnd\sServer\sOptions\s\-\-\-\-)", RegexOptions.Compiled), "<span class='whispers'>$1</span><span class='tells'>$2</span><span class='whispers'>$3</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"\]\s(.*?)\s(Joined\sas\s(?:Game\sMaster|Player)\s\d+)", RegexOptions.Compiled), "] <span class='actors'>$1</span> $2" ),
-            new Tuple<Regex, string> ( new Regex(@"\]\s(.*?)\s(Left\sas\sa\s(?:Game\sMaster|Player))\s(\(\d+\splayers\sleft\))", RegexOptions.Compiled), "] <span class='actors'>$1</span> $2 <span class='emotes'>$3</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"(Your cryptographic public identity is\:\s)(.*?)", RegexOptions.Compiled), "$1<span class='emotes'>$2</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"(Our\spublic\saddress\sas\sseen\sby\sthe\smasterserver\:)\s(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5})", RegexOptions.Compiled), "$1 <span class='emotes'>$2</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"(Connection\sAttempt\smade\sby\s)(.*?)(?=(|$))", RegexOptions.Compiled), "<span class='whispers'>$1</span><span class='actors'>$2</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"(SpellLikeAbilityReady\: Could not find valid ability in list.*?)", RegexOptions.Compiled), "<span class='whispers'>$1</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"(Event\sadded\swhile\spaused\:\s*?EventId\:\s\d\s*?CallerId\:\s\d+\s*?ObjectId\:\s*?\d+)", RegexOptions.Compiled), "<span class='emotes'>$1</span>" ),
-            new Tuple<Regex, string> ( new Regex(@"(Server Shutting Down)", RegexOptions.Compiled), "<span class='whispers'>$1</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(\-\-\-\-\sServer\sOptions\s\-\-\-\-)([^|]*)(\-\-\-\-\sEnd\sServer\sOptions\s\-\-\-\-)", RegexOptions.Compiled), @"<span class=""whispers"">$1</span><span class=""tells"">$2</span><span class=""whispers"">$3</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"\]\s(.*?)\s(Joined\sas\s(?:Game\sMaster|Player)\s\d+)", RegexOptions.Compiled), @"] <span class=""actors"">$1</span> $2" ),
+            new Tuple<Regex, string> ( new Regex(@"\]\s(.*?)\s(Left\sas\sa\s(?:Game\sMaster|Player))\s(\(\d+\splayers\sleft\))", RegexOptions.Compiled), @"] <span class=""actors"">$1</span> $2 <span class=""emotes"">$3</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Your cryptographic public identity is\:\s)(.*?)", RegexOptions.Compiled), @"$1<span class=""emotes"">$2</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Our\spublic\saddress\sas\sseen\sby\sthe\smasterserver\:)\s(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5})", RegexOptions.Compiled), @"$1 <span class=""emotes"">$2</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Connection\sAttempt\smade\sby\s)(.*?)(?=(|$))", RegexOptions.Compiled), @"<span class=""whispers"">$1</span><span class=""actors"">$2</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(SpellLikeAbilityReady\: Could not find valid ability in list.*?)", RegexOptions.Compiled), @"<span class=""whispers"">$1</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Event\sadded\swhile\spaused\:\s*?EventId\:\s\d\s*?CallerId\:\s\d+\s*?ObjectId\:\s*?\d+)", RegexOptions.Compiled), @"<span class=""emotes"">$1</span>" ),
+            new Tuple<Regex, string> ( new Regex(@"(Server Shutting Down)", RegexOptions.Compiled), @"<span class=""whispers"">$1</span>" ),
         };
     }
 }
