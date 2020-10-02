@@ -107,7 +107,7 @@ namespace NWNLogRotator
                 NWNStatusTextBlock.Foreground = OffColor;
                 if (PreviousStatus == true)
                 {
-                    if (NWNLog_Save(_settings) == true)
+                    if (NWNLog_Save(_settings, true) == true)
                         UpdateResultsPane(1);
                 }
                 await Task.Delay(IterateDelay);
@@ -437,23 +437,20 @@ namespace NWNLogRotator
             _settings.UseTheme = "light";
         }
 
-        private bool NWNLog_Save(Settings _settings)
+        private bool NWNLog_Save(Settings _settings, bool _automatic)
         {
             FileHandler instance = new FileHandler();
             string _filepathandname = instance.ReadNWNLogAndInvokeParser(_settings);
 
-            if (_settings.CloseOnLogGenerated == true)
-            {
-                Process.GetCurrentProcess().Kill();
-            }
-
             if (_filepathandname != "")
             {
-                if(_settings.Notifications == true)
+                if (_settings.Notifications == true)
                 {
                     notification.ShowNotification("Log file generated successfully!");
                 }
-                   
+
+                if (_automatic && _settings.CloseOnLogGenerated == true) Process.GetCurrentProcess().Kill();
+
                 if (_settings.Silent == false)
                 {
                     MessageBoxResult _messageBoxResult = MessageBox.Show("The log file has been generated successfully. Would you like to open the log file now?",
@@ -471,7 +468,11 @@ namespace NWNLogRotator
                     return true;
                 }
             }
-
+            else
+            {
+                if (_automatic && _settings.CloseOnLogGenerated == true) Process.GetCurrentProcess().Kill();
+            }
+                
             return false;
         }
 
@@ -639,7 +640,7 @@ namespace NWNLogRotator
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             await Task.Run(() =>
             {
-                SavedLogResult = NWNLog_Save(_settings);
+                SavedLogResult = NWNLog_Save(_settings, false);
             });
        
             SaveToggle_Event();

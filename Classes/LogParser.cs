@@ -168,6 +168,7 @@ namespace NWNLogRotator.Classes
 
         private List<Tuple<Regex, string>> formatReplacesWithUserOverride(Settings _run_settings)
         {
+            string theRegEx;
             string[] emotesArray = _run_settings.CustomEmotes.Split(',');
             List<Tuple<Regex, string>> formatReplacesOrderedReturn = new List<Tuple<Regex, string>>();
 
@@ -178,12 +179,12 @@ namespace NWNLogRotator.Classes
             if (_run_settings.MyCharacters != "")
             {
                 List<Tuple<Regex, string>> MyCharacterLines = new List<Tuple<Regex, string>>();
-                string theRegEx;
+                theRegEx = "";
                 string[] MyCharacters = _run_settings.MyCharacters.Split(',');
                 foreach(string CharacterName in MyCharacters)
                 {
-                    theRegEx = @"<span class=""actors"">(\s*?" + CharacterName + @":?.*?)</span>";
-                    Tuple<Regex, string> theMyCharacterLine = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"<span class=""actors""> <span class=""me"">$1</span> </span>");
+                    theRegEx = @"(<span class=""actors"">)(\s*?" + CharacterName + @":?.*?)(</span>|\[Whisper\]|\[Tell\]|\[Shout\])";
+                    Tuple<Regex, string> theMyCharacterLine = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"$1 <span class=""me"">$2</span> $3");
                     MyCharacterLines.Add(theMyCharacterLine);
                 }
                 formatReplacesOrderedReturn.AddRange(MyCharacterLines);
@@ -199,7 +200,6 @@ namespace NWNLogRotator.Classes
                     {
                         string tempLeftBracket = theEmotePair.Substring(0, 1);
                         string tempRightBracket = theEmotePair.Substring(1, 1);
-                        string theRegEx;
                         theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempRightBracket;
 
                         Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""emotes"">$1</span>");
@@ -208,7 +208,6 @@ namespace NWNLogRotator.Classes
                     else if (theEmotePair.Length == 1)
                     {
                         string tempBracket = theEmotePair.Substring(0, 1);
-                        string theRegEx;
                         theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempBracket;
 
                         Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""emotes"">$1</span>");
@@ -217,6 +216,13 @@ namespace NWNLogRotator.Classes
                 }
                 formatReplacesOrderedReturn.AddRange(additionalEmotesList);
             }
+
+            // Format fixing for Arelith style language-voice types
+            List<Tuple<Regex, string>> additionalFixes = new List<Tuple<Regex, string>>();
+            theRegEx = @"(<span class=\\?""actors\\?"">[A-z0-9\s\.\']+.*?)(\[(?:Whisper|Shout|Tell)\])(.*?\[[A-z0-9]+\].*<\/span>)(.*)";
+             Tuple<Regex, string> theCustomLanguageScope = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"$1<span class=""whispers"">$2</span>$3<span class=""whispers"">$4</span>");
+            additionalFixes.Add(theCustomLanguageScope);
+            formatReplacesOrderedReturn.AddRange(additionalFixes);
 
             return formatReplacesOrderedReturn;
         }
@@ -234,13 +240,13 @@ namespace NWNLogRotator.Classes
             // actors
             new Tuple<Regex, string>( new Regex(@"\]<\/span>((...).*: )",RegexOptions.Compiled), @"]</span><span class=""actors"">$1</span>" ),
             // shouts
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Shout])(.*.*)",RegexOptions.Compiled), @"</span><span class=""shouts""> $1:$2</span>"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Shout])(.*)",RegexOptions.Compiled), @"</span><span class=""shouts""> $1:$2</span>"),
             // tells
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Tell])(.*.*)",RegexOptions.Compiled), @"</span><span class=""tells""> $1:$2</span>"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Tell])(.*)",RegexOptions.Compiled), @"</span><span class=""tells""> $1:$2</span>"),
             // whispers 
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Whisper])(.*.*)",RegexOptions.Compiled), @"</span><span class=""whispers""> $1:$2</span>"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Whisper])(.*)",RegexOptions.Compiled), @"</span><span class=""whispers""> $1:$2</span>"),
             // party
-            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Party])(.*.*)",RegexOptions.Compiled), @"</span><span class=""party""> $1:$2</span>"),
+            new Tuple<Regex, string>( new Regex(@":\s?<\/span>\s?(\[Party])(.*)",RegexOptions.Compiled), @"</span><span class=""party""> $1:$2</span>"),
         };
 
         private List<Tuple<Regex, string>> formatReplacesOrderedThree = new List<Tuple<Regex, string>>
