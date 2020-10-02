@@ -219,7 +219,7 @@ namespace NWNLogRotator.Classes
 
             // Format fixing for Arelith style language-voice types
             List<Tuple<Regex, string>> additionalFixes = new List<Tuple<Regex, string>>();
-            theRegEx = @"(<span class=\\?""actors\\?"">[A-z0-9\s\.\']+.*?)(\[(?:Whisper|Shout|Tell)\])(.*?\[[A-z0-9]+\].*<\/span>)(.*)";
+            theRegEx = @"(<span class=\\?""actors\\?"">" + nameMatch + @".*?)(\[(?:Whisper|Shout|Tell)\])(.*?\[[A-z0-9]+\].*<\/span>)(.*)";
              Tuple<Regex, string> theCustomLanguageScope = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"$1<span class=""whispers"">$2</span>$3<span class=""whispers"">$4</span>");
             additionalFixes.Add(theCustomLanguageScope);
             formatReplacesOrderedReturn.AddRange(additionalFixes);
