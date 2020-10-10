@@ -49,9 +49,9 @@ namespace NWNLogRotator
         public void ActivateDarkTheme()
         {
             LinearGradientBrush myBrush = new LinearGradientBrush();
-            myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 0.0));
-            myBrush.GradientStops.Add(new GradientStop(Colors.Black, 0.5));
-            myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 1.0));
+            myBrush.GradientStops.Add(new GradientStop(Colors.Black, 0.0));
+            myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 0.5));
+            myBrush.GradientStops.Add(new GradientStop(Colors.Black, 1.0));
             Grid.Background = myBrush;
 
             PathToClientTextBox.Background = Brushes.Black;
@@ -135,6 +135,7 @@ namespace NWNLogRotator
             string WhisperColor = _settings.WhisperColor;
             string MyColor = _settings.MyColor;
             string MyCharacters = _settings.MyCharacters;
+            string FontName = _settings.FontName;
 
             _settings = new Settings(         OutputDirectory,
                                               PathToLog,
@@ -167,7 +168,8 @@ namespace NWNLogRotator
                                               TellColor,
                                               WhisperColor,
                                               MyColor,
-                                              MyCharacters
+                                              MyCharacters,
+                                              FontName
                                             );
 
             return _settings;

@@ -10,7 +10,7 @@ namespace NWNLogRotator.Components
     public partial class FileHandler : Component
     {
         Settings _settings;
-        int _expectedSettingsCount = 32;
+        int _expectedSettingsCount = 33;
 
         public FileHandler()
         {
@@ -74,7 +74,8 @@ namespace NWNLogRotator.Components
                                         "TellColor=" + _settings.TellColor + "\n" +
                                         "WhisperColor=" + _settings.WhisperColor + "\n" +
                                         "MyColor=" + _settings.MyColor + "\n" +
-                                        "MyCharacters=" + _settings.MyCharacters;
+                                        "MyCharacters=" + _settings.MyCharacters + "\n" +
+                                        "FontName=" + _settings.FontName;
             return NewSettingsFile;
         }
 
@@ -136,6 +137,7 @@ namespace NWNLogRotator.Components
             string WhisperColor = "808080";
             string MyColor = "";
             string MyCharacters = "";
+            string FontName = "Tahoma, Geneva, sans-serif";
 
             int Count = 0;
 
@@ -303,6 +305,11 @@ namespace NWNLogRotator.Components
                     MyCharacters = ParameterValue;
                     Count += 1;
                 }
+                if (line.IndexOf("FontName=") != -1)
+                {
+                    FontName = ParameterValue;
+                    Count += 1;
+                }
             }
 
             _settings = new Settings(OutputDirectory,
@@ -336,7 +343,8 @@ namespace NWNLogRotator.Components
                                               TellColor,
                                               WhisperColor,
                                               MyColor,
-                                              MyCharacters
+                                              MyCharacters,
+                                              FontName
                                             );
             if(Count == 0)
             {

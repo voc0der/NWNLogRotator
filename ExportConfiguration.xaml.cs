@@ -48,9 +48,9 @@ namespace NWNLogRotator
         public void ActivateDarkTheme()
         {
             LinearGradientBrush myBrush = new LinearGradientBrush();
-            myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 0.0));
-            myBrush.GradientStops.Add(new GradientStop(Colors.Black, 0.5));
-            myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 1.0));
+            myBrush.GradientStops.Add(new GradientStop(Colors.Black, 0.0));
+            myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 0.5));
+            myBrush.GradientStops.Add(new GradientStop(Colors.Black, 1.0));
 
             Grid.Background = myBrush;
 
@@ -58,6 +58,7 @@ namespace NWNLogRotator
             ServerNameColorTextBox.Background = Brushes.Black;
             MyCharactersTextBox.Background = Brushes.Black;
             MyColorTextBox.Background = Brushes.Black;
+            FontNameTextBox.Background = Brushes.Black;
             ActorColorTextBox.Background = Brushes.Black;
             PartyColorTextBox.Background = Brushes.Black;
             EmoteColorTextBox.Background = Brushes.Black;
@@ -73,10 +74,13 @@ namespace NWNLogRotator
             ServerNameTextBox.Foreground = new SolidColorBrush(Colors.White);
             ServerNameColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             ServerNameLabelTwo.Foreground = new SolidColorBrush(Colors.White);
+            ServerNameColorLabelTwo.Foreground = new SolidColorBrush(Colors.White);
             MyCharactersTextBox.Foreground = new SolidColorBrush(Colors.White);
             MyCharactersTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             MyColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             MyColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
+            FontNameTextBox.Foreground = new SolidColorBrush(Colors.White);
+            FontNameTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             ActorColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             ActorColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             PartyColorTextBox.Foreground = new SolidColorBrush(Colors.White);
@@ -128,6 +132,7 @@ namespace NWNLogRotator
             WhisperColorTextBox.Text = _settings.WhisperColor;
             MyColorTextBox.Text = _settings.MyColor;
             MyCharactersTextBox.Text = _settings.MyCharacters;
+            FontNameTextBox.Text = _settings.FontName;
         }
 
         private Settings CurrentSettings_Get()
@@ -164,6 +169,7 @@ namespace NWNLogRotator
             string WhisperColor = WhisperColorTextBox.Text;
             string MyColor = MyColorTextBox.Text;
             string MyCharacters = MyCharactersTextBox.Text;
+            string FontName = FontNameTextBox.Text;
 
             _settings = new Settings(   OutputDirectory,
                                         PathToLog,
@@ -196,7 +202,8 @@ namespace NWNLogRotator
                                         TellColor,
                                         WhisperColor,
                                         MyColor,
-                                        MyCharacters
+                                        MyCharacters,
+                                        FontName
                                    );
             return _settings;
         }
@@ -240,6 +247,7 @@ namespace NWNLogRotator
             ShoutColorTextBox.Text = __settings.ShoutColor;
             TellColorTextBox.Text = __settings.TellColor;
             WhisperColorTextBox.Text = __settings.WhisperColor;
+            FontNameTextBox.Text = __settings.FontName;
             __settings = null;
         }
     }

@@ -183,6 +183,7 @@ namespace NWNLogRotator
             string WhisperColor = _settings.WhisperColor;
             string MyColor = _settings.MyColor;
             string MyCharacters = _settings.MyCharacters;
+            string FontName = _settings.FontName;
 
             _settings = new Settings(OutputDirectory,
                                               PathToLog,
@@ -215,7 +216,8 @@ namespace NWNLogRotator
                                               TellColor,
                                               WhisperColor,
                                               MyColor,
-                                              MyCharacters
+                                              MyCharacters,
+                                              FontName
                                             );
 
             return _settings;
@@ -389,7 +391,9 @@ namespace NWNLogRotator
             ClientModeRadioButton.Foreground = new SolidColorBrush(Colors.White);
             ServerModeRadioButton.Foreground = new SolidColorBrush(Colors.White);
             HintLabel.Foreground = new SolidColorBrush(Colors.White);
-            
+            PathHelperLabel.Foreground = new SolidColorBrush(Colors.White);
+            OutputHelperLabel.Foreground = new SolidColorBrush(Colors.White);
+
             _settings.UseTheme = "dark";
         }
 
@@ -433,6 +437,8 @@ namespace NWNLogRotator
             ClientModeRadioButton.Foreground = new SolidColorBrush(Colors.Black);
             ServerModeRadioButton.Foreground = new SolidColorBrush(Colors.Black);
             HintLabel.Foreground = new SolidColorBrush(Colors.Black);
+            PathHelperLabel.Foreground = new SolidColorBrush(Colors.Black);
+            OutputHelperLabel.Foreground = new SolidColorBrush(Colors.Black);
 
             _settings.UseTheme = "light";
         }

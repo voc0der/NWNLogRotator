@@ -34,6 +34,7 @@
         public string WhisperColor;
         public string MyColor;
         public string MyCharacters;
+        public string FontName;
 
         // create singleton
         public static Settings _instance = new Settings();
@@ -73,6 +74,7 @@
             this.WhisperColor = "808080";
             this.MyColor = "";
             this.MyCharacters = "";
+            this.FontName = "Tahoma, Geneva, sans-serif";
         }
 
         // binding
@@ -107,7 +109,8 @@
                         string TellColor,
                         string WhisperColor,
                         string MyColor,
-                        string MyCharacters)
+                        string MyCharacters,
+                        string FontName)
         {
             this.OutputDirectory = OutputDirectory;
             this.PathToLog = PathToLog;
@@ -141,6 +144,7 @@
             this.WhisperColor = WhisperColor;
             this.MyColor = MyColor;
             this.MyCharacters = MyCharacters;
+            this.FontName = FontName;
         }
 
         // get singleton
