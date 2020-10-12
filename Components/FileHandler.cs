@@ -109,7 +109,7 @@ namespace NWNLogRotator.Components
             string PathToLog = "C:\nwnlogs\nwClientLog1.txt";
             int MinimumRowsToInteger = 10;
             string ServerName = "";
-            string ServerNameColor = "";
+            string ServerNameColor = "EECC00";
             bool EventText = false;
             bool CombatText = false;
             string UseTheme = "";
@@ -135,7 +135,7 @@ namespace NWNLogRotator.Components
             string ShoutColor = "F0DBA5";
             string TellColor = "00FF00";
             string WhisperColor = "808080";
-            string MyColor = "";
+            string MyColor = "D6CEFD";
             string MyCharacters = "";
             string FontName = "Tahoma, Geneva, sans-serif";
 

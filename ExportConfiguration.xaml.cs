@@ -77,7 +77,6 @@ namespace NWNLogRotator
             ServerNameColorLabelTwo.Foreground = new SolidColorBrush(Colors.White);
             MyCharactersTextBox.Foreground = new SolidColorBrush(Colors.White);
             MyCharactersTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
-            MyColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             MyColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             FontNameTextBox.Foreground = new SolidColorBrush(Colors.White);
             FontNameTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
@@ -96,7 +95,6 @@ namespace NWNLogRotator
             WhisperColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             WhisperColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             BackgroundColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
-            BackgroundColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             DefaultColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             DefaultColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             ResetSettingsButton.Background = Brushes.Black;
@@ -120,17 +118,17 @@ namespace NWNLogRotator
         private void LoadSettings_Handler(Settings _settings)
         {
             ServerNameTextBox.Text = _settings.ServerName;
-            ServerNameColorTextBox.Text = _settings.ServerNameColor;
-            BackgroundColorTextBox.Text = _settings.BackgroundColor;
-            TimestampColorTextBox.Text = _settings.TimestampColor;
-            DefaultColorTextBox.Text = _settings.DefaultColor;
-            ActorColorTextBox.Text = _settings.ActorColor;
-            PartyColorTextBox.Text = _settings.PartyColor;
-            EmoteColorTextBox.Text = _settings.EmoteColor;
-            ShoutColorTextBox.Text = _settings.ShoutColor;
-            TellColorTextBox.Text = _settings.TellColor;
-            WhisperColorTextBox.Text = _settings.WhisperColor;
-            MyColorTextBox.Text = _settings.MyColor;
+            ServerNameColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.ServerNameColor);
+            BackgroundColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.BackgroundColor);
+            TimestampColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.TimestampColor);
+            DefaultColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.DefaultColor);
+            ActorColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.ActorColor);
+            PartyColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.PartyColor);
+            EmoteColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.EmoteColor);
+            ShoutColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.ShoutColor);
+            TellColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.TellColor);
+            WhisperColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.WhisperColor);
+            MyColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.MyColor);
             MyCharactersTextBox.Text = _settings.MyCharacters;
             FontNameTextBox.Text = _settings.FontName;
         }
@@ -141,7 +139,7 @@ namespace NWNLogRotator
             string PathToLog = _settings.PathToLog;
             int MinimumRowsToInteger = _settings.MinimumRowsCount;
             string ServerName = ServerNameTextBox.Text;
-            string ServerNameColor = ServerNameColorTextBox.Text;
+            string ServerNameColor = new ColorConverter().ConvertToString(ServerNameColorTextBox.SelectedColor).Substring(3);
             bool EventText = _settings.EventText;
             bool CombatText = _settings.CombatText;
             string UseTheme = _settings.UseTheme;
@@ -158,16 +156,16 @@ namespace NWNLogRotator
             string ServerPassword = _settings.ServerPassword;
             bool DM = _settings.DM;
             bool ServerMode = _settings.ServerMode;
-            string BackgroundColor = BackgroundColorTextBox.Text;
-            string TimestampColor = TimestampColorTextBox.Text;
-            string DefaultColor = DefaultColorTextBox.Text;
-            string ActorColor = ActorColorTextBox.Text;
-            string PartyColor = PartyColorTextBox.Text;
-            string EmoteColor = EmoteColorTextBox.Text;
-            string ShoutColor = ShoutColorTextBox.Text;
-            string TellColor = TellColorTextBox.Text;
-            string WhisperColor = WhisperColorTextBox.Text;
-            string MyColor = MyColorTextBox.Text;
+            string BackgroundColor = new ColorConverter().ConvertToString(BackgroundColorTextBox.SelectedColor).Substring(3);
+            string TimestampColor = new ColorConverter().ConvertToString(TimestampColorTextBox.SelectedColor).Substring(3);
+            string DefaultColor = new ColorConverter().ConvertToString(DefaultColorTextBox.SelectedColor).Substring(3);
+            string ActorColor = new ColorConverter().ConvertToString(ActorColorTextBox.SelectedColor).Substring(3);
+            string PartyColor = new ColorConverter().ConvertToString(PartyColorTextBox.SelectedColor).Substring(3);
+            string EmoteColor = new ColorConverter().ConvertToString(EmoteColorTextBox.SelectedColor).Substring(3);
+            string ShoutColor = new ColorConverter().ConvertToString(ShoutColorTextBox.SelectedColor).Substring(3);
+            string TellColor = new ColorConverter().ConvertToString(TellColorTextBox.SelectedColor).Substring(3);
+            string WhisperColor = new ColorConverter().ConvertToString(WhisperColorTextBox.SelectedColor).Substring(3);
+            string MyColor = new ColorConverter().ConvertToString(MyColorTextBox.SelectedColor).Substring(3);
             string MyCharacters = MyCharactersTextBox.Text;
             string FontName = FontNameTextBox.Text;
 
@@ -238,15 +236,17 @@ namespace NWNLogRotator
         private void Button_Click2(object sender, RoutedEventArgs e)
         {
             var __settings = new Settings();
-            BackgroundColorTextBox.Text = __settings.BackgroundColor;
-            TimestampColorTextBox.Text = __settings.TimestampColor;
-            DefaultColorTextBox.Text = __settings.DefaultColor;
-            ActorColorTextBox.Text = __settings.ActorColor;
-            PartyColorTextBox.Text = __settings.PartyColor;
-            EmoteColorTextBox.Text = __settings.EmoteColor;
-            ShoutColorTextBox.Text = __settings.ShoutColor;
-            TellColorTextBox.Text = __settings.TellColor;
-            WhisperColorTextBox.Text = __settings.WhisperColor;
+            ServerNameColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.ServerNameColor);
+            BackgroundColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.BackgroundColor);
+            TimestampColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.TimestampColor);
+            DefaultColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.DefaultColor);
+            ActorColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.ActorColor);
+            PartyColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.PartyColor);
+            EmoteColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.EmoteColor);
+            ShoutColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.ShoutColor);
+            TellColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.TellColor);
+            WhisperColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.WhisperColor);
+            MyColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.MyColor);
             FontNameTextBox.Text = __settings.FontName;
             __settings = null;
         }

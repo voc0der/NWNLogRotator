@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="Launcher Settings" Height="249.005" Width="445.227" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid x:Name="Grid" Margin="0,0,-5,-3.667">
-        <CheckBox x:Name="RunClientOnLaunchCheckBox" Content="Start Client Automatically when Launcher Opens" HorizontalAlignment="Right" Margin="0,91,113,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604" Width="275"/>
-        <CheckBox x:Name="CloseAfterGenerationCheckBox" Content="Close Launcher Automatically when Client closes" HorizontalAlignment="Right" Margin="0,112,102,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604" Width="286"/>
+        <CheckBox x:Name="RunClientOnLaunchCheckBox" Content="Start Client automatically when Launcher opens" HorizontalAlignment="Right" Margin="0,91,113,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604" Width="275"/>
+        <CheckBox x:Name="CloseAfterGenerationCheckBox" Content="Close Launcher automatically when Client closes" HorizontalAlignment="Right" Margin="0,112,102,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604" Width="286"/>
         <Label x:Name="PathToClientLabel" Content="Path to Client:" HorizontalAlignment="Left" Margin="11,12,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
         <TextBox x:Name="PathToClientTextBox" HorizontalAlignment="Left" Height="20" Margin="101,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="262" RenderTransformOrigin="0.965,0.275"/>
         <Image x:Name="PathToClientImage" HorizontalAlignment="Left" Height="16" Margin="367,15,0,0" VerticalAlignment="Top" Width="16" RenderTransformOrigin="2.303,1.51" Source="Assets/Images/AssociationEditor_16x.png" MouseDown="Image_MouseDown3"/>

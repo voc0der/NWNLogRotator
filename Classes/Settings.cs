@@ -46,7 +46,7 @@
             this.PathToLog = "C:\\nwnlogs\\nwClientLog1.txt";
             this.MinimumRowsCount = 5;
             this.ServerName = "";
-            this.ServerNameColor = "";
+            this.ServerNameColor = "EECC00";
             this.EventText = false;
             this.CombatText = false;
             this.UseTheme = "light";
@@ -72,7 +72,7 @@
             this.ShoutColor = "F0DBA5";
             this.TellColor = "00FF00";
             this.WhisperColor = "808080";
-            this.MyColor = "";
+            this.MyColor = "D6CEFD";
             this.MyCharacters = "";
             this.FontName = "Tahoma, Geneva, sans-serif";
         }
