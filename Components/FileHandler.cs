@@ -168,6 +168,7 @@ namespace NWNLogRotator.Components
                 if (line.IndexOf("ServerNameColor=") != -1)
                 {
                     ServerNameColor = ParameterValue;
+                    if (ServerNameColor == "") ServerNameColor = _settings.ServerNameColor;
                     Count += 1;
                 }
                 if (line.IndexOf("EventText=") != -1)
@@ -253,51 +254,61 @@ namespace NWNLogRotator.Components
                 if (line.IndexOf("BackgroundColor=") != -1)
                 {
                     BackgroundColor = ParameterValue;
+                    if (BackgroundColor == "") BackgroundColor = _settings.BackgroundColor;
                     Count += 1;
                 }
                 if (line.IndexOf("TimestampColor=") != -1)
                 {
                     TimestampColor = ParameterValue;
+                    if (TimestampColor == "") TimestampColor = _settings.TimestampColor;
                     Count += 1;
                 }
                 if (line.IndexOf("DefaultColor=") != -1)
                 {
                     DefaultColor = ParameterValue;
+                    if (DefaultColor == "") DefaultColor = _settings.DefaultColor;
                     Count += 1;
                 }
                 if (line.IndexOf("ActorColor=") != -1)
                 {
                     ActorColor = ParameterValue;
+                    if (ActorColor == "") ActorColor = _settings.ActorColor;
                     Count += 1;
                 }
                 if (line.IndexOf("PartyColor=") != -1)
                 {
                     PartyColor = ParameterValue;
+                    if (PartyColor == "") PartyColor = _settings.PartyColor;
                     Count += 1;
                 }
                 if (line.IndexOf("EmoteColor=") != -1)
                 {
                     EmoteColor = ParameterValue;
+                    if (EmoteColor == "") EmoteColor = _settings.EmoteColor;
                     Count += 1;
                 }
                 if (line.IndexOf("ShoutColor=") != -1)
                 {
                     ShoutColor = ParameterValue;
+                    if (ShoutColor == "") ShoutColor = _settings.ShoutColor;
                     Count += 1;
                 }
                 if (line.IndexOf("TellColor=") != -1)
                 {
                     TellColor = ParameterValue;
+                    if (TellColor == "") TellColor = _settings.TellColor;
                     Count += 1;
                 }
                 if (line.IndexOf("WhisperColor=") != -1)
                 {
                     WhisperColor = ParameterValue;
+                    if (WhisperColor == "") WhisperColor = _settings.WhisperColor;
                     Count += 1;
                 }
                 if (line.IndexOf("MyColor=") != -1)
                 {
                     MyColor = ParameterValue;
+                    if (MyColor == "") MyColor = _settings.MyColor;
                     Count += 1;
                 }
                 if (line.IndexOf("MyCharacters=") != -1)
@@ -308,6 +319,7 @@ namespace NWNLogRotator.Components
                 if (line.IndexOf("FontName=") != -1)
                 {
                     FontName = ParameterValue;
+                    if (FontName == "") FontName = _settings.FontName;
                     Count += 1;
                 }
             }
