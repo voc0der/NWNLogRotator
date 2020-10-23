@@ -135,8 +135,20 @@ namespace NWNLogRotator.Classes
             {
                 ServerNameColor = "#" + _run_settings.ServerNameColor;
             }
+
+            string OptionalCSSMediaTag = "";
+            if( _run_settings.FontSize.Contains("vw") ||
+                _run_settings.FontSize.Contains("vh") ||
+                _run_settings.FontSize.Contains("vmin") ||
+                _run_settings.FontSize.Contains("vmax") ) {
+                OptionalCSSMediaTag = "@media screen and (min-width: 1000px) {" +
+                                            ".logbody { font-size: unset !important; }" +
+                                       "}";
+            }
+
             string HTMLHeader = "<head>" +
                 "<style>" +
+                    OptionalCSSMediaTag +
                     ".logbody { " +
                         "background-color: #" + _run_settings.BackgroundColor + ";" +
                         "font-family: " + _run_settings.FontName + ";" +
