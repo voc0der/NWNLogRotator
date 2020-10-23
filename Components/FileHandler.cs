@@ -139,7 +139,7 @@ namespace NWNLogRotator.Components
             string MyColor = "D6CEFD";
             string MyCharacters = "";
             string FontName = "Tahoma, Geneva, sans-serif";
-            string FontSize = "calc(.7vw + .7vh + .5vmin);";
+            string FontSize = "calc(.7vw + .7vh + .5vmin)";
 
             int Count = 0;
 

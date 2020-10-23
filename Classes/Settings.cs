@@ -76,7 +76,7 @@
             this.MyColor = "D6CEFD";
             this.MyCharacters = "";
             this.FontName = "Tahoma, Geneva, sans-serif";
-            this.FontSize = "calc(.7vw + .7vh + .5vmin);";
+            this.FontSize = "calc(.7vw + .7vh + .5vmin)";
         }
 
         // binding
