@@ -59,6 +59,7 @@ namespace NWNLogRotator
             MyCharactersTextBox.Background = Brushes.Black;
             MyColorTextBox.Background = Brushes.Black;
             FontNameTextBox.Background = Brushes.Black;
+            FontSizeTextBox.Background = Brushes.Black;
             ActorColorTextBox.Background = Brushes.Black;
             PartyColorTextBox.Background = Brushes.Black;
             EmoteColorTextBox.Background = Brushes.Black;
@@ -74,11 +75,15 @@ namespace NWNLogRotator
             ServerNameTextBox.Foreground = new SolidColorBrush(Colors.White);
             ServerNameLabelTwo.Foreground = new SolidColorBrush(Colors.White);
             ServerNameColorLabelTwo.Foreground = new SolidColorBrush(Colors.White);
+            HintLabelCSSOne.Foreground = new SolidColorBrush(Colors.White);
+            HintLabelCSSTwo.Foreground = new SolidColorBrush(Colors.White);
             MyCharactersTextBox.Foreground = new SolidColorBrush(Colors.White);
             MyCharactersTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             MyColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             FontNameTextBox.Foreground = new SolidColorBrush(Colors.White);
+            FontSizeTextBox.Foreground = new SolidColorBrush(Colors.White);
             FontNameTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
+            FontSizeTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             ActorColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             PartyColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             EmoteColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
@@ -123,6 +128,7 @@ namespace NWNLogRotator
             MyColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.MyColor);
             MyCharactersTextBox.Text = _settings.MyCharacters;
             FontNameTextBox.Text = _settings.FontName;
+            FontSizeTextBox.Text = _settings.FontSize;
         }
 
         private Settings CurrentSettings_Get()
@@ -160,6 +166,7 @@ namespace NWNLogRotator
             string MyColor = new ColorConverter().ConvertToString(MyColorTextBox.SelectedColor).Substring(3);
             string MyCharacters = MyCharactersTextBox.Text;
             string FontName = FontNameTextBox.Text;
+            string FontSize = FontSizeTextBox.Text;
 
             _settings = new Settings(   OutputDirectory,
                                         PathToLog,
@@ -193,7 +200,8 @@ namespace NWNLogRotator
                                         WhisperColor,
                                         MyColor,
                                         MyCharacters,
-                                        FontName
+                                        FontName,
+                                        FontSize
                                    );
             return _settings;
         }
@@ -240,6 +248,7 @@ namespace NWNLogRotator
             WhisperColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.WhisperColor);
             MyColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.MyColor);
             FontNameTextBox.Text = __settings.FontName;
+            FontSizeTextBox.Text = __settings.FontSize;
             __settings = null;
         }
     }

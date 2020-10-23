@@ -137,7 +137,12 @@ namespace NWNLogRotator.Classes
             }
             string HTMLHeader = "<head>" +
                 "<style>" +
-                    ".logbody { background-color: #" + _run_settings.BackgroundColor + "; font-family: " + _run_settings.FontName + "; color: #" + _run_settings.DefaultColor + "; }" +
+                    ".logbody { " +
+                        "background-color: #" + _run_settings.BackgroundColor + ";" +
+                        "font-family: " + _run_settings.FontName + ";" +
+                        "font-size: " + _run_settings.FontSize + ";" +
+                        "color: #" + _run_settings.DefaultColor + ";" +
+                    "}" +
                     ".logheader { color: " + ServerNameColor + " }" +
                     ".default { color: #" + _run_settings.DefaultColor + "; }" +
                     ".timestamp { color: #" + _run_settings.TimestampColor + "; }" +

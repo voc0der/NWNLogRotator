@@ -136,6 +136,7 @@ namespace NWNLogRotator
             string MyColor = _settings.MyColor;
             string MyCharacters = _settings.MyCharacters;
             string FontName = _settings.FontName;
+            string FontSize = _settings.FontSize;
 
             _settings = new Settings(         OutputDirectory,
                                               PathToLog,
@@ -169,7 +170,8 @@ namespace NWNLogRotator
                                               WhisperColor,
                                               MyColor,
                                               MyCharacters,
-                                              FontName
+                                              FontName,
+                                              FontSize
                                             );
 
             return _settings;

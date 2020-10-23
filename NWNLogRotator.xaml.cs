@@ -86,8 +86,7 @@ namespace NWNLogRotator
             var OnColor = Color_Get(_settings.UseTheme, true);
             var OffColor = Color_Get(_settings.UseTheme, false);
             int IterateDelay = 5000;
-            if(_settings.ServerMode == true)
-                ProcessName = "nwserver";
+            ProcessName = _settings.ServerMode == true ? "nwserver" : "nwmain";
             var Status = NWNProcessStatus_Get(ProcessName);
 
             if (Status > 0)
@@ -184,6 +183,7 @@ namespace NWNLogRotator
             string MyColor = _settings.MyColor;
             string MyCharacters = _settings.MyCharacters;
             string FontName = _settings.FontName;
+            string FontSize = _settings.FontSize;
 
             _settings = new Settings(OutputDirectory,
                                               PathToLog,
@@ -217,7 +217,8 @@ namespace NWNLogRotator
                                               WhisperColor,
                                               MyColor,
                                               MyCharacters,
-                                              FontName
+                                              FontName,
+                                              FontSize
                                             );
 
             return _settings;

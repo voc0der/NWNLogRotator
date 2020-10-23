@@ -10,7 +10,7 @@ namespace NWNLogRotator.Components
     public partial class FileHandler : Component
     {
         Settings _settings;
-        int _expectedSettingsCount = 33;
+        int _expectedSettingsCount = 34;
 
         public FileHandler()
         {
@@ -75,7 +75,8 @@ namespace NWNLogRotator.Components
                                         "WhisperColor=" + _settings.WhisperColor + "\n" +
                                         "MyColor=" + _settings.MyColor + "\n" +
                                         "MyCharacters=" + _settings.MyCharacters + "\n" +
-                                        "FontName=" + _settings.FontName;
+                                        "FontName=" + _settings.FontName + "\n" +
+                                        "FontSize=" + _settings.FontSize;
             return NewSettingsFile;
         }
 
@@ -138,6 +139,7 @@ namespace NWNLogRotator.Components
             string MyColor = "D6CEFD";
             string MyCharacters = "";
             string FontName = "Tahoma, Geneva, sans-serif";
+            string FontSize = "calc(.7vw + .7vh + .5vmin);";
 
             int Count = 0;
 
@@ -149,179 +151,223 @@ namespace NWNLogRotator.Components
                 {
                     OutputDirectory = ParameterValue;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("PathToLog=") != -1)
                 {
                     PathToLog = ParameterValue;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("MinimumRows=") != -1)
                 {
                     MinimumRowsToInteger = int.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("ServerName=") != -1)
                 {
                     ServerName = ParameterValue;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("ServerNameColor=") != -1)
                 {
                     ServerNameColor = ParameterValue;
                     if (ServerNameColor == "") ServerNameColor = _settings.ServerNameColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("EventText=") != -1)
                 {
                     EventText = bool.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("CombatText=") != -1)
                 {
                     CombatText = bool.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("UseTheme=") != -1)
                 {
                     UseTheme = ParameterValue;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("Silent=") != -1)
                 {
                     Silent = bool.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("Tray=") != -1)
                 {
                     Tray = bool.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("SaveBackup=") != -1)
                 {
                     SaveBackup = bool.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("Notifications=") != -1)
                 {
                     Notifications = bool.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("CustomEmotes=") != -1)
                 {
                     CustomEmotes = ParameterValue;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("FilterLines=") != -1)
                 {
                     FilterLines = ParameterValue;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("PathToClient=") != -1)
                 {
                     PathToClient = ParameterValue;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("RunClientOnLaunch=") != -1)
                 {
                     RunClientOnLaunch = bool.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("CloseOnLogGenerated=") != -1)
                 {
                     CloseOnLogGenerated = bool.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("ServerAddress=") != -1)
                 {
                     ServerAddress = ParameterValue;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("ServerPassword=") != -1)
                 {
                     ServerPassword = ParameterValue;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("DM=") != -1)
                 {
                     DM = bool.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("ServerMode=") != -1)
                 {
                     ServerMode = bool.Parse(ParameterValue);
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("BackgroundColor=") != -1)
                 {
                     BackgroundColor = ParameterValue;
                     if (BackgroundColor == "") BackgroundColor = _settings.BackgroundColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("TimestampColor=") != -1)
                 {
                     TimestampColor = ParameterValue;
                     if (TimestampColor == "") TimestampColor = _settings.TimestampColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("DefaultColor=") != -1)
                 {
                     DefaultColor = ParameterValue;
                     if (DefaultColor == "") DefaultColor = _settings.DefaultColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("ActorColor=") != -1)
                 {
                     ActorColor = ParameterValue;
                     if (ActorColor == "") ActorColor = _settings.ActorColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("PartyColor=") != -1)
                 {
                     PartyColor = ParameterValue;
                     if (PartyColor == "") PartyColor = _settings.PartyColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("EmoteColor=") != -1)
                 {
                     EmoteColor = ParameterValue;
                     if (EmoteColor == "") EmoteColor = _settings.EmoteColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("ShoutColor=") != -1)
                 {
                     ShoutColor = ParameterValue;
                     if (ShoutColor == "") ShoutColor = _settings.ShoutColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("TellColor=") != -1)
                 {
                     TellColor = ParameterValue;
                     if (TellColor == "") TellColor = _settings.TellColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("WhisperColor=") != -1)
                 {
                     WhisperColor = ParameterValue;
                     if (WhisperColor == "") WhisperColor = _settings.WhisperColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("MyColor=") != -1)
                 {
                     MyColor = ParameterValue;
                     if (MyColor == "") MyColor = _settings.MyColor;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("MyCharacters=") != -1)
                 {
                     MyCharacters = ParameterValue;
                     Count += 1;
+                    continue;
                 }
                 if (line.IndexOf("FontName=") != -1)
                 {
                     FontName = ParameterValue;
                     if (FontName == "") FontName = _settings.FontName;
                     Count += 1;
+                    continue;
                 }
+                if (line.IndexOf("FontSize=") != -1)
+                {
+                    FontSize = ParameterValue;
+                    if (FontSize == "") FontSize = _settings.FontSize;
+                    Count += 1;
+                    continue;
+                }
+                MessageBox.Show("NWNLogRotator detected that the settings file is outdated. Settings that are still valid have been loaded. Please verify and save the current settings.",
+                                "Outdated Settings File!",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
             }
 
             _settings = new Settings(OutputDirectory,
@@ -356,7 +402,8 @@ namespace NWNLogRotator.Components
                                               WhisperColor,
                                               MyColor,
                                               MyCharacters,
-                                              FontName
+                                              FontName,
+                                              FontSize
                                             );
             if(Count == 0)
             {
