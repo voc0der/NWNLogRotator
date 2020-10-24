@@ -115,7 +115,7 @@ namespace NWNLogRotator
             bool Tray = _settings.Tray;
             bool SaveBackup = _settings.SaveBackup;
             bool Notifications = _settings.Notifications;
-            string CustomEmotes = _settings.CustomEmotes;
+            string OOCColor = _settings.OOCColor;
             string FilterLines = _settings.FilterLines;
             string PathToClient = PathToClientTextBox.Text;
             bool RunClientOnLaunch = RunClientOnLaunchCheckBox.IsChecked.GetValueOrDefault();
@@ -137,6 +137,12 @@ namespace NWNLogRotator
             string MyCharacters = _settings.MyCharacters;
             string FontName = _settings.FontName;
             string FontSize = _settings.FontSize;
+            string CustomEmoteOne = _settings.CustomEmoteOne;
+            string CustomEmoteOneColor = _settings.CustomEmoteOneColor;
+            string CustomEmoteTwo = _settings.CustomEmoteTwo;
+            string CustomEmoteTwoColor = _settings.CustomEmoteTwoColor;
+            string CustomEmoteThree = _settings.CustomEmoteThree;
+            string CustomEmoteThreeColor = _settings.CustomEmoteThreeColor;
 
             _settings = new Settings(         OutputDirectory,
                                               PathToLog,
@@ -150,7 +156,7 @@ namespace NWNLogRotator
                                               Tray,
                                               SaveBackup,
                                               Notifications,
-                                              CustomEmotes,
+                                              OOCColor,
                                               FilterLines,
                                               PathToClient,
                                               RunClientOnLaunch,
@@ -171,7 +177,13 @@ namespace NWNLogRotator
                                               MyColor,
                                               MyCharacters,
                                               FontName,
-                                              FontSize
+                                              FontSize,
+                                              CustomEmoteOne,
+                                              CustomEmoteOneColor,
+                                              CustomEmoteTwo,
+                                              CustomEmoteTwoColor,
+                                              CustomEmoteThree,
+                                              CustomEmoteThreeColor
                                             );
 
             return _settings;

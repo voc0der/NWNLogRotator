@@ -69,6 +69,13 @@ namespace NWNLogRotator
             WhisperColorTextBox.Background = Brushes.Black;
             BackgroundColorTextBox.Background = Brushes.Black;
             DefaultColorTextBox.Background = Brushes.Black;
+            CustomEmoteOneTextBox.Background = Brushes.Black;
+            CustomEmoteOneColorTextBox.Background = Brushes.Black;
+            CustomEmoteTwoTextBox.Background = Brushes.Black;
+            CustomEmoteTwoColorTextBox.Background = Brushes.Black;
+            CustomEmoteThreeTextBox.Background = Brushes.Black;
+            CustomEmoteTwoColorTextBox.Background = Brushes.Black;
+            OOCColorTextBox.Background = Brushes.Black;
 
             ServerNameTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             ServerNameColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
@@ -93,6 +100,13 @@ namespace NWNLogRotator
             WhisperColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             BackgroundColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             DefaultColorTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
+            CustomEmoteOneCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            CustomEmoteOneTextBox.Foreground = new SolidColorBrush(Colors.White);
+            CustomEmoteTwoCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            CustomEmoteTwoTextBox.Foreground = new SolidColorBrush(Colors.White);
+            CustomEmoteThreeCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            CustomEmoteThreeTextBox.Foreground = new SolidColorBrush(Colors.White);
+            OOCTextBoxLabel.Foreground = new SolidColorBrush(Colors.White);
             DefaultColorTextBox.Foreground = new SolidColorBrush(Colors.White);
             ResetSettingsButton.Background = Brushes.Black;
             ResetSettingsButton.Foreground = new SolidColorBrush(Colors.White);
@@ -129,14 +143,25 @@ namespace NWNLogRotator
             MyCharactersTextBox.Text = _settings.MyCharacters;
             FontNameTextBox.Text = _settings.FontName;
             FontSizeTextBox.Text = _settings.FontSize;
-
-            /*
-            if (_settings.CustomEmotes != "")
+            CustomEmoteOneColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.CustomEmoteOneColor);
+            CustomEmoteTwoColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.CustomEmoteTwoColor);
+            CustomEmoteThreeColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.CustomEmoteThreeColor);
+            OOCColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + _settings.OOCColor);
+            if (_settings.CustomEmoteOne != "")
             {
-                CustomEmotesCheckBox.IsChecked = true;
-                CustomEmotesTextBox.Text = _settings.CustomEmotes;
+                CustomEmoteOneCheckBox.IsChecked = true;
+                CustomEmoteOneTextBox.Text = _settings.CustomEmoteOne;
             }
-            */
+            if (_settings.CustomEmoteTwo != "")
+            {
+                CustomEmoteTwoCheckBox.IsChecked = true;
+                CustomEmoteTwoTextBox.Text = _settings.CustomEmoteTwo;
+            }
+            if (_settings.CustomEmoteThree != "")
+            {
+                CustomEmoteThreeCheckBox.IsChecked = true;
+                CustomEmoteThreeTextBox.Text = _settings.CustomEmoteThree;
+            }
         }
 
         private Settings CurrentSettings_Get()
@@ -153,7 +178,7 @@ namespace NWNLogRotator
             bool Tray = _settings.Tray;
             bool SaveBackup = _settings.SaveBackup;
             bool Notifications = _settings.Notifications;
-            string CustomEmotes = _settings.CustomEmotes;
+            string OOCColor = new ColorConverter().ConvertToString(OOCColorTextBox.SelectedColor).Substring(3);
             string FilterLines = _settings.FilterLines;
             string PathToClient = _settings.PathToClient;
             bool RunClientOnLaunch = _settings.RunClientOnLaunch;
@@ -175,6 +200,13 @@ namespace NWNLogRotator
             string MyCharacters = MyCharactersTextBox.Text;
             string FontName = FontNameTextBox.Text;
             string FontSize = FontSizeTextBox.Text.ToLower();
+            string CustomEmoteOne = CustomEmoteOneTextBox.Text;
+            string CustomEmoteOneColor = new ColorConverter().ConvertToString(CustomEmoteOneColorTextBox.SelectedColor).Substring(3);
+            string CustomEmoteTwo = CustomEmoteTwoTextBox.Text;
+            string CustomEmoteTwoColor = new ColorConverter().ConvertToString(CustomEmoteTwoColorTextBox.SelectedColor).Substring(3);
+            string CustomEmoteThree = CustomEmoteThreeTextBox.Text;
+            string CustomEmoteThreeColor = new ColorConverter().ConvertToString(CustomEmoteThreeColorTextBox.SelectedColor).Substring(3);
+
 
             _settings = new Settings(   OutputDirectory,
                                         PathToLog,
@@ -188,7 +220,7 @@ namespace NWNLogRotator
                                         Tray,
                                         SaveBackup,
                                         Notifications,
-                                        CustomEmotes,
+                                        OOCColor,
                                         FilterLines,
                                         PathToClient,
                                         RunClientOnLaunch,
@@ -209,7 +241,13 @@ namespace NWNLogRotator
                                         MyColor,
                                         MyCharacters,
                                         FontName,
-                                        FontSize
+                                        FontSize,
+                                        CustomEmoteOne,
+                                        CustomEmoteOneColor,
+                                        CustomEmoteTwo,
+                                        CustomEmoteTwoColor,
+                                        CustomEmoteThree,
+                                        CustomEmoteThreeColor
                                    );
             return _settings;
         }
@@ -225,7 +263,11 @@ namespace NWNLogRotator
                _settings.EmoteColor.Length == 6 &&
                _settings.ShoutColor.Length == 6 &&
                _settings.TellColor.Length == 6 &&
-               _settings.WhisperColor.Length == 6
+               _settings.WhisperColor.Length == 6 && 
+               _settings.CustomEmoteOneColor.Length == 6 &&
+               _settings.CustomEmoteTwoColor.Length == 6 &&
+               _settings.CustomEmoteThreeColor.Length == 6 &&
+               _settings.OOCColor.Length == 6
               )
             {
                 _closed = false;
@@ -257,6 +299,10 @@ namespace NWNLogRotator
             MyColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.MyColor);
             FontNameTextBox.Text = __settings.FontName;
             FontSizeTextBox.Text = __settings.FontSize;
+            CustomEmoteOneColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.CustomEmoteOneColor);
+            CustomEmoteTwoColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.CustomEmoteTwoColor);
+            CustomEmoteThreeColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.CustomEmoteThreeColor);
+            OOCColorTextBox.SelectedColor = (Color)ColorConverter.ConvertFromString("#" + __settings.OOCColor);
             __settings = null;
         }
 

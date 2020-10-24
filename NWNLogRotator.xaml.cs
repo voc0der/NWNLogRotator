@@ -154,7 +154,7 @@ namespace NWNLogRotator
             bool Tray = TrayCheckBox.IsChecked.GetValueOrDefault();
             bool SaveBackup = SaveBackupCheckBox.IsChecked.GetValueOrDefault();
             bool Notifications = NotificationsCheckBox.IsChecked.GetValueOrDefault();
-            string CustomEmotes = "";
+            string OOCColor = _settings.OOCColor;
             string FilterLines = "";
             if (FilterLinesCheckBox.IsChecked == true && FilterLinesTextBox.Text != "")
             {
@@ -180,41 +180,53 @@ namespace NWNLogRotator
             string MyCharacters = _settings.MyCharacters;
             string FontName = _settings.FontName;
             string FontSize = _settings.FontSize;
+            string CustomEmoteOne = _settings.CustomEmoteOne;
+            string CustomEmoteOneColor = _settings.CustomEmoteOneColor;
+            string CustomEmoteTwo = _settings.CustomEmoteTwo;
+            string CustomEmoteTwoColor = _settings.CustomEmoteTwoColor;
+            string CustomEmoteThree = _settings.CustomEmoteThree;
+            string CustomEmoteThreeColor = _settings.CustomEmoteThreeColor;
 
-            _settings = new Settings(OutputDirectory,
-                                              PathToLog,
-                                              MinimumRowsToInteger,
-                                              ServerName,
-                                              ServerNameColor,
-                                              EventText,
-                                              CombatText,
-                                              UseTheme,
-                                              Silent,
-                                              Tray,
-                                              SaveBackup,
-                                              Notifications,
-                                              CustomEmotes,
-                                              FilterLines,
-                                              PathToClient,
-                                              RunClientOnLaunch,
-                                              CloseOnLogGenerated,
-                                              ServerAddress,
-                                              ServerPassword,
-                                              DM,
-                                              ServerMode,
-                                              BackgroundColor,
-                                              TimestampColor,
-                                              DefaultColor,
-                                              ActorColor,
-                                              PartyColor,
-                                              EmoteColor,
-                                              ShoutColor,
-                                              TellColor,
-                                              WhisperColor,
-                                              MyColor,
-                                              MyCharacters,
-                                              FontName,
-                                              FontSize
+            _settings = new Settings(           OutputDirectory,
+                                                PathToLog,
+                                                MinimumRowsToInteger,
+                                                ServerName,
+                                                ServerNameColor,
+                                                EventText,
+                                                CombatText,
+                                                UseTheme,
+                                                Silent,
+                                                Tray,
+                                                SaveBackup,
+                                                Notifications,
+                                                OOCColor,
+                                                FilterLines,
+                                                PathToClient,
+                                                RunClientOnLaunch,
+                                                CloseOnLogGenerated,
+                                                ServerAddress,
+                                                ServerPassword,
+                                                DM,
+                                                ServerMode,
+                                                BackgroundColor,
+                                                TimestampColor,
+                                                DefaultColor,
+                                                ActorColor,
+                                                PartyColor,
+                                                EmoteColor,
+                                                ShoutColor,
+                                                TellColor,
+                                                WhisperColor,
+                                                MyColor,
+                                                MyCharacters,
+                                                FontName,
+                                                FontSize,
+                                                CustomEmoteOne,
+                                                CustomEmoteOneColor,
+                                                CustomEmoteTwo,
+                                                CustomEmoteTwoColor,
+                                                CustomEmoteThree,
+                                                CustomEmoteThreeColor
                                             );
 
             return _settings;

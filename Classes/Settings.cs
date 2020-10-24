@@ -14,7 +14,7 @@
         public bool Tray;
         public bool SaveBackup;
         public bool Notifications;
-        public string CustomEmotes;
+        public string OOCColor;
         public string FilterLines;
         public string PathToClient;
         public bool RunClientOnLaunch;
@@ -36,6 +36,12 @@
         public string MyCharacters;
         public string FontName;
         public string FontSize;
+        public string CustomEmoteOne;
+        public string CustomEmoteOneColor;
+        public string CustomEmoteTwo;
+        public string CustomEmoteTwoColor;
+        public string CustomEmoteThree;
+        public string CustomEmoteThreeColor;
 
         // create singleton
         public static Settings _instance = new Settings();
@@ -55,7 +61,7 @@
             this.Tray = false;
             this.SaveBackup = false;
             this.Notifications = false;
-            this.CustomEmotes = "";
+            this.OOCColor = "D70A53";
             this.FilterLines = "";
             this.PathToClient = "";
             this.RunClientOnLaunch = false;
@@ -77,7 +83,13 @@
             this.MyCharacters = "";
             this.FontName = "Tahoma, Geneva, sans-serif";
             this.FontSize = "calc(.7vw + .7vh + .5vmin)";
-        }
+            this.CustomEmoteOne = "";
+            this.CustomEmoteOneColor = "FF9944";
+            this.CustomEmoteTwo = "";
+            this.CustomEmoteTwoColor = "87CEEB";
+            this.CustomEmoteThree = "";
+            this.CustomEmoteThreeColor = "FFD8B1";
+    }
 
         // binding
         public Settings(string OutputDirectory,
@@ -92,7 +104,7 @@
                         bool Tray,
                         bool SaveBackup,
                         bool Notifications,
-                        string CustomEmotes,
+                        string OOCColor,
                         string FilterLines,
                         string PathToClient,
                         bool RunClientOnLaunch,
@@ -113,7 +125,13 @@
                         string MyColor,
                         string MyCharacters,
                         string FontName,
-                        string FontSize)
+                        string FontSize,
+                        string CustomEmoteOne,
+                        string CustomEmoteOneColor,
+                        string CustomEmoteTwo,
+                        string CustomEmoteTwoColor,
+                        string CustomEmoteThree,
+                        string CustomEmoteThreeColor)
         {
             this.OutputDirectory = OutputDirectory;
             this.PathToLog = PathToLog;
@@ -127,7 +145,7 @@
             this.Tray = Tray;
             this.SaveBackup = SaveBackup;
             this.Notifications = Notifications;
-            this.CustomEmotes = CustomEmotes;
+            this.OOCColor = OOCColor;
             this.FilterLines = FilterLines;
             this.PathToClient = PathToClient;
             this.RunClientOnLaunch = RunClientOnLaunch;
@@ -149,6 +167,12 @@
             this.MyCharacters = MyCharacters;
             this.FontName = FontName;
             this.FontSize = FontSize;
+            this.CustomEmoteOne = CustomEmoteOne;
+            this.CustomEmoteOneColor = CustomEmoteOneColor;
+            this.CustomEmoteTwo = CustomEmoteTwo;
+            this.CustomEmoteTwoColor = CustomEmoteTwoColor;
+            this.CustomEmoteThree = CustomEmoteThree;
+            this.CustomEmoteThreeColor = CustomEmoteThreeColor;
         }
 
         // get singleton

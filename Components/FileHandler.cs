@@ -10,7 +10,7 @@ namespace NWNLogRotator.Components
     public partial class FileHandler : Component
     {
         Settings _settings;
-        int _expectedSettingsCount = 34;
+        int _expectedSettingsCount = 40;
 
         public FileHandler()
         {
@@ -55,7 +55,7 @@ namespace NWNLogRotator.Components
                                         "Tray=" + _settings.Tray + "\n" +
                                         "SaveBackup=" + _settings.SaveBackup + "\n" +
                                         "Notifications=" + _settings.Notifications + "\n" +
-                                        "CustomEmotes=" + _settings.CustomEmotes + "\n" +
+                                        "OOCColor=" + _settings.OOCColor + "\n" +
                                         "FilterLines=" + _settings.FilterLines + "\n" +
                                         "PathToClient=" + _settings.PathToClient + "\n" +
                                         "RunClientOnLaunch=" + _settings.RunClientOnLaunch + "\n" +
@@ -76,7 +76,14 @@ namespace NWNLogRotator.Components
                                         "MyColor=" + _settings.MyColor + "\n" +
                                         "MyCharacters=" + _settings.MyCharacters + "\n" +
                                         "FontName=" + _settings.FontName + "\n" +
-                                        "FontSize=" + _settings.FontSize;
+                                        "FontSize=" + _settings.FontSize + "\n" +
+                                        "CustomEmoteOne=" + _settings.CustomEmoteOne + "\n" +
+                                        "CustomEmoteOneColor=" + _settings.CustomEmoteOneColor + "\n" +
+                                        "CustomEmoteTwo=" + _settings.CustomEmoteTwo + "\n" +
+                                        "CustomEmoteTwoColor=" + _settings.CustomEmoteTwoColor + "\n" +
+                                        "CustomEmoteThree=" + _settings.CustomEmoteThree + "\n" +
+                                        "CustomEmoteThreeColor=" + _settings.CustomEmoteThreeColor;
+
             return NewSettingsFile;
         }
 
@@ -118,7 +125,7 @@ namespace NWNLogRotator.Components
             bool Tray = false;
             bool SaveBackup = false;
             bool Notifications = false;
-            string CustomEmotes = "";
+            string OOCColor = "D70A53";
             string FilterLines = "";
             string PathToClient = "";
             bool RunClientOnLaunch = false;
@@ -140,6 +147,12 @@ namespace NWNLogRotator.Components
             string MyCharacters = "";
             string FontName = "Tahoma, Geneva, sans-serif";
             string FontSize = "calc(.7vw + .7vh + .5vmin)";
+            string CustomEmoteOne = "";
+            string CustomEmoteOneColor = "FF9944";
+            string CustomEmoteTwo = "";
+            string CustomEmoteTwoColor = "87CEEB";
+            string CustomEmoteThree = "";
+            string CustomEmoteThreeColor = "FFD8B1";
 
             int Count = 0;
 
@@ -220,9 +233,10 @@ namespace NWNLogRotator.Components
                     Count += 1;
                     continue;
                 }
-                if (line.IndexOf("CustomEmotes=") != -1)
+                if (line.IndexOf("OOCColor=") != -1)
                 {
-                    CustomEmotes = ParameterValue;
+                    OOCColor = ParameterValue;
+                    if (OOCColor == "") OOCColor = _settings.OOCColor;
                     Count += 1;
                     continue;
                 }
@@ -364,6 +378,45 @@ namespace NWNLogRotator.Components
                     Count += 1;
                     continue;
                 }
+                if (line.IndexOf("CustomEmoteOne=") != -1)
+                {
+                    CustomEmoteOne = ParameterValue;
+                    Count += 1;
+                    continue;
+                }
+                if (line.IndexOf("CustomEmoteOneColor=") != -1)
+                {
+                    CustomEmoteOneColor = ParameterValue;
+                    if (CustomEmoteOneColor == "") CustomEmoteOneColor = _settings.CustomEmoteOneColor;
+                    Count += 1;
+                    continue;
+                }
+                if (line.IndexOf("CustomEmoteTwo=") != -1)
+                {
+                    CustomEmoteTwo = ParameterValue;
+                    Count += 1;
+                    continue;
+                }
+                if (line.IndexOf("CustomEmoteTwoColor=") != -1)
+                {
+                    CustomEmoteTwoColor = ParameterValue;
+                    if (CustomEmoteTwoColor == "") CustomEmoteTwoColor = _settings.CustomEmoteTwoColor;
+                    Count += 1;
+                    continue;
+                }
+                if (line.IndexOf("CustomEmoteThree=") != -1)
+                {
+                    CustomEmoteThree = ParameterValue;
+                    Count += 1;
+                    continue;
+                }
+                if (line.IndexOf("CustomEmoteThreeColor=") != -1)
+                {
+                    CustomEmoteThreeColor = ParameterValue;
+                    if (CustomEmoteThreeColor == "") CustomEmoteThreeColor = _settings.CustomEmoteThreeColor;
+                    Count += 1;
+                    continue;
+                }
                 MessageBox.Show("NWNLogRotator detected that the settings file is outdated. Settings that are still valid have been loaded. Please verify and save the current settings.",
                                 "Outdated Settings File!",
                                 MessageBoxButton.OK,
@@ -382,7 +435,7 @@ namespace NWNLogRotator.Components
                                               Tray,
                                               SaveBackup,
                                               Notifications,
-                                              CustomEmotes,
+                                              OOCColor,
                                               FilterLines,
                                               PathToClient,
                                               RunClientOnLaunch,
@@ -403,7 +456,13 @@ namespace NWNLogRotator.Components
                                               MyColor,
                                               MyCharacters,
                                               FontName,
-                                              FontSize
+                                              FontSize,
+                                              CustomEmoteOne,
+                                              CustomEmoteOneColor,
+                                              CustomEmoteTwo,
+                                              CustomEmoteTwoColor,
+                                              CustomEmoteThree,
+                                              CustomEmoteThreeColor
                                             );
             if(Count == 0)
             {

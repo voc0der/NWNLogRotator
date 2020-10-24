@@ -165,6 +165,10 @@ namespace NWNLogRotator.Classes
                     ".whispers { color: #" + _run_settings.WhisperColor + "; }" +
                     ".party { color: #" + _run_settings.PartyColor + "; }" +
                     ".emotes { color: #" + _run_settings.EmoteColor + "; }" +
+                    ".customemotesone { color: #" + _run_settings.CustomEmoteOneColor + "; }" +
+                    ".customemotestwo { color: #" + _run_settings.CustomEmoteTwoColor + "; }" +
+                    ".customemotesthree { color: #" + _run_settings.CustomEmoteThreeColor + "; }" +
+                    ".ooc { color: #" + _run_settings.OOCColor + "; }" +
                 "</style>" +
             "</head>";
 
@@ -186,7 +190,6 @@ namespace NWNLogRotator.Classes
         private List<Tuple<Regex, string>> formatReplacesWithUserOverride(Settings _run_settings)
         {
             string theRegEx;
-            string[] emotesArray = _run_settings.CustomEmotes.Split(',');
             List<Tuple<Regex, string>> formatReplacesOrderedReturn = new List<Tuple<Regex, string>>();
 
             formatReplacesOrderedReturn.AddRange(formatReplacesOrderedOne);
@@ -198,7 +201,7 @@ namespace NWNLogRotator.Classes
                 List<Tuple<Regex, string>> MyCharacterLines = new List<Tuple<Regex, string>>();
                 theRegEx = "";
                 string[] MyCharacters = _run_settings.MyCharacters.Split(',');
-                foreach(string CharacterName in MyCharacters)
+                foreach (string CharacterName in MyCharacters)
                 {
                     theRegEx = @"(<span class=""actors"">)(\s*?" + CharacterName + @":?.*?)(</span>|\[Whisper\]|\[Tell\]|\[Shout\])";
                     Tuple<Regex, string> theMyCharacterLine = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"$1 <span class=""me"">$2</span> $3");
@@ -207,31 +210,87 @@ namespace NWNLogRotator.Classes
                 formatReplacesOrderedReturn.AddRange(MyCharacterLines);
             }
 
-            if (_run_settings.CustomEmotes.Length != 0)
+            // Process custom emotes
+            List<Tuple<Regex, string>> additionalEmotesList = new List<Tuple<Regex, string>>();
+            Tuple<Regex, string> theCustomEmote;
+            if (_run_settings.CustomEmoteOne.Length != 0 || _run_settings.CustomEmoteTwo.Length != 0 || _run_settings.CustomEmoteThree.Length != 0 || _run_settings.OOCColor.Length != 0)
             {
-                List<Tuple<Regex, string>> additionalEmotesList = new List<Tuple<Regex, string>>();
-                foreach (string emotePair in emotesArray)
+                if (_run_settings.CustomEmoteOne.Length != 0)
                 {
-                    string theEmotePair = emotePair.Trim();
-                    if (theEmotePair.Length == 2)
+                    // Custom emote 1...
+                    if (_run_settings.CustomEmoteOne.Length == 2)
                     {
-                        string tempLeftBracket = theEmotePair.Substring(0, 1);
-                        string tempRightBracket = theEmotePair.Substring(1, 1);
+                        string tempLeftBracket = _run_settings.CustomEmoteOne.Substring(0, 1);
+                        string tempRightBracket = _run_settings.CustomEmoteOne.Substring(1, 1);
                         theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempRightBracket;
 
-                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""emotes"">$1</span>");
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotesone"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
-                    else if (theEmotePair.Length == 1)
+                    else if (_run_settings.CustomEmoteOne.Length == 1)
                     {
-                        string tempBracket = theEmotePair.Substring(0, 1);
+                        string tempBracket = _run_settings.CustomEmoteOne.Substring(0, 1);
                         theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempBracket;
 
-                        Tuple<Regex, string> theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""emotes"">$1</span>");
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotesone"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
+                    formatReplacesOrderedReturn.AddRange(additionalEmotesList);
                 }
-                formatReplacesOrderedReturn.AddRange(additionalEmotesList);
+                // Custom emote 2...
+                if (_run_settings.CustomEmoteTwo.Length != 0)
+                {
+                    if (_run_settings.CustomEmoteTwo.Length == 2)
+                    {
+                        string tempLeftBracket = _run_settings.CustomEmoteTwo.Substring(0, 1);
+                        string tempRightBracket = _run_settings.CustomEmoteTwo.Substring(1, 1);
+                        theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempRightBracket;
+
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotestwo"">$1</span>");
+                        additionalEmotesList.Add(theCustomEmote);
+                    }
+                    else if (_run_settings.CustomEmoteTwo.Length == 1)
+                    {
+                        string tempBracket = _run_settings.CustomEmoteTwo.Substring(0, 1);
+                        theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempBracket;
+
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotestwo"">$1</span>");
+                        additionalEmotesList.Add(theCustomEmote);
+                    }
+                    formatReplacesOrderedReturn.AddRange(additionalEmotesList);
+                }
+                // Custom emote 3...
+                if (_run_settings.CustomEmoteThree.Length != 0)
+                {
+                    if (_run_settings.CustomEmoteThree.Length == 2)
+                    {
+                        string tempLeftBracket = _run_settings.CustomEmoteThree.Substring(0, 1);
+                        string tempRightBracket = _run_settings.CustomEmoteThree.Substring(1, 1);
+                        theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempRightBracket;
+
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotesthree"">$1</span>");
+                        additionalEmotesList.Add(theCustomEmote);
+                    }
+                    else if (_run_settings.CustomEmoteThree.Length == 1)
+                    {
+                        string tempBracket = _run_settings.CustomEmoteThree.Substring(0, 1);
+                        theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempBracket;
+
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotesthree"">$1</span>");
+                        additionalEmotesList.Add(theCustomEmote);
+                    }
+                    formatReplacesOrderedReturn.AddRange(additionalEmotesList);
+                }
+                // OOC ..
+                if (_run_settings.OOCColor.Length != 0)
+                {
+                    theRegEx = "(" + timestampStatefulMatch + nameStatefulMatch + @"\s*?)(\/\/.*)";
+
+                    theCustomEmote = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"<span class=""ooc"">$1$3</span>");
+                    additionalEmotesList.Add(theCustomEmote);
+
+                    formatReplacesOrderedReturn.AddRange(additionalEmotesList);
+                }
             }
 
             // Format fixing for Arelith style language-voice types
@@ -269,7 +328,7 @@ namespace NWNLogRotator.Classes
         private List<Tuple<Regex, string>> formatReplacesOrderedThree = new List<Tuple<Regex, string>>
         {
             // emotes 
-            new Tuple<Regex, string>( new Regex(@"(\*.*?\*)",RegexOptions.Compiled), @"<span class=""emotes"">$1</span>")
+            new Tuple<Regex, string>( new Regex(@"(\*.*?\*)",RegexOptions.Compiled), @"<span class=""emotes"">$1</span>"),
         };
 
         private List<String> gloabalRemoves = new List<String>
