@@ -155,10 +155,6 @@ namespace NWNLogRotator
             bool SaveBackup = SaveBackupCheckBox.IsChecked.GetValueOrDefault();
             bool Notifications = NotificationsCheckBox.IsChecked.GetValueOrDefault();
             string CustomEmotes = "";
-            if (CustomEmotesCheckBox.IsChecked == true && CustomEmotesTextBox.Text != "")
-            {
-                CustomEmotes = CustomEmotesTextBox.Text;
-            }
             string FilterLines = "";
             if (FilterLinesCheckBox.IsChecked == true && FilterLinesTextBox.Text != "")
             {
@@ -311,11 +307,6 @@ namespace NWNLogRotator
             TrayCheckBox.IsChecked = _settings.Tray;
             SaveBackupCheckBox.IsChecked = _settings.SaveBackup;
             NotificationsCheckBox.IsChecked = _settings.Notifications;
-            if (_settings.CustomEmotes != "")
-            {
-                CustomEmotesCheckBox.IsChecked = true;
-                CustomEmotesTextBox.Text = _settings.CustomEmotes;
-            }
             if (_settings.FilterLines != "")
             {
                 FilterLinesCheckBox.IsChecked = true;
@@ -370,7 +361,6 @@ namespace NWNLogRotator
             ServerConfigurationButton.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryTextBox.Background = Brushes.Black;
             PathToLogTextBox.Background = Brushes.Black;
-            CustomEmotesTextBox.Background = Brushes.Black;
             FilterLinesTextBox.Background = Brushes.Black;
             MainStatusBar.Background = Brushes.Black;
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.White);
@@ -379,7 +369,6 @@ namespace NWNLogRotator
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.White);
             PathToLogLabel.Foreground = new SolidColorBrush(Colors.White);
-            CustomEmotesTextBox.Foreground = new SolidColorBrush(Colors.White);
             FilterLinesTextBox.Foreground = new SolidColorBrush(Colors.White);
             EventTextCheckBox.Foreground = new SolidColorBrush(Colors.White);
             CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.White);
@@ -387,7 +376,6 @@ namespace NWNLogRotator
             MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.White);
             SaveBackupCheckBox.Foreground = new SolidColorBrush(Colors.White);
             NotificationsCheckBox.Foreground = new SolidColorBrush(Colors.White);
-            CustomEmotesCheckBox.Foreground = new SolidColorBrush(Colors.White);
             FilterLinesCheckBox.Foreground = new SolidColorBrush(Colors.White);
             ClientModeRadioButton.Foreground = new SolidColorBrush(Colors.White);
             ServerModeRadioButton.Foreground = new SolidColorBrush(Colors.White);
@@ -416,7 +404,6 @@ namespace NWNLogRotator
             LauncherConfigurationButton.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryTextBox.Background = Brushes.White;
             PathToLogTextBox.Background = Brushes.White;
-            CustomEmotesTextBox.Background = Brushes.White;
             FilterLinesTextBox.Background = Brushes.White;
             MainStatusBar.Background = Brushes.White;
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.Black);
@@ -425,7 +412,6 @@ namespace NWNLogRotator
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.Black);
             PathToLogLabel.Foreground = new SolidColorBrush(Colors.Black);
-            CustomEmotesTextBox.Foreground = new SolidColorBrush(Colors.Black);
             FilterLinesTextBox.Foreground = new SolidColorBrush(Colors.Black);
             EventTextCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             CombatTextCheckBox.Foreground = new SolidColorBrush(Colors.Black);
@@ -433,7 +419,6 @@ namespace NWNLogRotator
             MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.Black);
             SaveBackupCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             NotificationsCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-            CustomEmotesCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             FilterLinesCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             ClientModeRadioButton.Foreground = new SolidColorBrush(Colors.Black);
             ServerModeRadioButton.Foreground = new SolidColorBrush(Colors.Black);
@@ -614,17 +599,6 @@ namespace NWNLogRotator
         {
             _settings = CurrentSettings_Get();
             SaveSettings(_settings);
-        }
-
-        private void CustomEmotesCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            CustomEmotesTextBox.Visibility = Visibility.Visible;
-        }
-
-        private void CustomEmotesCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            CustomEmotesTextBox.Text = "";
-            CustomEmotesTextBox.Visibility = Visibility.Collapsed;
         }
 
         private void FilterLinesCheckBox_Checked(object sender, RoutedEventArgs e)

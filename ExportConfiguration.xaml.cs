@@ -129,6 +129,14 @@ namespace NWNLogRotator
             MyCharactersTextBox.Text = _settings.MyCharacters;
             FontNameTextBox.Text = _settings.FontName;
             FontSizeTextBox.Text = _settings.FontSize;
+
+            /*
+            if (_settings.CustomEmotes != "")
+            {
+                CustomEmotesCheckBox.IsChecked = true;
+                CustomEmotesTextBox.Text = _settings.CustomEmotes;
+            }
+            */
         }
 
         private Settings CurrentSettings_Get()
@@ -166,7 +174,7 @@ namespace NWNLogRotator
             string MyColor = new ColorConverter().ConvertToString(MyColorTextBox.SelectedColor).Substring(3);
             string MyCharacters = MyCharactersTextBox.Text;
             string FontName = FontNameTextBox.Text;
-            string FontSize = FontSizeTextBox.Text;
+            string FontSize = FontSizeTextBox.Text.ToLower();
 
             _settings = new Settings(   OutputDirectory,
                                         PathToLog,
@@ -250,6 +258,45 @@ namespace NWNLogRotator
             FontNameTextBox.Text = __settings.FontName;
             FontSizeTextBox.Text = __settings.FontSize;
             __settings = null;
+        }
+
+        private void CustomEmoteOneCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CustomEmoteOneTextBox.Visibility = Visibility.Visible;
+            CustomEmoteOneColorTextBox.Visibility = Visibility.Visible;
+        }
+
+        private void CustomEmoteOneCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CustomEmoteOneTextBox.Text = "";
+            CustomEmoteOneTextBox.Visibility = Visibility.Collapsed;
+            CustomEmoteOneColorTextBox.Visibility = Visibility.Collapsed;
+        }
+
+        private void CustomEmoteTwoCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CustomEmoteTwoTextBox.Visibility = Visibility.Visible;
+            CustomEmoteTwoColorTextBox.Visibility = Visibility.Visible;
+        }
+
+        private void CustomEmoteTwoCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CustomEmoteTwoTextBox.Text = "";
+            CustomEmoteTwoTextBox.Visibility = Visibility.Collapsed;
+            CustomEmoteTwoColorTextBox.Visibility = Visibility.Collapsed;
+        }
+
+        private void CustomEmoteThreeCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CustomEmoteThreeTextBox.Visibility = Visibility.Visible;
+            CustomEmoteThreeColorTextBox.Visibility = Visibility.Visible;
+        }
+
+        private void CustomEmoteThreeCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CustomEmoteThreeTextBox.Text = "";
+            CustomEmoteThreeTextBox.Visibility = Visibility.Collapsed;
+            CustomEmoteThreeColorTextBox.Visibility = Visibility.Collapsed;
         }
     }
 }
