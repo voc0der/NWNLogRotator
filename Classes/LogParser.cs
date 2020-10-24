@@ -196,6 +196,22 @@ namespace NWNLogRotator.Classes
             formatReplacesOrderedReturn.AddRange(formatReplacesOrderedTwo);
             formatReplacesOrderedReturn.AddRange(formatReplacesOrderedThree);
 
+            // Process custom emotes
+            List<Tuple<Regex, string>> additionalEmotesList = new List<Tuple<Regex, string>>();
+            Tuple<Regex, string> theCustomEmote;
+
+            // OOC ..
+            if (_run_settings.OOCColor.Length != 0)
+            {
+                theRegEx = "(" + timestampStatefulMatch + nameStatefulMatch + @"\s*?)(\/\/.*)";
+
+                theCustomEmote = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"<span class=""ooc"">$1$3</span>");
+                additionalEmotesList.Add(theCustomEmote);
+
+                formatReplacesOrderedReturn.AddRange(additionalEmotesList);
+            }
+
+            // My characters ...
             if (_run_settings.MyCharacters != "")
             {
                 List<Tuple<Regex, string>> MyCharacterLines = new List<Tuple<Regex, string>>();
@@ -210,9 +226,6 @@ namespace NWNLogRotator.Classes
                 formatReplacesOrderedReturn.AddRange(MyCharacterLines);
             }
 
-            // Process custom emotes
-            List<Tuple<Regex, string>> additionalEmotesList = new List<Tuple<Regex, string>>();
-            Tuple<Regex, string> theCustomEmote;
             if (_run_settings.CustomEmoteOne.Length != 0 || _run_settings.CustomEmoteTwo.Length != 0 || _run_settings.CustomEmoteThree.Length != 0 || _run_settings.OOCColor.Length != 0)
             {
                 if (_run_settings.CustomEmoteOne.Length != 0)
@@ -279,16 +292,6 @@ namespace NWNLogRotator.Classes
                         theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotesthree"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
-                    formatReplacesOrderedReturn.AddRange(additionalEmotesList);
-                }
-                // OOC ..
-                if (_run_settings.OOCColor.Length != 0)
-                {
-                    theRegEx = "(" + timestampStatefulMatch + nameStatefulMatch + @"\s*?)(\/\/.*)";
-
-                    theCustomEmote = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"<span class=""ooc"">$1$3</span>");
-                    additionalEmotesList.Add(theCustomEmote);
-
                     formatReplacesOrderedReturn.AddRange(additionalEmotesList);
                 }
             }
