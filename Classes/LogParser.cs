@@ -142,20 +142,20 @@ namespace NWNLogRotator.Classes
                 _run_settings.FontSize.Contains("vmin") ||
                 _run_settings.FontSize.Contains("vmax") ) {
                 OptionalCSSMediaTag = "@media screen and (min-width: 1000px) {" +
-                                            ".logbody { font-size: unset !important; }" +
+                                            ".log-body { font-size: unset !important; }" +
                                        "}";
             }
 
             string HTMLHeader = "<head>" +
                 "<style>" +
                     OptionalCSSMediaTag +
-                    ".logbody { " +
+                    ".log-body { " +
                         "background-color: #" + _run_settings.BackgroundColor + ";" +
                         "font-family: " + _run_settings.FontName + ";" +
                         "font-size: " + _run_settings.FontSize + ";" +
                         "color: #" + _run_settings.DefaultColor + ";" +
                     "}" +
-                    ".logheader { color: " + ServerNameColor + " }" +
+                    ".log-header { color: " + ServerNameColor + " }" +
                     ".default { color: #" + _run_settings.DefaultColor + "; }" +
                     ".timestamp { color: #" + _run_settings.TimestampColor + "; }" +
                     ".me { color: #" + _run_settings.MyColor + "; }" +
@@ -165,9 +165,9 @@ namespace NWNLogRotator.Classes
                     ".whispers { color: #" + _run_settings.WhisperColor + "; }" +
                     ".party { color: #" + _run_settings.PartyColor + "; }" +
                     ".emotes { color: #" + _run_settings.EmoteColor + "; }" +
-                    ".customemotesone { color: #" + _run_settings.CustomEmoteOneColor + "; }" +
-                    ".customemotestwo { color: #" + _run_settings.CustomEmoteTwoColor + "; }" +
-                    ".customemotesthree { color: #" + _run_settings.CustomEmoteThreeColor + "; }" +
+                    ".custom-emotes-one { color: #" + _run_settings.CustomEmoteOneColor + "; }" +
+                    ".custom-emotes-two { color: #" + _run_settings.CustomEmoteTwoColor + "; }" +
+                    ".custom-emotes-three { color: #" + _run_settings.CustomEmoteThreeColor + "; }" +
                     ".ooc { color: #" + _run_settings.OOCColor + "; }" +
                 "</style>" +
             "</head>";
@@ -175,16 +175,16 @@ namespace NWNLogRotator.Classes
             string logTitle;
             if (_run_settings.ServerName != "")
             {
-                logTitle = @"<h4>[<span class=""logheader"">" + _run_settings.ServerName + " Log</span>] ";
+                logTitle = @"<h4>[<span class=""log-header"">" + _run_settings.ServerName + " Log</span>] ";
             }
             else
             {
-                logTitle = @"<h4>[<span class=""logheader"">Log</span>] ";
+                logTitle = @"<h4>[<span class=""log-header"">Log</span>] ";
             }
             logTitle += @"<span class=""actors"">Date/Time</span>: " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
             logTitle += "</h4>";
             string postLog = "</span></body></html>";
-            return "<html>" + HTMLHeader + logTitle + ParsedNWNLog + @"<body class=""logbody""><span class=""default"">" + postLog;
+            return "<html>" + HTMLHeader + logTitle + ParsedNWNLog + @"<body class=""log-body""><span class=""default"">" + postLog;
         }
 
         private List<Tuple<Regex, string>> formatReplacesWithUserOverride(Settings _run_settings)
@@ -228,24 +228,25 @@ namespace NWNLogRotator.Classes
 
             if (_run_settings.CustomEmoteOne.Length != 0 || _run_settings.CustomEmoteTwo.Length != 0 || _run_settings.CustomEmoteThree.Length != 0 || _run_settings.OOCColor.Length != 0)
             {
+                string theRegExEscapeCharacter = "\\";
                 if (_run_settings.CustomEmoteOne.Length != 0)
                 {
                     // Custom emote 1...
                     if (_run_settings.CustomEmoteOne.Length == 2)
                     {
-                        string tempLeftBracket = _run_settings.CustomEmoteOne.Substring(0, 1);
-                        string tempRightBracket = _run_settings.CustomEmoteOne.Substring(1, 1);
-                        theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempRightBracket;
+                        string tempLeftBracket = theRegExEscapeCharacter + _run_settings.CustomEmoteOne.Substring(0, 1);
+                        string tempRightBracket = theRegExEscapeCharacter + _run_settings.CustomEmoteOne.Substring(1, 1);
+                        theRegEx = "(" + tempLeftBracket + textStatefulMatch + tempRightBracket + ")";
 
-                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotesone"">$1</span>");
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(theRegEx, RegexOptions.Compiled), @"<span class=""custom-emotes-one"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
                     else if (_run_settings.CustomEmoteOne.Length == 1)
                     {
-                        string tempBracket = _run_settings.CustomEmoteOne.Substring(0, 1);
-                        theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempBracket;
+                        string tempBracket = theRegExEscapeCharacter + _run_settings.CustomEmoteOne.Substring(0, 1);
+                        theRegEx = "(" + tempBracket + textStatefulMatch + tempBracket + ")";
 
-                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotesone"">$1</span>");
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(theRegEx, RegexOptions.Compiled), @"<span class=""custom-emotes-one"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
                     formatReplacesOrderedReturn.AddRange(additionalEmotesList);
@@ -255,19 +256,19 @@ namespace NWNLogRotator.Classes
                 {
                     if (_run_settings.CustomEmoteTwo.Length == 2)
                     {
-                        string tempLeftBracket = _run_settings.CustomEmoteTwo.Substring(0, 1);
-                        string tempRightBracket = _run_settings.CustomEmoteTwo.Substring(1, 1);
-                        theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempRightBracket;
+                        string tempLeftBracket = theRegExEscapeCharacter + _run_settings.CustomEmoteTwo.Substring(0, 1);
+                        string tempRightBracket = theRegExEscapeCharacter + _run_settings.CustomEmoteTwo.Substring(1, 1);
+                        theRegEx = "(" + tempLeftBracket + textStatefulMatch + tempRightBracket + ")";
 
-                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotestwo"">$1</span>");
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(theRegEx, RegexOptions.Compiled), @"<span class=""custom-emotes-two"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
                     else if (_run_settings.CustomEmoteTwo.Length == 1)
                     {
-                        string tempBracket = _run_settings.CustomEmoteTwo.Substring(0, 1);
-                        theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempBracket;
+                        string tempBracket = theRegExEscapeCharacter + _run_settings.CustomEmoteTwo.Substring(0, 1);
+                        theRegEx = "(" + tempBracket + textStatefulMatch + tempBracket + ")";
 
-                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotestwo"">$1</span>");
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(theRegEx, RegexOptions.Compiled), @"<span class=""custom-emotes-two"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
                     formatReplacesOrderedReturn.AddRange(additionalEmotesList);
@@ -277,19 +278,19 @@ namespace NWNLogRotator.Classes
                 {
                     if (_run_settings.CustomEmoteThree.Length == 2)
                     {
-                        string tempLeftBracket = _run_settings.CustomEmoteThree.Substring(0, 1);
-                        string tempRightBracket = _run_settings.CustomEmoteThree.Substring(1, 1);
-                        theRegEx = "\\" + tempLeftBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempRightBracket;
+                        string tempLeftBracket = theRegExEscapeCharacter + _run_settings.CustomEmoteThree.Substring(0, 1);
+                        string tempRightBracket = theRegExEscapeCharacter + _run_settings.CustomEmoteThree.Substring(1, 1);
+                        theRegEx = "(" + tempLeftBracket + textStatefulMatch + tempRightBracket + ")";
 
-                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotesthree"">$1</span>");
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(theRegEx, RegexOptions.Compiled), @"<span class=""custom-emotes-three"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
                     else if (_run_settings.CustomEmoteThree.Length == 1)
                     {
-                        string tempBracket = _run_settings.CustomEmoteThree.Substring(0, 1);
-                        theRegEx = "\\" + tempBracket + "(?!([0-9]{2}\\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?\\" + tempBracket;
+                        string tempBracket = theRegExEscapeCharacter + _run_settings.CustomEmoteThree.Substring(0, 1);
+                        theRegEx = "(" + tempBracket + textStatefulMatch + tempBracket + ")";
 
-                        theCustomEmote = new Tuple<Regex, string>(new Regex(@"(" + theRegEx + ")", RegexOptions.Compiled), @"<span class=""customemotesthree"">$1</span>");
+                        theCustomEmote = new Tuple<Regex, string>(new Regex(theRegEx, RegexOptions.Compiled), @"<span class=""custom-emotes-three"">$1</span>");
                         additionalEmotesList.Add(theCustomEmote);
                     }
                     formatReplacesOrderedReturn.AddRange(additionalEmotesList);
@@ -395,6 +396,7 @@ namespace NWNLogRotator.Classes
         private static string timestampStatefulMatch = @"\<span\sclass\=\""timestamp\""\>\[\d+\:\d+\]\<\/span\>\s*?(\<span\sclass\=\""actors\""\>\s)?";
         private static string nameMatch = @"[A-z0-9\s\.\']+";
         private static string nameStatefulMatch = @"[A-z0-9\s\.\']+\:\s\<\/span\>";
+        private static string textStatefulMatch = @"(?!([0-9]{2}\:[0-9]{2}|Whisper|Tell|Party|Shout)).*?";
 
         private List<Regex> combatLines = new List<Regex>
         {
