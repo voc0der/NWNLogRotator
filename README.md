@@ -17,14 +17,14 @@ While open, NWNLogRotator will process new logs automatically based on the statu
 # Configuration Examples
 | Configuration  | Example | Description |
 | ------------- | ------------- | ------------- |
-| Output Directory | C:\Users\\{USER}น\Documents\Neverwinter Nights\logs\ | New logs stored in default Steam EE log directory |
+| Output Directory | C:\Users\\{USER}ยน\Documents\Neverwinter Nights\logs\ | New logs stored in default Steam EE log directory |
 | Output Directory | C:\Program Files (x86)\Neverwinter Nights\logs\ | New logs stored in default 1.69 log directory |
-| Path to Log | C:\Users\\{USER}น\Documents\Neverwinter Nights\logs\nwClientLog1.txt | Get log from Steam EE default log directory |
+| Path to Log | C:\Users\\{USER}ยน\Documents\Neverwinter Nights\logs\nwClientLog1.txt | Get log from Steam EE default log directory |
 | Path to Log | C:\Program Files (x86)\Neverwinter Nights\logs\nwClientLog1.txt | Get log from 1.69 default log directory |
 | Custom Emotes | [],^ | [This will be an emote], ^This will be an emote^ |
 | Filter Lines | foo,bar | Any line that has the word foo or bar will be removed |
 
-<sub><sup>Search %HOMEPATH% in Windows File Explorer, and the last directory is your {USER}</sup></sub>
+1. Search %HOMEPATH% in Windows File Explorer, and the last directory is your {USER}
 
 # Other Notes
 1) When opening for the first time, Windows may warn you that the publisher is not signed or verified, but if you click 'More Info' it will allow you to run anyways.
