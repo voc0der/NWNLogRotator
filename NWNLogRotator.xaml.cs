@@ -525,7 +525,7 @@ namespace NWNLogRotator
             {
                 try
                 {
-                    var p = new System.Diagnostics.Process();
+                    var p = new Process();
                     p.StartInfo.FileName = _settings.PathToClient;
                     p.StartInfo.Arguments = theLaunchParameters;
                     p.StartInfo.WorkingDirectory = theLaunchPath;
