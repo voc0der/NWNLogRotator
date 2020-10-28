@@ -11,12 +11,12 @@ namespace NWNLogRotator.Classes
         {
             _notifyIcon = new NotifyIcon();
             // Extracts your app's icon and uses it as notify icon
-           _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+            _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
             // Hides the icon when the notification is closed
             _notifyIcon.BalloonTipClosed += (s, e) => _notifyIcon.Visible = false;
         }
 
-        public void ShowNotification( string theMessage )
+        public void ShowNotification(string theMessage)
         {
             _notifyIcon.Visible = true;
             // Shows a notification with specified message and title

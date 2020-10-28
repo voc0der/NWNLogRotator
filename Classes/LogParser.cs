@@ -130,17 +130,18 @@ namespace NWNLogRotator.Classes
             if (_run_settings.ServerNameColor == "")
             {
                 ServerNameColor = "#" + _run_settings.DefaultColor;
-            } 
+            }
             else
             {
                 ServerNameColor = "#" + _run_settings.ServerNameColor;
             }
 
             string OptionalCSSMediaTag = "";
-            if( _run_settings.FontSize.Contains("vw") ||
+            if (_run_settings.FontSize.Contains("vw") ||
                 _run_settings.FontSize.Contains("vh") ||
                 _run_settings.FontSize.Contains("vmin") ||
-                _run_settings.FontSize.Contains("vmax") ) {
+                _run_settings.FontSize.Contains("vmax"))
+            {
                 OptionalCSSMediaTag = "@media screen and (min-width: 1000px) {" +
                                             ".log-body { font-size: unset !important; }" +
                                        "}";
@@ -200,7 +201,7 @@ namespace NWNLogRotator.Classes
             List<Tuple<Regex, string>> additionalEmotesList = new List<Tuple<Regex, string>>();
             Tuple<Regex, string> theCustomEmote;
 
-            // OOC ..
+            // OOC emotes
             if (_run_settings.OOCColor.Length != 0)
             {
                 theRegEx = "(" + timestampStatefulMatch + nameStatefulMatch + @"\s*?)(\/\/.*)";
@@ -211,7 +212,7 @@ namespace NWNLogRotator.Classes
                 formatReplacesOrderedReturn.AddRange(additionalEmotesList);
             }
 
-            // My characters ...
+            // My characters
             if (_run_settings.MyCharacters != "")
             {
                 List<Tuple<Regex, string>> MyCharacterLines = new List<Tuple<Regex, string>>();
@@ -220,7 +221,7 @@ namespace NWNLogRotator.Classes
                 foreach (string CharacterName in MyCharacters)
                 {
                     theRegEx = @"(<span class=""actors"">)(\s*?" + CharacterName + @":?.*?)(</span>|\[Whisper\]|\[Tell\]|\[Shout\])";
-                    Tuple<Regex, string> theMyCharacterLine = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"$1 <span class=""me"">$2</span> $3");
+                    Tuple<Regex, string> theMyCharacterLine = new Tuple<Regex, string>(new Regex(theRegEx, RegexOptions.Compiled), @"$1 <span class=""me"">$2</span> $3");
                     MyCharacterLines.Add(theMyCharacterLine);
                 }
                 formatReplacesOrderedReturn.AddRange(MyCharacterLines);
@@ -231,7 +232,7 @@ namespace NWNLogRotator.Classes
                 string theRegExEscapeCharacter = "\\";
                 if (_run_settings.CustomEmoteOne.Length != 0)
                 {
-                    // Custom emote 1...
+                    // Custom emote 1
                     if (_run_settings.CustomEmoteOne.Length == 2)
                     {
                         string tempLeftBracket = theRegExEscapeCharacter + _run_settings.CustomEmoteOne.Substring(0, 1);
@@ -251,7 +252,7 @@ namespace NWNLogRotator.Classes
                     }
                     formatReplacesOrderedReturn.AddRange(additionalEmotesList);
                 }
-                // Custom emote 2...
+                // Custom emote 2
                 if (_run_settings.CustomEmoteTwo.Length != 0)
                 {
                     if (_run_settings.CustomEmoteTwo.Length == 2)
@@ -273,7 +274,7 @@ namespace NWNLogRotator.Classes
                     }
                     formatReplacesOrderedReturn.AddRange(additionalEmotesList);
                 }
-                // Custom emote 3...
+                // Custom emote 3
                 if (_run_settings.CustomEmoteThree.Length != 0)
                 {
                     if (_run_settings.CustomEmoteThree.Length == 2)
@@ -300,7 +301,7 @@ namespace NWNLogRotator.Classes
             // Format fixing for Arelith style language-voice types
             List<Tuple<Regex, string>> additionalFixes = new List<Tuple<Regex, string>>();
             theRegEx = @"(<span class=\\?""actors\\?"">" + nameMatch + @".*?)(\[(?:Whisper|Shout|Tell)\])(.*?\[[A-z0-9]+\].*<\/span>)(.*)";
-             Tuple<Regex, string> theCustomLanguageScope = new Tuple<Regex, string>(new Regex(@"" + theRegEx, RegexOptions.Compiled), @"$1<span class=""whispers"">$2</span>$3<span class=""whispers"">$4</span>");
+            Tuple<Regex, string> theCustomLanguageScope = new Tuple<Regex, string>(new Regex(theRegEx, RegexOptions.Compiled), @"$1<span class=""whispers"">$2</span>$3<span class=""whispers"">$4</span>");
             additionalFixes.Add(theCustomLanguageScope);
             formatReplacesOrderedReturn.AddRange(additionalFixes);
 

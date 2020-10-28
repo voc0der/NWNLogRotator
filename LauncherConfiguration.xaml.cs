@@ -5,19 +5,20 @@ using System.Windows.Input;
 using System.Windows.Media;
 namespace NWNLogRotator
 {
-    /// <summary>
-    /// Interaction logic for LauncherConfiguration.xaml
-    /// </summary>
     public partial class LauncherConfiguration : Window
     {
         public Settings _settings;
         public bool _closed = true;
+
         public LauncherConfiguration(Settings __settings)
         {
             InitializeComponent();
-            SetupApplication( Settings_Set(__settings) );
+            SetupApplication(Settings_Set(__settings));
         }
 
+        /*
+         * Setters and Getters
+        */
         public Settings Settings_Get()
         {
             CurrentSettings_Get();
@@ -34,30 +35,28 @@ namespace NWNLogRotator
             return _closed;
         }
 
-        private void SetupApplication(Settings _settings)
-        {
-            if (_settings.UseTheme == "light")
-            {
-                ActivateLightTheme();
-            }
-            else if (_settings.UseTheme == "dark")
-            {
-                ActivateDarkTheme();
-            }
-            LoadSettings_Handler(_settings);
-        }
         public void ActivateDarkTheme()
         {
+            /*
+             * Black -> Purple -> Black
+            */
             LinearGradientBrush myBrush = new LinearGradientBrush();
             myBrush.GradientStops.Add(new GradientStop(Colors.Black, 0.0));
             myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 0.5));
             myBrush.GradientStops.Add(new GradientStop(Colors.Black, 1.0));
             Grid.Background = myBrush;
 
+            /*
+             * Background
+            */
             PathToClientTextBox.Background = Brushes.Black;
             ServerAddressTextBox.Background = Brushes.Black;
             ServerPasswordTextBox.Background = Brushes.Black;
+            SaveSettingsButton.Background = Brushes.Black;
 
+            /*
+             * Foreground
+            */
             PathToClientLabel.Foreground = new SolidColorBrush(Colors.White);
             PathToClientTextBox.Foreground = new SolidColorBrush(Colors.White);
             RunClientOnLaunchCheckBox.Foreground = new SolidColorBrush(Colors.White);
@@ -67,17 +66,32 @@ namespace NWNLogRotator
             ServerPasswordLabel.Foreground = new SolidColorBrush(Colors.White);
             ServerPasswordTextBox.Foreground = new SolidColorBrush(Colors.White);
             DMCheckBox.Foreground = new SolidColorBrush(Colors.White);
-            SaveSettingsButton.Background = Brushes.Black;
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.White);
         }
 
         public void ActivateLightTheme()
         {
+            /*
+             * Lavender -> White -> Light Gray
+            */
+            LinearGradientBrush myBrush = new LinearGradientBrush();
+            myBrush.GradientStops.Add(new GradientStop(Colors.Lavender, 0.0));
+            myBrush.GradientStops.Add(new GradientStop(Colors.White, 0.5));
+            myBrush.GradientStops.Add(new GradientStop(Colors.LightGray, 1.0));
+            Grid.Background = myBrush;
+
+            /*
+             * Background
+            */
             PathToClientLabel.Background = Brushes.White;
             PathToClientTextBox.Background = Brushes.White;
             ServerAddressTextBox.Background = Brushes.White;
             ServerPasswordTextBox.Background = Brushes.White;
+            SaveSettingsButton.Background = Brushes.White;
 
+            /*
+             * Foreground
+            */
             PathToClientLabel.Foreground = new SolidColorBrush(Colors.Black);
             PathToClientTextBox.Foreground = new SolidColorBrush(Colors.Black);
             RunClientOnLaunchCheckBox.Foreground = new SolidColorBrush(Colors.Black);
@@ -87,7 +101,6 @@ namespace NWNLogRotator
             ServerPasswordLabel.Foreground = new SolidColorBrush(Colors.Black);
             ServerPasswordTextBox.Foreground = new SolidColorBrush(Colors.Black);
             DMCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-            SaveSettingsButton.Background = Brushes.White;
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.Black);
         }
 
@@ -144,7 +157,7 @@ namespace NWNLogRotator
             string CustomEmoteThree = _settings.CustomEmoteThree;
             string CustomEmoteThreeColor = _settings.CustomEmoteThreeColor;
 
-            _settings = new Settings(         OutputDirectory,
+            _settings = new Settings(OutputDirectory,
                                               PathToLog,
                                               MinimumRowsToInteger,
                                               ServerName,
@@ -189,13 +202,33 @@ namespace NWNLogRotator
             return _settings;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        /*
+         * Functions
+        */
+        private void SetupApplication(Settings _settings)
+        {
+            if (_settings.UseTheme == "light")
+            {
+                ActivateLightTheme();
+            }
+            else if (_settings.UseTheme == "dark")
+            {
+                ActivateDarkTheme();
+            }
+
+            LoadSettings_Handler(_settings);
+        }
+
+        /*
+         * Button Callbacks
+        */
+        private void Button_Click_Save_Settings(object sender, RoutedEventArgs e)
         {
             _settings = CurrentSettings_Get();
             _closed = false;
             this.Close();
         }
-        private void Image_MouseDown3(object sender, MouseButtonEventArgs e)
+        private void PathToClient_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var fileDialog = new System.Windows.Forms.OpenFileDialog();
             fileDialog.InitialDirectory = _settings.PathToLog;

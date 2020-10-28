@@ -117,6 +117,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\FileHandler.cs" />
     <Compile Include="LauncherConfiguration.xaml.cs">
       <DependentUpon>LauncherConfiguration.xaml</DependentUpon>
     </Compile>
@@ -138,12 +139,6 @@
     <Compile Include="Classes\Notification.cs" />
     <Compile Include="Classes\LogParser.cs" />
     <Compile Include="Classes\Settings.cs" />
-    <Compile Include="Components\FileHandler.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Components\FileHandler.Designer.cs">
-      <DependentUpon>FileHandler.cs</DependentUpon>
-    </Compile>
     <Compile Include="NWNLogRotator.xaml.cs">
       <DependentUpon>NWNLogRotator.xaml</DependentUpon>
       <SubType>Code</SubType>

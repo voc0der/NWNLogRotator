@@ -1,28 +1,14 @@
-﻿using NWNLogRotator.Classes;
-using System;
-using System.ComponentModel;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
 
-namespace NWNLogRotator.Components
+namespace NWNLogRotator.Classes
 {
-    public partial class FileHandler : Component
+    class FileHandler
     {
         Settings _settings;
         int _expectedSettingsCount = 40;
-
-        public FileHandler()
-        {
-            InitializeComponent();
-        }
-
-        public FileHandler(IContainer container)
-        {
-            container.Add(this);
-
-            InitializeComponent();
-        }
 
         public string CurrentProgramDirectory_Get()
         {
@@ -464,7 +450,7 @@ namespace NWNLogRotator.Components
                                               CustomEmoteThree,
                                               CustomEmoteThreeColor
                                             );
-            if(Count == 0)
+            if (Count == 0)
             {
                 MessageBox.Show("Default Configuration Loaded:\n\nPlease ensure NWNLogRotator.ini is properly formatted, and has " + _expectedSettingsCount + " parameters present.\n\nIf it is deleted, NWNLogRotator will create a new one automatically with the default settings.",
                                 "Invalid Settings File!",
@@ -565,7 +551,7 @@ namespace NWNLogRotator.Components
                 }
                 return "";
             }
-            
+
             try
             {
                 File.WriteAllText(filepath + filename, result);
@@ -607,7 +593,7 @@ namespace NWNLogRotator.Components
                         {
                             File.WriteAllText(filepath + filename, result);
 
-                            if(_run_settings.SaveBackup == true)
+                            if (_run_settings.SaveBackup == true)
                             {
                                 string theFileToCopy = _run_settings.PathToLog;
                                 string theDestinationFile = filepath + backupfilename;

@@ -1,15 +1,18 @@
 ﻿/*  
-    *  AUTHOR: notsigma
-    *  DATE: 05/23/2020
-    *  LICENSE: MIT
+    *  Author:   © Notsigma
+    *  Project:  NWNLogRotator
+    *  GitHub:   https://github.com/notsigma/NWNLogRotator
+    *  Date:     10/27/2020
+    *  License:  MIT
+    *  Purpose:  This program is designed used alongside the Neverwinter Nights game, either Enhanced Edition, or 1.69.
+    *  This program does not come with a warranty. Any support may be found on the GitHub page.
 */
 
 using NWNLogRotator.Classes;
-using NWNLogRotator.Components;
 using System;
-using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,104 +43,13 @@ namespace NWNLogRotator
             SetupApplication();
         }
 
-        private void SetupApplication()
-        {
-            LoadSettings_Handler();
-            IterateNWN_Watcher(false);
-        }
-
+        /*
+         * Setters and Getters
+        */
         private Settings Settings_Get()
         {
             _settings = instance.InitSettingsIni();
             return _settings;
-        }
-
-        private SolidColorBrush Color_Get(string UseTheme, bool OnColor)
-        {
-            if(OnColor == true)
-            {
-                if (_settings.UseTheme == "light")
-                {
-                    return new SolidColorBrush(Colors.DarkGreen);
-                }
-                else if (_settings.UseTheme == "dark")
-                {
-                    return new SolidColorBrush(Colors.LawnGreen);
-                }
-            }
-            else
-            {
-                if (_settings.UseTheme == "light")
-                {
-                    return new SolidColorBrush(Colors.DarkRed);
-                }
-                else if (_settings.UseTheme == "dark")
-                {
-                    return new SolidColorBrush(Colors.Red);
-                }
-            }
-            
-            return new SolidColorBrush(Colors.Gray);
-        }
-
-        private async void IterateNWN_Watcher(bool PreviousStatus)
-        {
-            _settings = CurrentSettings_Get();
-            var OnColor = Color_Get(_settings.UseTheme, true);
-            var OffColor = Color_Get(_settings.UseTheme, false);
-            int IterateDelay = 5000;
-            ProcessName = _settings.ServerMode == true ? "nwserver" : "nwmain";
-            var Status = NWNProcessStatus_Get(ProcessName);
-
-            if (Status > 0)
-            {
-                NWNStatusTextBlock.Text = ProcessName + " is active!";
-                NWNStatusTextBlock.Foreground = OnColor;
-
-                if (Status == 1)
-                {
-                    await Task.Delay(IterateDelay);
-                    IterateNWN_Watcher(true);
-                }
-            }
-            else
-            {
-                NWNStatusTextBlock.Text = ProcessName + " not found!";
-                NWNStatusTextBlock.Foreground = OffColor;
-                if (PreviousStatus == true)
-                {
-                    if (NWNLog_Save(_settings, true) == true)
-                        UpdateResultsPane(1);
-                }
-                await Task.Delay(IterateDelay);
-                ClientLauncherState = 0;
-                IterateNWN_Watcher(false);
-            }
-        }
-
-        private int NWNProcessStatus_Get(string ProcessName)
-        {
-            if(ClientLauncherState == 1)
-            {
-                return 2;
-            } 
-            else if (ClientLauncherState == 2)
-            {
-                return 0;
-            }
-            else
-            {
-                Process[] processlist = Process.GetProcesses();
-
-                foreach (Process theProcess in processlist)
-                {
-                    if (theProcess.ProcessName.IndexOf(ProcessName) != -1)
-                    {
-                        return 1;
-                    }
-                }
-                return 0;
-            }      
         }
 
         private Settings CurrentSettings_Get()
@@ -187,7 +99,7 @@ namespace NWNLogRotator
             string CustomEmoteThree = _settings.CustomEmoteThree;
             string CustomEmoteThreeColor = _settings.CustomEmoteThreeColor;
 
-            _settings = new Settings(           OutputDirectory,
+            _settings = new Settings(OutputDirectory,
                                                 PathToLog,
                                                 MinimumRowsToInteger,
                                                 ServerName,
@@ -232,33 +144,100 @@ namespace NWNLogRotator
             return _settings;
         }
 
-        private void SaveToggle_Event()
+        private int NWNProcessStatus_Get(string ProcessName)
         {
-            if (StatusBarProgressBar.Visibility == Visibility.Collapsed)
+            if (ClientLauncherState == 1)
             {
-                StatusBarProgressBar.Visibility = Visibility.Visible;
-                UpdateResultsPane(4);
+                return 2;
+            }
+            else if (ClientLauncherState == 2)
+            {
+                return 0;
             }
             else
             {
-                StatusBarProgressBar.Visibility = Visibility.Collapsed;
-                UpdateResultsPane(-1);
+                Process[] processlist = Process.GetProcesses();
+
+                foreach (Process theProcess in processlist)
+                {
+                    if (theProcess.ProcessName.IndexOf(ProcessName) != -1)
+                    {
+                        return 1;
+                    }
+                }
+                return 0;
             }
         }
 
-        private void Tray_Set(bool doMinimize)
+        private SolidColorBrush Color_Get(string UseTheme, bool OnColor)
         {
-            if (_settings.Tray == true)
+            if (OnColor == true)
             {
-                if (doMinimize == true)
+                if (_settings.UseTheme == "light")
                 {
-                    WindowState = WindowState.Minimized;
-                    this.Hide();
+                    return new SolidColorBrush(Colors.DarkGreen);
+                }
+                else if (_settings.UseTheme == "dark")
+                {
+                    return new SolidColorBrush(Colors.LawnGreen);
                 }
             }
             else
             {
-                ni.Visible = false;
+                if (_settings.UseTheme == "light")
+                {
+                    return new SolidColorBrush(Colors.DarkRed);
+                }
+                else if (_settings.UseTheme == "dark")
+                {
+                    return new SolidColorBrush(Colors.Red);
+                }
+            }
+
+            return new SolidColorBrush(Colors.Gray);
+        }
+
+        /*
+         * Functions
+        */
+        private void SetupApplication()
+        {
+            LoadSettings_Handler();
+            IterateNWN_Watcher(false);
+        }
+
+        private async void IterateNWN_Watcher(bool PreviousStatus)
+        {
+            _settings = CurrentSettings_Get();
+            var OnColor = Color_Get(_settings.UseTheme, true);
+            var OffColor = Color_Get(_settings.UseTheme, false);
+            int IterateDelay = 5000;
+            ProcessName = _settings.ServerMode == true ? "nwserver" : "nwmain";
+            var Status = NWNProcessStatus_Get(ProcessName);
+
+            if (Status > 0)
+            {
+                NWNStatusTextBlock.Text = ProcessName + " is active!";
+                NWNStatusTextBlock.Foreground = OnColor;
+
+                if (Status == 1)
+                {
+                    await Task.Delay(IterateDelay);
+                    IterateNWN_Watcher(true);
+                }
+            }
+            else
+            {
+                NWNStatusTextBlock.Text = ProcessName + " not found!";
+                NWNStatusTextBlock.Foreground = OffColor;
+                if (PreviousStatus == true)
+                {
+                    if (NWNLog_Save(_settings, true) == true)
+                        UpdateResultsPane(1);
+                }
+                await Task.Delay(IterateDelay);
+                ClientLauncherState = 0;
+                IterateNWN_Watcher(false);
             }
         }
 
@@ -290,7 +269,7 @@ namespace NWNLogRotator
                     EventStatusTextBlock.Text = "Settings Loaded Successfully!";
                     EventStatusTextBlock.Foreground = OnColor;
                     await Task.Delay(2000);
-                    System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                    Assembly assembly = Assembly.GetExecutingAssembly();
                     FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
                     string version = fvi.FileVersion;
                     version = "v" + version.Substring(2, version.Length - 2);
@@ -324,7 +303,7 @@ namespace NWNLogRotator
                 FilterLinesCheckBox.IsChecked = true;
                 FilterLinesTextBox.Text = _settings.FilterLines;
             }
-            if(_settings.ServerMode == false)
+            if (_settings.ServerMode == false)
             {
                 ClientModeRadioButton.IsChecked = true;
             }
@@ -332,7 +311,7 @@ namespace NWNLogRotator
             {
                 ServerModeRadioButton.IsChecked = true;
             }
-            
+
             if (_settings.UseTheme == "light")
             {
                 ActivateLightTheme();
@@ -344,7 +323,7 @@ namespace NWNLogRotator
 
             UpdateResultsPane(3);
 
-            LoadTray_Handler();
+            LoadTray_Listener();
 
             if (_settings.RunClientOnLaunch)
                 LaunchClient();
@@ -352,32 +331,41 @@ namespace NWNLogRotator
 
         private void ActivateDarkTheme()
         {
-            // purple => black => purple 
+            /*
+             * Purple -> Black -> Purple
+            */
             LinearGradientBrush myBrush = new LinearGradientBrush();
             myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 0.0));
             myBrush.GradientStops.Add(new GradientStop(Colors.Black, 0.5));
             myBrush.GradientStops.Add(new GradientStop(Colors.Purple, 1.0));
             Grid.Background = myBrush;
 
+            /*
+             * Background
+            */
             RunOnceButton.Background = Brushes.Black;
-            RunOnceButton.Foreground = new SolidColorBrush(Colors.White);
-            TrayCheckBox.Foreground = new SolidColorBrush(Colors.White);
-            SilentCheckBox.Foreground = new SolidColorBrush(Colors.White);
             SaveSettingsButton.Background = Brushes.Black;
-            SaveSettingsButton.Foreground = new SolidColorBrush(Colors.White);
             LaunchClientButton.Background = Brushes.Black;
-            LaunchClientButton.Foreground = new SolidColorBrush(Colors.White);
             LauncherConfigurationButton.Background = Brushes.Black;
-            LauncherConfigurationButton.Foreground = new SolidColorBrush(Colors.White);
             ServerConfigurationButton.Background = Brushes.Black;
-            ServerConfigurationButton.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryTextBox.Background = Brushes.Black;
             PathToLogTextBox.Background = Brushes.Black;
             FilterLinesTextBox.Background = Brushes.Black;
             MainStatusBar.Background = Brushes.Black;
+
+
+            /*
+             * Foreground
+            */
+            SaveSettingsButton.Foreground = new SolidColorBrush(Colors.White);
+            LaunchClientButton.Foreground = new SolidColorBrush(Colors.White);
+            LauncherConfigurationButton.Foreground = new SolidColorBrush(Colors.White);
+            ServerConfigurationButton.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.White);
             PathToLogTextBox.Foreground = new SolidColorBrush(Colors.White);
-            SettingsTextBlock.Text = "Dark Mode";
+            RunOnceButton.Foreground = new SolidColorBrush(Colors.White);
+            TrayCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            SilentCheckBox.Foreground = new SolidColorBrush(Colors.White);
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.White);
             OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.White);
             PathToLogLabel.Foreground = new SolidColorBrush(Colors.White);
@@ -395,32 +383,49 @@ namespace NWNLogRotator
             PathHelperLabel.Foreground = new SolidColorBrush(Colors.White);
             OutputHelperLabel.Foreground = new SolidColorBrush(Colors.White);
 
+            /*
+             * Transformations
+            */
+            SettingsTextBlock.Text = "Dark Mode";
             _settings.UseTheme = "dark";
         }
 
         private void ActivateLightTheme()
         {
-            Grid.Background = Brushes.White;
+            /*
+             * Lavender -> White -> Light Gray
+            */
+            LinearGradientBrush myBrush = new LinearGradientBrush();
+            myBrush.GradientStops.Add(new GradientStop(Colors.Lavender, 0.0));
+            myBrush.GradientStops.Add(new GradientStop(Colors.White, 0.5));
+            myBrush.GradientStops.Add(new GradientStop(Colors.LightGray, 1.0));
+            Grid.Background = myBrush;
 
+            /*
+             * Background
+            */
             RunOnceButton.Background = Brushes.White;
-            RunOnceButton.Foreground = new SolidColorBrush(Colors.Black);
-            TrayCheckBox.Foreground = new SolidColorBrush(Colors.Black);
-            SilentCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             SaveSettingsButton.Background = Brushes.White;
             SaveSettingsButton.Foreground = new SolidColorBrush(Colors.Black);
             LaunchClientButton.Background = Brushes.White;
-            LaunchClientButton.Foreground = new SolidColorBrush(Colors.Black);
             ServerConfigurationButton.Background = Brushes.White;
-            ServerConfigurationButton.Foreground = new SolidColorBrush(Colors.Black);
             LauncherConfigurationButton.Background = Brushes.White;
-            LauncherConfigurationButton.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryTextBox.Background = Brushes.White;
             PathToLogTextBox.Background = Brushes.White;
             FilterLinesTextBox.Background = Brushes.White;
             MainStatusBar.Background = Brushes.White;
+
+            /*
+             * Foreground
+            */
+            RunOnceButton.Foreground = new SolidColorBrush(Colors.Black);
+            TrayCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            SilentCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            LaunchClientButton.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryTextBox.Foreground = new SolidColorBrush(Colors.Black);
             PathToLogTextBox.Foreground = new SolidColorBrush(Colors.Black);
-            SettingsTextBlock.Text = "Light Mode";
+            ServerConfigurationButton.Foreground = new SolidColorBrush(Colors.Black);
+            LauncherConfigurationButton.Foreground = new SolidColorBrush(Colors.Black);
             SettingsTextBlock.Foreground = new SolidColorBrush(Colors.Black);
             OutputDirectoryLabel.Foreground = new SolidColorBrush(Colors.Black);
             PathToLogLabel.Foreground = new SolidColorBrush(Colors.Black);
@@ -438,6 +443,10 @@ namespace NWNLogRotator
             PathHelperLabel.Foreground = new SolidColorBrush(Colors.Black);
             OutputHelperLabel.Foreground = new SolidColorBrush(Colors.Black);
 
+            /*
+             * Transformations
+            */
+            SettingsTextBlock.Text = "Light Mode";
             _settings.UseTheme = "light";
         }
 
@@ -463,7 +472,7 @@ namespace NWNLogRotator
                             MessageBoxImage.Question);
 
                     if (_messageBoxResult == MessageBoxResult.Yes)
-                        System.Diagnostics.Process.Start(_filepathandname);
+                        Process.Start(_filepathandname);
 
                     return true;
                 }
@@ -476,7 +485,7 @@ namespace NWNLogRotator
             {
                 if (_automatic && _settings.CloseOnLogGenerated == true) Process.GetCurrentProcess().Kill();
             }
-                
+
             return false;
         }
 
@@ -513,7 +522,7 @@ namespace NWNLogRotator
                     theLaunchParameters = " -gameidlaunch 704450" + theLaunchParameters;
                 }
             }
-            if(theLaunchPath != "" && File.Exists(_settings.PathToClient))
+            if (theLaunchPath != "" && File.Exists(_settings.PathToClient))
             {
                 try
                 {
@@ -534,7 +543,7 @@ namespace NWNLogRotator
                         p.Start();
                         p.WaitForExit();
                     });
-                    if( Path.GetFileName(_settings.PathToClient) == ProcessName + ".exe")
+                    if (Path.GetFileName(_settings.PathToClient) == ProcessName + ".exe")
                     {
                         ClientLauncherState = 2;
                         IterateNWN_Watcher(true);
@@ -547,7 +556,7 @@ namespace NWNLogRotator
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
                 }
-            } 
+            }
             else
             {
                 MessageBoxResult _messageBoxResult = MessageBox.Show("Please configure the launch options, and verify the client path is correct prior to launching!",
@@ -557,18 +566,42 @@ namespace NWNLogRotator
             }
         }
 
-        private void LoadTray_Handler()
+        private void SaveToggle_Event()
         {
-            ni.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
-            ni.Visible = true;
-            ni.DoubleClick +=
-                delegate (object sender, EventArgs args)
-                {
-                    this.Show();
-                    this.WindowState = WindowState.Normal;
-                };
+            if (StatusBarProgressBar.Visibility == Visibility.Collapsed)
+            {
+                StatusBarProgressBar.Visibility = Visibility.Visible;
+                UpdateResultsPane(4);
+            }
+            else
+            {
+                StatusBarProgressBar.Visibility = Visibility.Collapsed;
+                UpdateResultsPane(-1);
+            }
+        }
 
-            Tray_Set(true);
+        private void Tray_Set(bool doMinimize)
+        {
+            if (_settings.Tray == true)
+            {
+                if (doMinimize == true)
+                {
+                    WindowState = WindowState.Minimized;
+                    this.Hide();
+                }
+            }
+            else
+            {
+                ni.Visible = false;
+            }
+        }
+
+        private void SaveSettings(Settings _settings)
+        {
+            FileHandler instance = new FileHandler();
+            instance.SaveSettingsIni(_settings);
+
+            UpdateResultsPane(2);
         }
 
         private void InvertColorScheme(object sender, MouseButtonEventArgs e)
@@ -583,34 +616,37 @@ namespace NWNLogRotator
             }
         }
 
-        private void SaveSettings(Settings _settings)
+        private void LoadTray_Listener()
         {
-            FileHandler instance = new FileHandler();
-            instance.SaveSettingsIni(_settings);
+            ni.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+            ni.Visible = true;
+            ni.DoubleClick +=
+                delegate (object sender, EventArgs args)
+                {
+                    this.Show();
+                    this.WindowState = WindowState.Normal;
+                };
 
-            UpdateResultsPane(2);
+            Tray_Set(true);
         }
 
+        /*
+         * Event Handlers
+        */
         private void SettingsTextBlock_MouseEnter(object sender, MouseEventArgs e)
         {
-            Mouse.OverrideCursor = System.Windows.Input.Cursors.Hand;
+            Mouse.OverrideCursor = Cursors.Hand;
         }
 
         private void SettingsTextBlock_MouseLeave(object sender, MouseEventArgs e)
         {
-            Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
 
         private void MinimumRowsCountSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (MinimumRowsCountTextBlock != null)
                 MinimumRowsCountTextBlock.Text = e.NewValue.ToString();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            _settings = CurrentSettings_Get();
-            SaveSettings(_settings);
         }
 
         private void FilterLinesCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -624,34 +660,6 @@ namespace NWNLogRotator
             FilterLinesTextBox.Visibility = Visibility.Collapsed;
         }
 
-        private async void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            _settings = CurrentSettings_Get();
-            bool SavedLogResult = false;
-            SaveToggle_Event();
-
-            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-            await Task.Run(() =>
-            {
-                SavedLogResult = NWNLog_Save(_settings, false);
-            });
-       
-            SaveToggle_Event();
-            SavedResult_Callback(SavedLogResult);
-        }
-
-        private void SavedResult_Callback(bool result)
-        {
-            Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
-            if (result == true)
-                UpdateResultsPane(1);
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            _settings.Tray = _settings.Tray ? false : true;
-            Tray_Set(false);
-        }
         protected override void OnStateChanged(EventArgs e)
         {
             if (WindowState == System.Windows.WindowState.Minimized)
@@ -659,32 +667,35 @@ namespace NWNLogRotator
                 this.Hide();
                 ni.Visible = true;
             }
-                
+
             if (WindowState == System.Windows.WindowState.Normal)
             {
                 ni.Visible = false;
             }
-                
+
 
             base.OnStateChanged(e);
         }
+
         private void WindowClosed_Event(object sender, CancelEventArgs e)
         {
             ni.Visible = false;
         }
 
-        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        /*
+         * Callbacks
+        */
+        private void SavedResult_Callback(bool result)
         {
-            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                dialog.SelectedPath = _settings.OutputDirectory;
-                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
-                    OutputDirectoryTextBox.Text = dialog.SelectedPath;
-            }
+            Mouse.OverrideCursor = Cursors.Arrow;
+            if (result == true)
+                UpdateResultsPane(1);
         }
 
-        private void Image_MouseDown2(object sender, MouseButtonEventArgs e)
+        /*
+         * Button Callbacks
+        */
+        private void PathToLog_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var fileDialog = new System.Windows.Forms.OpenFileDialog();
             fileDialog.InitialDirectory = _settings.PathToLog;
@@ -706,12 +717,24 @@ namespace NWNLogRotator
             }
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void OutputDirectory_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            LaunchClient();
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                dialog.SelectedPath = _settings.OutputDirectory;
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                    OutputDirectoryTextBox.Text = dialog.SelectedPath;
+            }
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
+        private void Button_Click_Save_Settings(object sender, RoutedEventArgs e)
+        {
+            _settings = CurrentSettings_Get();
+            SaveSettings(_settings);
+        }
+
+        private void Button_Click_Export_Settings(object sender, RoutedEventArgs e)
         {
             _settings = CurrentSettings_Get();
             ExportConfiguration ExportConfigurationPopUp = new ExportConfiguration(_settings);
@@ -727,7 +750,7 @@ namespace NWNLogRotator
             }
             Grid.Effect = null;
         }
-        private void Button_Click_5(object sender, RoutedEventArgs e)
+        private void Button_Click_Launcher_Settings(object sender, RoutedEventArgs e)
         {
             _settings = CurrentSettings_Get();
             LauncherConfiguration LauncherConfigurationPopUp = new LauncherConfiguration(_settings);
@@ -736,12 +759,33 @@ namespace NWNLogRotator
             LauncherConfigurationPopUp.ShowDialog();
             Settings __settings = LauncherConfigurationPopUp.Settings_Get();
             bool __closed = LauncherConfigurationPopUp.Closed_Get();
-            if( _settings != __settings && !__closed )
+            if (_settings != __settings && !__closed)
             {
                 _settings = __settings;
                 SaveSettings(_settings);
             }
             Grid.Effect = null;
+        }
+
+        private void Button_Click_Launch_Client(object sender, RoutedEventArgs e)
+        {
+            LaunchClient();
+        }
+
+        private async void Button_Click_Run_Once(object sender, RoutedEventArgs e)
+        {
+            _settings = CurrentSettings_Get();
+            bool SavedLogResult = false;
+            SaveToggle_Event();
+
+            Mouse.OverrideCursor = Cursors.Wait;
+            await Task.Run(() =>
+            {
+                SavedLogResult = NWNLog_Save(_settings, false);
+            });
+
+            SaveToggle_Event();
+            SavedResult_Callback(SavedLogResult);
         }
     }
 }

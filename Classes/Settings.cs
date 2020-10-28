@@ -89,7 +89,7 @@
             this.CustomEmoteTwoColor = "87CEEB";
             this.CustomEmoteThree = "";
             this.CustomEmoteThreeColor = "FFD8B1";
-    }
+        }
 
         // binding
         public Settings(string OutputDirectory,
