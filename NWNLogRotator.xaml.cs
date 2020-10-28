@@ -25,7 +25,7 @@ namespace NWNLogRotator
 {
     public partial class MainWindow : Window
     {
-        FileHandler instance = new FileHandler();
+        FileHandler FileHandlerInstance = new FileHandler();
         Settings _settings;
         System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
         Notification notification = new Notification();
@@ -48,7 +48,7 @@ namespace NWNLogRotator
         */
         private Settings Settings_Get()
         {
-            _settings = instance.InitSettingsIni();
+            _settings = FileHandlerInstance.InitSettingsIni();
             return _settings;
         }
 
@@ -452,8 +452,7 @@ namespace NWNLogRotator
 
         private bool NWNLog_Save(Settings _settings, bool _automatic)
         {
-            FileHandler instance = new FileHandler();
-            string _filepathandname = instance.ReadNWNLogAndInvokeParser(_settings);
+            string _filepathandname = FileHandlerInstance.ReadNWNLogAndInvokeParser(_settings);
 
             if (_filepathandname != "")
             {
@@ -598,8 +597,7 @@ namespace NWNLogRotator
 
         private void SaveSettings(Settings _settings)
         {
-            FileHandler instance = new FileHandler();
-            instance.SaveSettingsIni(_settings);
+            FileHandlerInstance.SaveSettingsIni(_settings);
 
             UpdateResultsPane(2);
         }

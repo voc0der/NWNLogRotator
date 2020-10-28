@@ -9,6 +9,7 @@ namespace NWNLogRotator.Classes
     {
         Settings _settings;
         int _expectedSettingsCount = 40;
+        LogParser LogParserInstance = new LogParser();
 
         public string CurrentProgramDirectory_Get()
         {
@@ -534,12 +535,11 @@ namespace NWNLogRotator.Classes
                 return "";
             }
 
-            LogParser instance = new LogParser();
-            result = instance.ParseLog(fs, _run_settings);
+            result = LogParserInstance.ParseLog(fs, _run_settings);
             fs.Close();
 
             // maintain minimum row lines requirement
-            hasenoughlines = instance.LineCount_Get(result, _run_settings.MinimumRowsCount);
+            hasenoughlines = LogParserInstance.LineCount_Get(result, _run_settings.MinimumRowsCount);
             if (hasenoughlines == false)
             {
                 if (_run_settings.Silent == false)
