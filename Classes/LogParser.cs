@@ -147,45 +147,47 @@ namespace NWNLogRotator.Classes
                                        "}";
             }
 
-            string HTMLHeader = "<head>" +
-                "<style>" +
-                    OptionalCSSMediaTag +
-                    ".log-body { " +
-                        "background-color: #" + _run_settings.BackgroundColor + ";" +
-                        "font-family: " + _run_settings.FontName + ";" +
-                        "font-size: " + _run_settings.FontSize + ";" +
-                        "color: #" + _run_settings.DefaultColor + ";" +
-                    "}" +
-                    ".log-header { color: " + ServerNameColor + " }" +
-                    ".default { color: #" + _run_settings.DefaultColor + "; }" +
-                    ".timestamp { color: #" + _run_settings.TimestampColor + "; }" +
-                    ".me { color: #" + _run_settings.MyColor + "; }" +
-                    ".actors { color: #" + _run_settings.ActorColor + "; }" +
-                    ".shouts { color: #" + _run_settings.ShoutColor + "; }" +
-                    ".tells { color: #" + _run_settings.TellColor + "; }" +
-                    ".whispers { color: #" + _run_settings.WhisperColor + "; }" +
-                    ".party { color: #" + _run_settings.PartyColor + "; }" +
-                    ".emotes { color: #" + _run_settings.EmoteColor + "; }" +
-                    ".custom-emotes-one { color: #" + _run_settings.CustomEmoteOneColor + "; }" +
-                    ".custom-emotes-two { color: #" + _run_settings.CustomEmoteTwoColor + "; }" +
-                    ".custom-emotes-three { color: #" + _run_settings.CustomEmoteThreeColor + "; }" +
-                    ".ooc { color: #" + _run_settings.OOCColor + "; }" +
-                "</style>" +
-            "</head>";
+            string HTMLHeader = "<html>" +
+                "<head>" +
+                    "<style>" +
+                        OptionalCSSMediaTag +
+                        ".log-body { " +
+                            "background-color: #" + _run_settings.BackgroundColor + ";" +
+                            "font-family: " + _run_settings.FontName + ";" +
+                            "font-size: " + _run_settings.FontSize + ";" +
+                            "color: #" + _run_settings.DefaultColor + ";" +
+                        "}" +
+                        ".log-header { color: " + ServerNameColor + " }" +
+                        ".default { color: #" + _run_settings.DefaultColor + "; }" +
+                        ".timestamp { color: #" + _run_settings.TimestampColor + "; }" +
+                        ".me { color: #" + _run_settings.MyColor + "; }" +
+                        ".actors { color: #" + _run_settings.ActorColor + "; }" +
+                        ".shouts { color: #" + _run_settings.ShoutColor + "; }" +
+                        ".tells { color: #" + _run_settings.TellColor + "; }" +
+                        ".whispers { color: #" + _run_settings.WhisperColor + "; }" +
+                        ".party { color: #" + _run_settings.PartyColor + "; }" +
+                        ".emotes { color: #" + _run_settings.EmoteColor + "; }" +
+                        ".custom-emotes-one { color: #" + _run_settings.CustomEmoteOneColor + "; }" +
+                        ".custom-emotes-two { color: #" + _run_settings.CustomEmoteTwoColor + "; }" +
+                        ".custom-emotes-three { color: #" + _run_settings.CustomEmoteThreeColor + "; }" +
+                        ".ooc { color: #" + _run_settings.OOCColor + "; }" +
+                    "</style>" +
+                "</head>";
 
-            string logTitle;
+            string HTMLLogHeader;
             if (_run_settings.ServerName != "")
             {
-                logTitle = @"<h4>[<span class=""log-header"">" + _run_settings.ServerName + " Log</span>] ";
+                HTMLLogHeader = @"<h4>[<span class=""log-header"">" + _run_settings.ServerName + " Log</span>] ";
             }
             else
             {
-                logTitle = @"<h4>[<span class=""log-header"">Log</span>] ";
+                HTMLLogHeader = @"<h4>[<span class=""log-header"">Log</span>] ";
             }
-            logTitle += @"<span class=""actors"">Date/Time</span>: " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
-            logTitle += "</h4>";
-            string postLog = "</span></body></html>";
-            return "<html>" + HTMLHeader + logTitle + ParsedNWNLog + @"<body class=""log-body""><span class=""default"">" + postLog;
+            HTMLLogHeader += @"<span class=""actors"">Date/Time</span>: " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
+            HTMLLogHeader += "</h4>";
+            HTMLLogHeader += @"<body class=""log-body""><span class=""default"">";
+            string HTMLPostLogFooter = "</span></body></html>";
+            return HTMLHeader + HTMLLogHeader + ParsedNWNLog + HTMLPostLogFooter;
         }
 
         private List<Tuple<Regex, string>> formatReplacesWithUserOverride(Settings _run_settings)
