@@ -149,7 +149,8 @@ namespace NWNLogRotator.Classes
 
             string HTMLHeader = "<html>" +
                 "<head>" +
-                    "<style>" +
+                     @"<meta charset=""utf-8"">" +
+                     "<style>" +
                         OptionalCSSMediaTag +
                         ".log-body { " +
                             "background-color: #" + _run_settings.BackgroundColor + ";" +
