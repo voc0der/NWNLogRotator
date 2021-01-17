@@ -17,7 +17,7 @@
         <Label x:Name="ServerPasswordLabel" Content="Server Password (optional):" HorizontalAlignment="Left" Margin="11,59,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
         <TextBox x:Name="ServerPasswordTextBox" HorizontalAlignment="Left" Height="17" Margin="169,64,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="206" RenderTransformOrigin="0.965,0.275"/>
         <CheckBox x:Name="DMCheckBox" Content="Use DM Client" HorizontalAlignment="Right" Margin="0,133,286,0" VerticalAlignment="Top" RenderTransformOrigin="0.004,0.604" Width="102"/>
-        <Button x:Name="SaveSettingsButton" Content="Save Settings" HorizontalAlignment="Left" Margin="312,173,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click_Save_Settings" RenderTransformOrigin="0.697,1.884"/>
+        <Button x:Name="SaveSettingsButton" Content="💾 Save Settings" HorizontalAlignment="Left" Margin="312,173,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click_Save_Settings" RenderTransformOrigin="0.697,1.884"/>
 
     </Grid>
 </Window>

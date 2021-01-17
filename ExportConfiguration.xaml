@@ -23,7 +23,7 @@
         <Label x:Name="HintLabelCSSOne" Content="(css)" HorizontalAlignment="Left" Margin="366,94,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Width="33" FontSize="10" FontStyle="Italic"/>
         <Label x:Name="HintLabelCSSTwo" Content="(css)" HorizontalAlignment="Left" Margin="366,124,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Width="33" FontSize="10" FontStyle="Italic"/>
         <xctk:ColorPicker x:Name="BackgroundColorTextBox" Margin="142,278,240,201" DisplayColorAndName="True" AvailableColorsSortingMode="HueSaturationBrightness" UsingAlphaChannel="False" RenderTransformOrigin="0.949,0.78"  />
-        <Button x:Name="SaveSettingsButton" Content="Save Settings" Margin="301,451,0,0" VerticalAlignment="Top" Click="Button_Click_Save_Settings" RenderTransformOrigin="0.216,1.118" HorizontalAlignment="Left" Width="98"/>
+        <Button x:Name="SaveSettingsButton" Content="💾 Save Settings" Margin="301,451,0,0" VerticalAlignment="Top" Click="Button_Click_Save_Settings" RenderTransformOrigin="0.216,1.118" HorizontalAlignment="Left" Width="98"/>
         <Label x:Name="ActorColorTextBoxLabel" Content="Actor Color:" HorizontalAlignment="Left" Margin="66,153,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
         <Label x:Name="PartyColorTextBoxLabel" Content="Party Color:" HorizontalAlignment="Left" Margin="68,182,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
         <Label x:Name="EmoteColorTextBoxLabel" Content="Emote Color:" HorizontalAlignment="Left" Margin="63,213,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
@@ -33,7 +33,7 @@
         <Label x:Name="WhisperColorTextBoxLabel" Content="Whisper Color:" HorizontalAlignment="Left" Margin="225,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
         <Label x:Name="DefaultColorTextBoxLabel" Content="Default Color:" HorizontalAlignment="Left" Margin="230,244,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
         <Label x:Name="BackgroundColorTextBoxLabel" Content="Background Color:" HorizontalAlignment="Left" Margin="34,276,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
-        <Button x:Name="ResetSettingsButton" Content="Reset" Margin="226,451,0,0" VerticalAlignment="Top" Click="Button_Click_Reset" RenderTransformOrigin="0.216,1.118" HorizontalAlignment="Left" Width="65"/>
+        <Button x:Name="ResetSettingsButton" Content="⟳ Reset" Margin="226,451,0,0" VerticalAlignment="Top" Click="Button_Click_Reset" RenderTransformOrigin="0.216,1.118" HorizontalAlignment="Left" Width="65"/>
         <Label x:Name="MyColorTextBoxLabel" Content="My Color:" HorizontalAlignment="Left" Margin="251,275,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721"/>
         <xctk:ColorPicker x:Name="MyColorTextBox" Margin="314,277,68,201" DisplayColorAndName="True" AvailableColorsSortingMode="HueSaturationBrightness" UsingAlphaChannel="False" RenderTransformOrigin="0.574,1.091"  />
         <xctk:ColorPicker x:Name="DefaultColorTextBox" Margin="314,246,68,233" DisplayColorAndName="True" AvailableColorsSortingMode="HueSaturationBrightness" UsingAlphaChannel="False" RenderTransformOrigin="0.507,0.619"  />

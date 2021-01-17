@@ -375,6 +375,8 @@ namespace NWNLogRotator
             MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.White);
             MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.White);
             SaveBackupCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            SaveBackupOnlyCheckBox.Foreground = new SolidColorBrush(Colors.White);
+            SaveOnLaunchCheckBox.Foreground = new SolidColorBrush(Colors.White);
             NotificationsCheckBox.Foreground = new SolidColorBrush(Colors.White);
             FilterLinesCheckBox.Foreground = new SolidColorBrush(Colors.White);
             ClientModeRadioButton.Foreground = new SolidColorBrush(Colors.White);
@@ -435,6 +437,8 @@ namespace NWNLogRotator
             MinimumRowsLabel.Foreground = new SolidColorBrush(Colors.Black);
             MinimumRowsCountTextBlock.Foreground = new SolidColorBrush(Colors.Black);
             SaveBackupCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            SaveBackupOnlyCheckBox.Foreground = new SolidColorBrush(Colors.Black);
+            SaveOnLaunchCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             NotificationsCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             FilterLinesCheckBox.Foreground = new SolidColorBrush(Colors.Black);
             ClientModeRadioButton.Foreground = new SolidColorBrush(Colors.Black);
