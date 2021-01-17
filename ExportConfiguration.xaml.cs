@@ -42,6 +42,8 @@ namespace NWNLogRotator
             bool Silent = _settings.Silent;
             bool Tray = _settings.Tray;
             bool SaveBackup = _settings.SaveBackup;
+            bool SaveBackupOnly = _settings.SaveBackupOnly;
+            bool SaveOnLaunch = _settings.SaveOnLaunch;
             bool Notifications = _settings.Notifications;
             string OOCColor = new ColorConverter().ConvertToString(OOCColorTextBox.SelectedColor).Substring(3);
             string FilterLines = _settings.FilterLines;
@@ -83,6 +85,8 @@ namespace NWNLogRotator
                                         Silent,
                                         Tray,
                                         SaveBackup,
+                                        SaveBackupOnly,
+                                        SaveOnLaunch,
                                         Notifications,
                                         OOCColor,
                                         FilterLines,

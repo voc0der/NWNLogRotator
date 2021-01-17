@@ -13,6 +13,8 @@
         public bool Silent;
         public bool Tray;
         public bool SaveBackup;
+        public bool SaveBackupOnly;
+        public bool SaveOnLaunch;
         public bool Notifications;
         public string OOCColor;
         public string FilterLines;
@@ -60,6 +62,8 @@
             this.Silent = false;
             this.Tray = false;
             this.SaveBackup = false;
+            this.SaveBackupOnly = false;
+            this.SaveOnLaunch = false;
             this.Notifications = false;
             this.OOCColor = "D70A53";
             this.FilterLines = "";
@@ -103,6 +107,8 @@
                         bool Silent,
                         bool Tray,
                         bool SaveBackup,
+                        bool SaveBackupOnly,
+                        bool SaveOnLaunch,
                         bool Notifications,
                         string OOCColor,
                         string FilterLines,
@@ -144,6 +150,8 @@
             this.Silent = Silent;
             this.Tray = Tray;
             this.SaveBackup = SaveBackup;
+            this.SaveBackupOnly = SaveBackupOnly;
+            this.SaveOnLaunch = SaveOnLaunch;
             this.Notifications = Notifications;
             this.OOCColor = OOCColor;
             this.FilterLines = FilterLines;

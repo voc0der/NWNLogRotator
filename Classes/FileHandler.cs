@@ -8,7 +8,7 @@ namespace NWNLogRotator.Classes
     class FileHandler
     {
         Settings _settings;
-        int _expectedSettingsCount = 40;
+        int _expectedSettingsCount = 42;
         LogParser LogParserInstance = new LogParser();
 
         public string CurrentProgramDirectory_Get()
@@ -41,6 +41,8 @@ namespace NWNLogRotator.Classes
                                         "Silent=" + _settings.Silent + "\n" +
                                         "Tray=" + _settings.Tray + "\n" +
                                         "SaveBackup=" + _settings.SaveBackup + "\n" +
+                                        "SaveBackupOnly=" + _settings.SaveBackupOnly + "\n" +
+                                        "SaveOnLaunch=" + _settings.SaveOnLaunch + "\n" +
                                         "Notifications=" + _settings.Notifications + "\n" +
                                         "OOCColor=" + _settings.OOCColor + "\n" +
                                         "FilterLines=" + _settings.FilterLines + "\n" +
@@ -111,6 +113,8 @@ namespace NWNLogRotator.Classes
             bool Silent = false;
             bool Tray = false;
             bool SaveBackup = false;
+            bool SaveBackupOnly = false;
+            bool SaveOnLaunch = false;
             bool Notifications = false;
             string OOCColor = "D70A53";
             string FilterLines = "";
@@ -211,6 +215,18 @@ namespace NWNLogRotator.Classes
                 if (line.IndexOf("SaveBackup=") != -1)
                 {
                     SaveBackup = bool.Parse(ParameterValue);
+                    Count += 1;
+                    continue;
+                }
+                if (line.IndexOf("SaveBackupOnly=") != -1)
+                {
+                    SaveBackupOnly = bool.Parse(ParameterValue);
+                    Count += 1;
+                    continue;
+                }
+                if (line.IndexOf("SaveOnLaunch=") != -1)
+                {
+                    SaveOnLaunch = bool.Parse(ParameterValue);
                     Count += 1;
                     continue;
                 }
@@ -421,6 +437,8 @@ namespace NWNLogRotator.Classes
                                               Silent,
                                               Tray,
                                               SaveBackup,
+                                              SaveBackupOnly,
+                                              SaveOnLaunch,
                                               Notifications,
                                               OOCColor,
                                               FilterLines,
@@ -554,7 +572,8 @@ namespace NWNLogRotator.Classes
 
             try
             {
-                File.WriteAllText(filepath + filename, result);
+                if (_run_settings.SaveBackupOnly == false)
+                    File.WriteAllText(filepath + filename, result);
 
                 if (_run_settings.SaveBackup == true)
                 {

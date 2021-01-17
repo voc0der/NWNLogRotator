@@ -65,6 +65,8 @@ namespace NWNLogRotator
             bool Silent = SilentCheckBox.IsChecked.GetValueOrDefault();
             bool Tray = TrayCheckBox.IsChecked.GetValueOrDefault();
             bool SaveBackup = SaveBackupCheckBox.IsChecked.GetValueOrDefault();
+            bool SaveBackupOnly = SaveBackupOnlyCheckBox.IsChecked.GetValueOrDefault();
+            bool SaveOnLaunch = SaveOnLaunchCheckBox.IsChecked.GetValueOrDefault();
             bool Notifications = NotificationsCheckBox.IsChecked.GetValueOrDefault();
             string OOCColor = _settings.OOCColor;
             string FilterLines = "";
@@ -110,6 +112,8 @@ namespace NWNLogRotator
                                                 Silent,
                                                 Tray,
                                                 SaveBackup,
+                                                SaveBackupOnly,
+                                                SaveOnLaunch,
                                                 Notifications,
                                                 OOCColor,
                                                 FilterLines,
@@ -232,8 +236,16 @@ namespace NWNLogRotator
                 NWNStatusTextBlock.Foreground = OffColor;
                 if (PreviousStatus == true)
                 {
-                    if (NWNLog_Save(_settings, true) == true)
-                        UpdateResultsPane(1);
+                    if(_settings.SaveOnLaunch == false)
+                    {
+                        if (NWNLog_Save(_settings, true) == true)
+                            UpdateResultsPane(1);
+                    }
+                    else
+                    {
+                        Process.GetCurrentProcess().Kill();
+                    }
+                        
                 }
                 await Task.Delay(IterateDelay);
                 ClientLauncherState = 0;
@@ -297,6 +309,14 @@ namespace NWNLogRotator
             SilentCheckBox.IsChecked = _settings.Silent;
             TrayCheckBox.IsChecked = _settings.Tray;
             SaveBackupCheckBox.IsChecked = _settings.SaveBackup;
+
+            if(_settings.SaveBackupOnly == true)
+            {
+                SaveBackupCheckBox.IsChecked = true;
+            }
+                    
+            SaveBackupOnlyCheckBox.IsChecked = _settings.SaveBackupOnly;
+            SaveOnLaunchCheckBox.IsChecked = _settings.SaveOnLaunch;
             NotificationsCheckBox.IsChecked = _settings.Notifications;
             if (_settings.FilterLines != "")
             {
@@ -465,7 +485,8 @@ namespace NWNLogRotator
                     notification.ShowNotification("Log file generated successfully!");
                 }
 
-                if (_automatic && _settings.CloseOnLogGenerated == true) Process.GetCurrentProcess().Kill();
+                if (_settings.SaveOnLaunch == false)
+                    if (_automatic && _settings.CloseOnLogGenerated == true) Process.GetCurrentProcess().Kill();
 
                 if (_settings.Silent == false)
                 {
@@ -486,7 +507,8 @@ namespace NWNLogRotator
             }
             else
             {
-                if (_automatic && _settings.CloseOnLogGenerated == true) Process.GetCurrentProcess().Kill();
+                if(_settings.SaveOnLaunch == false)
+                    if (_automatic && _settings.CloseOnLogGenerated == true) Process.GetCurrentProcess().Kill();
             }
 
             return false;
@@ -495,6 +517,11 @@ namespace NWNLogRotator
         private async void LaunchClient()
         {
             _settings = CurrentSettings_Get();
+
+            if(_settings.SaveOnLaunch == true)
+                if (NWNLog_Save(_settings, true) == true)
+                    UpdateResultsPane(1);
+
             var theLaunchPath = "";
             try
             {
@@ -649,6 +676,11 @@ namespace NWNLogRotator
         {
             if (MinimumRowsCountTextBlock != null)
                 MinimumRowsCountTextBlock.Text = e.NewValue.ToString();
+        }
+
+        private void SaveBackupOnlyCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveBackupCheckBox.IsChecked = true;
         }
 
         private void FilterLinesCheckBox_Checked(object sender, RoutedEventArgs e)

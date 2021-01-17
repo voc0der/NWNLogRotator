@@ -54,7 +54,7 @@
     <Button x:Name="LaunchClientButton" Content="🗔 Launch Client" Grid.Column="2" HorizontalAlignment="Left" Margin="149.6,140.4,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867" Click="Button_Click_Launch_Client" Grid.Row="1"/>
     <Button x:Name="ServerConfigurationButton" Content="🔆 Export Settings" HorizontalAlignment="Left" Margin="39.6,100.4,0,0" VerticalAlignment="Top" Width="148" Click="Button_Click_Export_Settings" Grid.Column="2" Grid.Row="1"/>
     <Button x:Name="LauncherConfigurationButton" Content="🔧 Launcher Settings" Grid.Column="2" HorizontalAlignment="Left" Margin="218.6,100.4,0,0" VerticalAlignment="Top" Width="149" Click="Button_Click_Launcher_Settings" Grid.Row="1"/>
-    <CheckBox x:Name="SaveBackupOnlyCheckBox" Content="Save Backup Only" Grid.Column="2" HorizontalAlignment="Right" Margin="0,158,162.4,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109" Height="15"/>
+        <CheckBox x:Name="SaveBackupOnlyCheckBox" Content="Save Backup Only" Grid.Column="2" HorizontalAlignment="Right" Margin="0,158,162.4,0" VerticalAlignment="Top" Checked="SaveBackupOnlyCheckBox_Checked" RenderTransformOrigin="0.618,0.109" Height="15"/>
     <CheckBox x:Name="SaveOnLaunchCheckBox" Content="Save on Launch" Grid.Column="2" HorizontalAlignment="Right" Margin="0,158,31.4,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109" Height="15"/>
     <Label Content="⚙ General Settings" HorizontalAlignment="Left" Margin="150.6,-5,0,0" VerticalAlignment="Top" Grid.Column="2" FontSize="11"/>
   </Grid>

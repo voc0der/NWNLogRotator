@@ -56,16 +56,6 @@
   <PropertyGroup>
     <ApplicationIcon>Assets\Images\ravenmyst.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>9D99BF4E8D8164E9B7419B0204B306DEB92F4EE0</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>
-    </ManifestKeyFile>
-  </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
