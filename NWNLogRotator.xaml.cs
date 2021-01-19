@@ -243,7 +243,8 @@ namespace NWNLogRotator
                     }
                     else
                     {
-                        Process.GetCurrentProcess().Kill();
+                        if(_settings.CloseOnLogGenerated == true )
+                            Process.GetCurrentProcess().Kill();
                     }
                         
                 }
