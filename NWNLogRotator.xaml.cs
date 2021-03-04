@@ -1,8 +1,8 @@
 ﻿/*  
-    *  Author:   © Notsigma
+    *  Author:   © noblesigma
     *  Project:  NWNLogRotator
-    *  GitHub:   https://github.com/notsigma/NWNLogRotator
-    *  Date:     10/27/2020
+    *  GitHub:   https://github.com/noblesigma/NWNLogRotator
+    *  Date:     3/3/2021
     *  License:  MIT
     *  Purpose:  This program is designed used alongside the Neverwinter Nights game, either Enhanced Edition, or 1.69.
     *  This program does not come with a warranty. Any support may be found on the GitHub page.
@@ -405,6 +405,7 @@ namespace NWNLogRotator
             HintLabel.Foreground = new SolidColorBrush(Colors.White);
             PathHelperLabel.Foreground = new SolidColorBrush(Colors.White);
             OutputHelperLabel.Foreground = new SolidColorBrush(Colors.White);
+            GeneralSettingsLabel.Foreground = new SolidColorBrush(Colors.White);
 
             /*
              * Transformations
@@ -467,6 +468,7 @@ namespace NWNLogRotator
             HintLabel.Foreground = new SolidColorBrush(Colors.Black);
             PathHelperLabel.Foreground = new SolidColorBrush(Colors.Black);
             OutputHelperLabel.Foreground = new SolidColorBrush(Colors.Black);
+            GeneralSettingsLabel.Foreground = new SolidColorBrush(Colors.Black);
 
             /*
              * Transformations
@@ -677,6 +679,11 @@ namespace NWNLogRotator
         {
             if (MinimumRowsCountTextBlock != null)
                 MinimumRowsCountTextBlock.Text = e.NewValue.ToString();
+        }
+
+        private void SaveBackupCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SaveBackupOnlyCheckBox.IsChecked = false;
         }
 
         private void SaveBackupOnlyCheckBox_Checked(object sender, RoutedEventArgs e)

@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*  
+    *  Author:   © noblesigma
+    *  Project:  NWNLogRotator
+    *  GitHub:   https://github.com/noblesigma/NWNLogRotator
+    *  Date:     3/3/2021
+    *  License:  MIT
+    *  Purpose:  This program is designed used alongside the Neverwinter Nights game, either Enhanced Edition, or 1.69.
+    *  This program does not come with a warranty. Any support may be found on the GitHub page.
+*/
+
+using System;
 using System.IO;
 using System.Linq;
 using System.Windows;

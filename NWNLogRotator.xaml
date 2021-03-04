@@ -47,7 +47,7 @@
     <Button x:Name="RunOnceButton" Content="🔂 Run Once" Grid.Column="2" HorizontalAlignment="Left" Margin="299.6,140.4,0,0" VerticalAlignment="Top" Width="108" RenderTransformOrigin="2.04,0.867" Click="Button_Click_Run_Once" Grid.Row="1"/>
     <CheckBox x:Name="TrayCheckBox" Content="Start in Tray" Grid.Column="2" HorizontalAlignment="Right" Margin="0,134,351.4,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109" Height="15"/>
     <CheckBox x:Name="SilentCheckBox" Content="Silent Mode" Grid.Column="2" Margin="0,134,191.4,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109" HorizontalAlignment="Right" Width="85" Height="19"/>
-    <CheckBox x:Name="SaveBackupCheckBox" Content="Save Backup" Grid.Column="2" HorizontalAlignment="Right" Margin="0,158,347.4,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109" Height="15"/>
+    <CheckBox x:Name="SaveBackupCheckBox" Content="Save Backup" Grid.Column="2" HorizontalAlignment="Right" Margin="0,158,347.4,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109"  Unchecked="SaveBackupCheckBox_Unchecked" Height="15"/>
     <CheckBox x:Name="NotificationsCheckBox" Content="Notifications" Grid.Column="2" HorizontalAlignment="Right" Margin="0,134,46.4,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609" Height="19"/>
     <CheckBox x:Name="FilterLinesCheckBox" Content="Filter Lines" HorizontalAlignment="Right" Margin="0,55.4,357.4,0" VerticalAlignment="Top" RenderTransformOrigin="0.341,0.609" Unchecked="FilterLinesCheckBox_Unchecked" Checked="FilterLinesCheckBox_Checked" Grid.Column="2" Height="20" Grid.Row="1" />
     <Label x:Name="HintLabel" Content="ⓘ Copy NWNLogRotator.exe into another folder to configure another server." HorizontalAlignment="Left" Margin="39.6,171.4,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,2.721" Width="353" Height="27" Grid.Row="1" FontSize="10" Grid.Column="2" />
@@ -56,6 +56,6 @@
     <Button x:Name="LauncherConfigurationButton" Content="🔧 Launcher Settings" Grid.Column="2" HorizontalAlignment="Left" Margin="218.6,100.4,0,0" VerticalAlignment="Top" Width="149" Click="Button_Click_Launcher_Settings" Grid.Row="1"/>
         <CheckBox x:Name="SaveBackupOnlyCheckBox" Content="Save Backup Only" Grid.Column="2" HorizontalAlignment="Right" Margin="0,158,162.4,0" VerticalAlignment="Top" Checked="SaveBackupOnlyCheckBox_Checked" RenderTransformOrigin="0.618,0.109" Height="15"/>
     <CheckBox x:Name="SaveOnLaunchCheckBox" Content="Save on Launch" Grid.Column="2" HorizontalAlignment="Right" Margin="0,158,31.4,0" VerticalAlignment="Top" RenderTransformOrigin="0.618,0.109" Height="15"/>
-    <Label Content="⚙ General Settings" HorizontalAlignment="Left" Margin="150.6,-5,0,0" VerticalAlignment="Top" Grid.Column="2" FontSize="11"/>
+    <Label x:Name="GeneralSettingsLabel" Content="⚙ General Settings" HorizontalAlignment="Left" Margin="150.6,-5,0,0" VerticalAlignment="Top" Grid.Column="2" FontSize="11"/>
   </Grid>
 </Window>

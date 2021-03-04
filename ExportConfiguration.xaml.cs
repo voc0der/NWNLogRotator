@@ -1,4 +1,14 @@
-﻿using NWNLogRotator.Classes;
+﻿/*  
+    *  Author:   © noblesigma
+    *  Project:  NWNLogRotator
+    *  GitHub:   https://github.com/noblesigma/NWNLogRotator
+    *  Date:     3/3/2021
+    *  License:  MIT
+    *  Purpose:  This program is designed used alongside the Neverwinter Nights game, either Enhanced Edition, or 1.69.
+    *  This program does not come with a warranty. Any support may be found on the GitHub page.
+*/
+
+using NWNLogRotator.Classes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
