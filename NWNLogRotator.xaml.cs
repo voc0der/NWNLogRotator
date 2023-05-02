@@ -27,7 +27,7 @@ namespace NWNLogRotator
     {
         FileHandler FileHandlerInstance = new FileHandler();
         Settings _settings;
-        System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
+        static System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
         Notification notification = new Notification();
         private int ClientLauncherState = 0;
         private string ProcessName = "nwmain";
@@ -37,6 +37,7 @@ namespace NWNLogRotator
             if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location)).Length > 1)
             {
                 MessageBox.Show("There is already an instance of NWNLogRotator running!");
+                ExitEvent();
                 Process.GetCurrentProcess().Kill();
             }
             InitializeComponent();
@@ -244,7 +245,10 @@ namespace NWNLogRotator
                     else
                     {
                         if(_settings.CloseOnLogGenerated == true )
+                        {
+                            ExitEvent();
                             Process.GetCurrentProcess().Kill();
+                        }
                     }
                         
                 }
@@ -489,8 +493,11 @@ namespace NWNLogRotator
                 }
 
                 if (_settings.SaveOnLaunch == false)
-                    if (_automatic && _settings.CloseOnLogGenerated == true) Process.GetCurrentProcess().Kill();
-
+                    if (_automatic && _settings.CloseOnLogGenerated == true)
+                    {
+                        ExitEvent();
+                        Process.GetCurrentProcess().Kill();
+                    }
                 if (_settings.Silent == false)
                 {
                     MessageBoxResult _messageBoxResult = MessageBox.Show("The log file has been generated successfully. Would you like to open the log file now?",
@@ -510,8 +517,12 @@ namespace NWNLogRotator
             }
             else
             {
-                if(_settings.SaveOnLaunch == false)
-                    if (_automatic && _settings.CloseOnLogGenerated == true) Process.GetCurrentProcess().Kill();
+                if (_settings.SaveOnLaunch == false)
+                    if (_automatic && _settings.CloseOnLogGenerated == true)
+                    {
+                        ExitEvent();
+                        Process.GetCurrentProcess().Kill();
+                    }
             }
 
             return false;
@@ -719,7 +730,12 @@ namespace NWNLogRotator
             base.OnStateChanged(e);
         }
 
-        private void WindowClosed_Event(object sender, CancelEventArgs e)
+        public void WindowClosed_Event(object sender, CancelEventArgs e)
+        {
+            ExitEvent();
+        }
+
+        public static void ExitEvent()
         {
             ni.Visible = false;
             ni.Icon = null;
