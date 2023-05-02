@@ -722,6 +722,9 @@ namespace NWNLogRotator
         private void WindowClosed_Event(object sender, CancelEventArgs e)
         {
             ni.Visible = false;
+            ni.Icon = null;
+            ni.Dispose();
+            System.Windows.Forms.Application.DoEvents();
         }
 
         /*
