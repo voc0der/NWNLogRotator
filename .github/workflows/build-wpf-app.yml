@@ -1,0 +1,77 @@
+name: Build and Release NWN Log Rotator
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Visual Studio for .NET Framework
+    - name: Setup Visual Studio
+      uses: microsoft/setup-msbuild@v1
+
+    # Step 3: Install NuGet
+    - name: Install NuGet
+      uses: NuGet/setup-nuget@v1
+
+    # Step 4: Restore NuGet packages
+    - name: Restore NuGet packages
+      run: nuget restore NWNLogRotator.sln
+
+    # Step 5: Build the solution in Release mode
+    - name: Build solution
+      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="Any CPU"
+
+    # Step 6: Archive the Release binaries as build artifacts
+    - name: Archive Release binaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: Release-build
+        path: |
+          NWNLogRotator\bin\Release\
+          
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Determine the next semantic version tag
+    - name: Calculate next version
+      id: next_version
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const semver = require('semver');
+          const tags = await github.repos.listTags({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          });
+          const latestTag = tags.data.length > 0 ? tags.data[0].name : '0.0.0';
+          const nextVersion = semver.inc(latestTag, 'patch');
+          core.setOutput('next_version', nextVersion);
+        result-encoding: string
+
+    # Step 3: Create a GitHub release
+    - name: Create GitHub release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.next_version.outputs.next_version }}
+        name: Release v${{ steps.next_version.outputs.next_version }}
+        files: |
+          NWNLogRotator/bin/Release/*.exe
+        body: |
+          ## Changes
+          - Auto-generated release with compiled binaries.
