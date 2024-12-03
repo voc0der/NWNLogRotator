@@ -29,7 +29,7 @@ jobs:
 
     # Step 5: Build the solution in Release mode
     - name: Build solution
-      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="Any CPU"
+      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x64"
 
     # Step 6: Archive the Release binaries as build artifacts
     - name: Archive Release binaries
