@@ -27,18 +27,30 @@ jobs:
     - name: Restore NuGet packages
       run: nuget restore NWNLogRotator.sln
 
-    # Step 5: Build the solution in Release mode
-    - name: Build solution
+    # Step 5: Build the solution for x64
+    - name: Build solution (x64)
       run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x64"
 
-    # Step 6: Archive the Release binaries as build artifacts
-    - name: Archive Release binaries
+    # Step 6: Archive x64 binaries as build artifacts
+    - name: Archive x64 Release binaries
       uses: actions/upload-artifact@v3
       with:
-        name: Release-build
+        name: Release-build-x64
         path: |
           NWNLogRotator\bin\Release\
-          
+
+    # Step 7: Build the solution for x86
+    - name: Build solution (x86)
+      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x86"
+
+    # Step 8: Archive x86 binaries as build artifacts
+    - name: Archive x86 Release binaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: Release-build-x86
+        path: |
+          NWNLogRotator\bin\Release\
+
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -64,7 +76,7 @@ jobs:
           core.setOutput('next_version', nextVersion);
         result-encoding: string
 
-    # Step 3: Create a GitHub release
+    # Step 3: Create a GitHub release with both x86 and x64 binaries
     - name: Create GitHub release
       uses: softprops/action-gh-release@v1
       with:
@@ -74,4 +86,4 @@ jobs:
           NWNLogRotator/bin/Release/*.exe
         body: |
           ## Changes
-          - Auto-generated release with compiled binaries.
+          - Auto-generated release with both x86 and x64 binaries.
