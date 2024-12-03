@@ -107,8 +107,12 @@ jobs:
     - name: Calculate next version
       id: next_version
       run: |
-        latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) || echo "0.0.0")
+        # Fetch all tags to ensure git describe works properly
+        git fetch --tags
+        # Get the latest tag, or default to v1.0.0 if none exists
+        latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) || echo "v1.0.0")
         echo "Latest tag: $latest_tag"
+        # Calculate the next version
         next_version=$(echo $latest_tag | awk -F. -v OFS=. '{$NF+=1; print}')
         echo "next_version=$next_version" >> $GITHUB_ENV
 
@@ -117,7 +121,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ env.next_version }}
-        name: Release v${{ env.next_version }}
+        name: v${{ env.next_version }}
         files: |
           ./bin/Release/x86/NWNLogRotator-x86.exe
           ./bin/Release/x64/NWNLogRotator-x64.exe
