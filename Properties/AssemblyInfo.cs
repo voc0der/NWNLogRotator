@@ -8,7 +8,7 @@ using System.Windows;
 [assembly: AssemblyTitle("NWNLogRotator")]
 [assembly: AssemblyDescription("Transforms and parses any Neverwinter Nights chat log into beautiful HTML. Written in C# .NET. NWNLogRotator is both Enhanced Edition and 1.69 compatible.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("xNetrunner")]
+[assembly: AssemblyCompany("voc0der")]
 [assembly: AssemblyProduct("NWNLogRotator")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]

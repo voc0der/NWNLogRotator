@@ -1,15 +1,15 @@
 # NWNLogRotator
 Use this NWN Log Rotator to colorize, clean, and automatically save Neverwinter Nights chat logs into beautiful HTML. Enhanced Edition and 1.69 compatible.
-##### <a href="http://htmlpreview.github.io/?https://github.com/noblesigma/NWNLogRotator-Node.js/blob/master/output/NWNLogExample.html">Click here</a> for an example of a parsed log. 
+##### <a href="http://htmlpreview.github.io/?https://github.com/voc0der/NWNLogRotator-Node.js/blob/master/output/NWNLogExample.html">Click here</a> for an example of a parsed log. 
 ##### <a href="https://www.youtube.com/watch?v=b2jie6fbSOA">Click here</a> to see a usage video.
 
 # Download
-Latest version can be found <a href="https://github.com/noblesigma/NWNLogRotator/releases/latest">here</a>.
+Latest version can be found <a href="https://github.com/voc0der/NWNLogRotator/releases/latest">here</a>.
 
 # Screenshots
-![Screenshot of NWNLogRotator main would be here](https://raw.githubusercontent.com/noblesigma/NWNLogRotator/master/Assets/Images/screenshot_nwnlr1.png)
-![Screenshot of NWNLogRotator export would be here](https://raw.githubusercontent.com/noblesigma/NWNLogRotator/master/Assets/Images/screenshot_nwnlr2.png)
-![Screenshot of NWNLogRotator launcher would be here](https://raw.githubusercontent.com/noblesigma/NWNLogRotator/master/Assets/Images/screenshot_nwnlr3.png)
+![Screenshot of NWNLogRotator main would be here](https://raw.githubusercontent.com/voc0der/NWNLogRotator/master/Assets/Images/screenshot_nwnlr1.png)
+![Screenshot of NWNLogRotator export would be here](https://raw.githubusercontent.com/voc0der/NWNLogRotator/master/Assets/Images/screenshot_nwnlr2.png)
+![Screenshot of NWNLogRotator launcher would be here](https://raw.githubusercontent.com/voc0der/NWNLogRotator/master/Assets/Images/screenshot_nwnlr3.png)
 
 # Automation (How it works)
 While open, NWNLogRotator will process new logs automatically based on the status of whether Neverwinter Nights is running. Configure the directories to match with your Neverwinter Nights default log storage, and it will process them automatically.

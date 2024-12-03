@@ -1,7 +1,7 @@
 ﻿/*  
-    *  Author:   © xNetrunner
+    *  Author:   © voc0der
     *  Project:  NWNLogRotator
-    *  GitHub:   https://github.com/xNetrunner/NWNLogRotator
+    *  GitHub:   https://github.com/voc0der/NWNLogRotator
     *  Date:     3/3/2021
     *  License:  MIT
     *  Purpose:  This program is designed used alongside the Neverwinter Nights game, either Enhanced Edition, or 1.69.
