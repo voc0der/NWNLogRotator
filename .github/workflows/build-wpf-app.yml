@@ -27,29 +27,29 @@ jobs:
     - name: Restore NuGet packages
       run: nuget restore NWNLogRotator.sln
 
-    # Step 5: Build the solution for x64
-    - name: Build solution (x64)
-      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x64"
-
-    # Step 6: Archive x64 binaries as build artifacts
-    - name: Archive x64 Release binaries
-      uses: actions/upload-artifact@v3
-      with:
-        name: Release-build-x64
-        path: |
-          NWNLogRotator\bin\Release\
-
-    # Step 7: Build the solution for x86
+    # Step 5: Build the solution for x86
     - name: Build solution (x86)
-      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x86"
+      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x86" /p:OutDir="bin/Release/x86/"
 
-    # Step 8: Archive x86 binaries as build artifacts
+    # Step 6: Archive x86 binaries as build artifacts
     - name: Archive x86 Release binaries
       uses: actions/upload-artifact@v3
       with:
         name: Release-build-x86
         path: |
-          NWNLogRotator\bin\Release\
+          bin/Release/x86/
+
+    # Step 7: Build the solution for x64
+    - name: Build solution (x64)
+      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="Any CPU" /p:OutDir="bin/Release/x64/"
+
+    # Step 8: Archive x64 binaries as build artifacts
+    - name: Archive x64 Release binaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: Release-build-x64
+        path: |
+          bin/Release/x64/
 
   release:
     needs: build
@@ -70,14 +70,15 @@ jobs:
         echo "Next version: $next_version"
         echo "next_version=$next_version" >> $GITHUB_ENV
 
-    # Step 3: Create a GitHub release with both x86 and x64 binaries
+    # Step 3: Create GitHub release
     - name: Create GitHub release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v${{ steps.next_version.outputs.next_version }}
-        name: Release v${{ steps.next_version.outputs.next_version }}
+        tag_name: v${{ env.next_version }}
+        name: Release v${{ env.next_version }}
         files: |
-          NWNLogRotator/bin/Release/*.exe
+          bin/Release/x86/*.exe
+          bin/Release/x64/*.exe
         body: |
           ## Changes
-          - Auto-generated release with both x86 and x64 binaries.
+          - Auto-generated release with x86 and x64 binaries.
