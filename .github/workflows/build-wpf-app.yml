@@ -120,8 +120,8 @@ jobs:
     - name: Create GitHub release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v${{ env.next_version }}
-        name: v${{ env.next_version }}
+        tag_name: ${{ env.next_version }}
+        name: ${{ env.next_version }}
         files: |
           ./bin/Release/x86/NWNLogRotator-x86.exe
           ./bin/Release/x64/NWNLogRotator-x64.exe
