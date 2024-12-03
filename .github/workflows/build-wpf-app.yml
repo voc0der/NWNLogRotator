@@ -30,7 +30,7 @@ jobs:
     # Step 5: Build the solution for x86
     - name: Build solution (x86)
       run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x86" /p:OutDir="bin/Release/x86/"
-      
+
     # Debugging Step for x86 Build
     - name: Debug x86 Build Output
       run: |
@@ -63,6 +63,10 @@ jobs:
         path: |
           bin/Release/x64/
 
+    # List all files after the build
+    - name: List all files post-build
+      run: dir /s /b
+
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -72,6 +76,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # Debugging Step: List all files
+    - name: List all files
+      run: dir /s /b
+
     # Step 2: Determine the next semantic version tag
     - name: Calculate next version
       id: next_version
@@ -79,7 +87,6 @@ jobs:
         latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) || echo "0.0.0")
         echo "Latest tag: $latest_tag"
         next_version=$(echo $latest_tag | awk -F. -v OFS=. '{$NF+=1; print}')
-        echo "Next version: $next_version"
         echo "next_version=$next_version" >> $GITHUB_ENV
 
     # Step 3: Create GitHub release
