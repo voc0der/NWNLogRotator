@@ -35,7 +35,7 @@ jobs:
     - name: Debug x86 Build Output
       run: |
         echo "Listing files in bin/Release/x86/"
-        dir bin\Release\x86\
+        cmd /c dir bin\Release\x86\
 
     # Step 6: Archive x86 binaries as build artifacts
     - name: Archive x86 Release binaries
@@ -53,7 +53,7 @@ jobs:
     - name: Debug x64 Build Output
       run: |
         echo "Listing files in bin/Release/x64/"
-        dir bin\Release\x64\
+        cmd /c dir bin\Release\x64\
 
     # Step 8: Archive x64 binaries as build artifacts
     - name: Archive x64 Release binaries
@@ -65,7 +65,7 @@ jobs:
 
     # List all files after the build
     - name: List all files post-build
-      run: dir /s /b
+      run: cmd /c dir /s /b  # Use cmd to list files recursively
 
   release:
     needs: build
@@ -78,7 +78,7 @@ jobs:
 
     # Debugging Step: List all files
     - name: List all files
-      run: dir /s /b
+      run: cmd /c dir /s /b  # List files recursively using cmd
 
     # Step 2: Determine the next semantic version tag
     - name: Calculate next version
