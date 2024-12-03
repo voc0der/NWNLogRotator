@@ -30,6 +30,12 @@ jobs:
     # Step 5: Build the solution for x86
     - name: Build solution (x86)
       run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x86" /p:OutDir="bin/Release/x86/"
+      
+    # Debugging Step for x86 Build
+    - name: Debug x86 Build Output
+      run: |
+        echo "Listing files in bin/Release/x86/"
+        dir bin\Release\x86\
 
     # Step 6: Archive x86 binaries as build artifacts
     - name: Archive x86 Release binaries
@@ -42,6 +48,12 @@ jobs:
     # Step 7: Build the solution for x64
     - name: Build solution (x64)
       run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x64" /p:OutDir="bin/Release/x64/"
+
+    # Debugging Step for x64 Build
+    - name: Debug x64 Build Output
+      run: |
+        echo "Listing files in bin/Release/x64/"
+        dir bin\Release\x64\
 
     # Step 8: Archive x64 binaries as build artifacts
     - name: Archive x64 Release binaries
