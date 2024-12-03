@@ -41,7 +41,7 @@ jobs:
 
     # Step 7: Build the solution for x64
     - name: Build solution (x64)
-      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="Any CPU" /p:OutDir="bin/Release/x64/"
+      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x64 /p:OutDir="bin/Release/x64/"
 
     # Step 8: Archive x64 binaries as build artifacts
     - name: Archive x64 Release binaries
