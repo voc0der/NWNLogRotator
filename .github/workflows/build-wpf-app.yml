@@ -35,7 +35,7 @@ jobs:
     - name: Debug x86 Build Output
       run: |
         echo "Listing files in bin/Release/x86/"
-        cmd /c dir bin\Release\x86\
+        dir bin\Release\x86\
 
     # Step 6: Archive x86 binaries as build artifacts
     - name: Archive x86 Release binaries
@@ -53,7 +53,7 @@ jobs:
     - name: Debug x64 Build Output
       run: |
         echo "Listing files in bin/Release/x64/"
-        cmd /c dir bin\Release\x64\
+        dir bin\Release\x64\
 
     # Step 8: Archive x64 binaries as build artifacts
     - name: Archive x64 Release binaries
@@ -62,10 +62,6 @@ jobs:
         name: Release-build-x64
         path: |
           bin/Release/x64/
-
-    # List all files after the build
-    - name: List all files post-build
-      run: cmd /c dir /s /b  # Use cmd to list files recursively
 
   release:
     needs: build
@@ -76,13 +72,28 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Debugging Step: List all files (Using Linux commands)
-    - name: List all files (Linux)
-      run: |
-        echo "Listing all files in the repository"
-        find . -type f  # Using 'find' to list all files recursively
+    # Step 2: Download the build artifacts (x86 and x64)
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: Release-build-x86
+        path: ./bin/Release/x86/
 
-    # Step 2: Determine the next semantic version tag
+    - name: Download build artifacts (x64)
+      uses: actions/download-artifact@v3
+      with:
+        name: Release-build-x64
+        path: ./bin/Release/x64/
+
+    # Debugging Step: List all downloaded files (Linux)
+    - name: List all downloaded files
+      run: |
+        echo "Listing all downloaded files in x86 directory"
+        find ./bin/Release/x86/ -type f
+        echo "Listing all downloaded files in x64 directory"
+        find ./bin/Release/x64/ -type f
+
+    # Step 3: Determine the next semantic version tag
     - name: Calculate next version
       id: next_version
       run: |
@@ -91,15 +102,15 @@ jobs:
         next_version=$(echo $latest_tag | awk -F. -v OFS=. '{$NF+=1; print}')
         echo "next_version=$next_version" >> $GITHUB_ENV
 
-    # Step 3: Create GitHub release
+    # Step 4: Create GitHub release
     - name: Create GitHub release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ env.next_version }}
         name: Release v${{ env.next_version }}
         files: |
-          bin/Release/x86/*.exe
-          bin/Release/x64/*.exe
+          ./bin/Release/x86/*.exe
+          ./bin/Release/x64/*.exe
         body: |
           ## Changes
           - Auto-generated release with x86 and x64 binaries.
