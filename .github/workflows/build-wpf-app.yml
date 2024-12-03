@@ -76,9 +76,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Debugging Step: List all files
-    - name: List all files
-      run: cmd /c dir /s /b  # List files recursively using cmd
+    # Debugging Step: List all files (Using Linux commands)
+    - name: List all files (Linux)
+      run: |
+        echo "Listing all files in the repository"
+        find . -type f  # Using 'find' to list all files recursively
 
     # Step 2: Determine the next semantic version tag
     - name: Calculate next version
