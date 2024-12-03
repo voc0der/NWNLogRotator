@@ -63,18 +63,12 @@ jobs:
     # Step 2: Determine the next semantic version tag
     - name: Calculate next version
       id: next_version
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const semver = require('semver');
-          const tags = await github.repos.listTags({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-          });
-          const latestTag = tags.data.length > 0 ? tags.data[0].name : '0.0.0';
-          const nextVersion = semver.inc(latestTag, 'patch');
-          core.setOutput('next_version', nextVersion);
-        result-encoding: string
+      run: |
+        latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) || echo "0.0.0")
+        echo "Latest tag: $latest_tag"
+        next_version=$(echo $latest_tag | awk -F. -v OFS=. '{$NF+=1; print}')
+        echo "Next version: $next_version"
+        echo "next_version=$next_version" >> $GITHUB_ENV
 
     # Step 3: Create a GitHub release with both x86 and x64 binaries
     - name: Create GitHub release
