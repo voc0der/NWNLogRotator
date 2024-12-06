@@ -25,7 +25,10 @@ jobs:
 
     # Step 4: Restore NuGet packages
     - name: Restore NuGet packages
-      run: nuget restore NWNLogRotator.sln
+      run: nuget restore NWNLogRotator.sln -ConfigFile NuGet.config
+
+    - name: Debug NuGet Packages
+      run: dir packages /s
 
     # Step 5: Build the solution for x86
     - name: Build solution (x86)
