@@ -25,7 +25,7 @@ jobs:
 
     # Step 4: Restore NuGet packages
     - name: Restore NuGet packages
-      run: nuget restore NWNLogRotator.sln -ConfigFile NuGet.config
+      run: nuget restore NWNLogRotator.sln -ConfigFile packages.config
 
     - name: Debug NuGet Packages
       run: dir packages /s
