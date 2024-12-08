@@ -68,7 +68,7 @@
   <PropertyGroup />
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="Costura, Version=6.9.1.0, Culture=neutral, PublicKeyToken=9919ef960d84173d">
+    <Reference Include="Fody, Version=6.9.1.0, Culture=neutral, PublicKeyToken=9919ef960d84173d">
       <HintPath>packages\Fody.6.9.1\lib\netstandard2.0\Fody.dll</HintPath>
       <Private>True</Private>
     </Reference>
