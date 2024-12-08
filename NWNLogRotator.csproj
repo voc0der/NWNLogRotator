@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages/Costura.Fody.6.9.1/build/Costura.Fody.props" Condition="Exists('packages/Costura.Fody.6.9.1/build/Costura.Fody.props')" />
+  <Import Project="packages/Fody.6.9.1/build/Fody.props" Condition="Exists('packages/Fody.6.9.1/build/Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\NuGet\NuGet.targets" Condition="Exists('$(MSBuildExtensionsPath)\NuGet\NuGet.targets')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -69,7 +69,7 @@
   <PropertyGroup />
   <ItemGroup>
     <Reference Include="Costura, Version=6.9.1.0, Culture=neutral, PublicKeyToken=9919ef960d84173d">
-      <HintPath>packages\Costura.Fody.6.9.1\lib\netstandard2.0\Costura.dll</HintPath>
+      <HintPath>packages\Fody.6.9.1\lib\netstandard2.0\Fody.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -194,11 +194,11 @@
     <Resource Include="Assets\Images\AssociationEditor_16x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="packages/Costura.Fody.6.9.1/build/Fody.targets" Condition="Exists('packages/Costura.Fody.6.9.1/build/Fody.targets')" />
+  <Import Project="packages/Fody.6.9.1/build/Fody.targets" Condition="Exists('packages/Fody.6.9.1/build/Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages/Costura.Fody.6.9.1/build/Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages/Costura.Fody.6.9.1/build/Fody.targets'))" />
+    <Error Condition="!Exists('packages/Fody.6.9.1/build/Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages/Fody.6.9.1/build/Fody.targets'))" />
   </Target>
 </Project>
