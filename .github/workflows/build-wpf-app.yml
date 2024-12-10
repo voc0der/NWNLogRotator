@@ -27,7 +27,30 @@ jobs:
     - name: Restore NuGet packages
       run: nuget restore NWNLogRotator.sln
 
-    # Step 5: Build the solution for x64
+    # Step 5: Build the solution for x86
+    - name: Build solution (x86)
+      run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x86" /p:OutDir="bin/Release/x86/"
+
+    # Debugging Step for x86 Build
+    - name: Debug x86 Build Output
+      run: |
+        echo "Listing files in bin/Release/x86/"
+        dir bin\Release\x86\
+
+    # Step 6: Rename x86 executable
+    - name: Rename x86 executable
+      run: |
+        ren bin\Release\x86\NWNLogRotator.exe NWNLogRotator-x86.exe
+
+    # Step 7: Archive x86 binaries as build artifacts
+    - name: Archive x86 Release binaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: Release-build-x86
+        path: |
+          bin/Release/x86/NWNLogRotator-x86.exe
+
+    # Step 8: Build the solution for x64
     - name: Build solution (x64)
       run: msbuild NWNLogRotator.sln /p:Configuration=Release /p:Platform="x64" /p:OutDir="bin/Release/x64/"
 
@@ -37,12 +60,12 @@ jobs:
         echo "Listing files in bin/Release/x64/"
         dir bin\Release\x64\
 
-    # Step 6: Rename x64 executable
+    # Step 9: Rename x64 executable
     - name: Rename x64 executable
       run: |
         ren bin\Release\x64\NWNLogRotator.exe NWNLogRotator-x64.exe
 
-    # Step 7: Archive x64 binaries as build artifacts
+    # Step 10: Archive x64 binaries as build artifacts
     - name: Archive x64 Release binaries
       uses: actions/upload-artifact@v3
       with:
@@ -59,8 +82,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Step 2: Download the build artifacts (x64)
+    # Step 2: Download the build artifacts (x86 and x64)
     - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: Release-build-x86
+        path: ./bin/Release/x86/
+
+    - name: Download build artifacts (x64)
       uses: actions/download-artifact@v3
       with:
         name: Release-build-x64
@@ -69,6 +98,8 @@ jobs:
     # Debugging Step: List all downloaded files (Linux)
     - name: List all downloaded files
       run: |
+        echo "Listing all downloaded files in x86 directory"
+        find ./bin/Release/x86/ -type f
         echo "Listing all downloaded files in x64 directory"
         find ./bin/Release/x64/ -type f
 
@@ -92,7 +123,8 @@ jobs:
         tag_name: ${{ env.next_version }}
         name: ${{ env.next_version }}
         files: |
+          ./bin/Release/x86/NWNLogRotator-x86.exe
           ./bin/Release/x64/NWNLogRotator-x64.exe
         body: |
           ## Changes
-          - Auto-generated release with x64 binary.
+          - Auto-generated release with x86 and x64 binaries.
