@@ -44,7 +44,7 @@ jobs:
 
     # Step 7: Archive x86 binaries as build artifacts
     - name: Archive x86 Release binaries
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Release-build-x86
         path: |
@@ -67,7 +67,7 @@ jobs:
 
     # Step 10: Archive x64 binaries as build artifacts
     - name: Archive x64 Release binaries
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Release-build-x64
         path: |
@@ -84,13 +84,13 @@ jobs:
 
     # Step 2: Download the build artifacts (x86 and x64)
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: Release-build-x86
         path: ./bin/Release/x86/
 
     - name: Download build artifacts (x64)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: Release-build-x64
         path: ./bin/Release/x64/
