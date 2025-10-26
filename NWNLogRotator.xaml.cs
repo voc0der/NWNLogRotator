@@ -1,4 +1,4 @@
-﻿/*  
+/*  
     *  Author:   © voc0der
     *  Project:  NWNLogRotator
     *  GitHub:   https://github.com/voc0der/NWNLogRotator
@@ -237,6 +237,8 @@ namespace NWNLogRotator
                 NWNStatusTextBlock.Foreground = OffColor;
                 if (PreviousStatus == true)
                 {
+                    await Task.Delay(1500);
+                    
                     if(_settings.SaveOnLaunch == false)
                     {
                         if (NWNLog_Save(_settings, true) == true)

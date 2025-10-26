@@ -1,4 +1,4 @@
-﻿/*  
+/*  
     *  Author:   © voc0der
     *  Project:  NWNLogRotator
     *  GitHub:   https://github.com/voc0der/NWNLogRotator
