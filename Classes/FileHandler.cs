@@ -592,7 +592,7 @@ namespace NWNLogRotator.Classes
                 if (_run_settings.SaveBackup == true)
                 {
                     var theDestinationFile = Path.Combine(filepath, backupfilename);
-                    File.Copy(_run_settings.PathToLog, theDestinationFile, overwrite: false);
+                    File.Copy(_run_settings.PathToLog, theDestinationFile, overwrite: true);
                 }
                 return Path.Combine(filepath, filename);
             }
@@ -629,7 +629,7 @@ namespace NWNLogRotator.Classes
                                 string theFileToCopy = _run_settings.PathToLog;
                                 string theDestinationFile = Path.Combine(filepath, backupfilename);
 
-                                File.Copy(theFileToCopy, theDestinationFile);
+                                File.Copy(theFileToCopy, theDestinationFile, overwrite: true);
                             }
 
                             return Path.Combine(filepath, filename);
