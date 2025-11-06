@@ -1,4 +1,4 @@
-﻿/*  
+/*  
     *  Author:   © voc0der
     *  Project:  NWNLogRotator
     *  GitHub:   https://github.com/voc0der/NWNLogRotator
@@ -14,6 +14,7 @@ using System.Linq;
 using System.Windows;
 using System.Threading;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace NWNLogRotator.Classes
 {
@@ -540,7 +541,8 @@ namespace NWNLogRotator.Classes
 
         public string ReadNWNLogAndInvokeParser(Settings _run_settings)
         {
-            WaitForStableFile(_run_settings.PathToLog);
+            var effectiveLogPath = ResolveLatestLogPath(_run_settings.PathToLog);
+            WaitForStableFile(effectiveLogPath);
             DateTime _dateTime = CurrentDateTime_Get();
             string filepath = FilePath_Get(_run_settings);
             string filename = FileNameGenerator_Get(_dateTime);
@@ -551,7 +553,7 @@ namespace NWNLogRotator.Classes
             try
             {
                 using (var fs = new FileStream(
-                    _run_settings.PathToLog,
+                    effectiveLogPath,
                     FileMode.Open,
                     FileAccess.Read,
                     FileShare.ReadWrite | FileShare.Delete,
@@ -574,14 +576,43 @@ namespace NWNLogRotator.Classes
             hasenoughlines = LogParserInstance.LineCount_Get(result, _run_settings.MinimumRowsCount);
             if (hasenoughlines == false)
             {
-                if (_run_settings.Silent == false)
+                // Try the second-newest EE log once
+                var cand2 = SecondNewestEELog(_run_settings.PathToLog);
+                if (!cand2.Equals(effectiveLogPath, StringComparison.OrdinalIgnoreCase) && File.Exists(cand2))
                 {
-                    MessageBox.Show("This NWN Log did not meet the 'Minimum Rows' requirement. The specified log file was not saved!",
-                                "Minimum Rows Information",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Information);
+                    try
+                    {
+                        using (var fs2 = new FileStream(
+                            cand2,
+                            FileMode.Open,
+                            FileAccess.Read,
+                            FileShare.ReadWrite | FileShare.Delete,
+                            4096,
+                            FileOptions.SequentialScan))
+                        {
+                            var alt = LogParserInstance.ParseLog(fs2, _run_settings);
+                            if (LogParserInstance.LineCount_Get(alt, _run_settings.MinimumRowsCount))
+                            {
+                                result = alt;
+                                hasenoughlines = true;
+                                effectiveLogPath = cand2; // ensure backup copies the file we actually parsed
+                            }
+                        }
+                    }
+                    catch { /* ignore and fall through */ }
                 }
-                return "";
+
+                if (hasenoughlines == false)
+                {
+                    if (_run_settings.Silent == false)
+                    {
+                        MessageBox.Show("This NWN Log did not meet the 'Minimum Rows' requirement. The specified log file was not saved!",
+                                    "Minimum Rows Information",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Information);
+                    }
+                    return "";
+                }
             }
 
             try
@@ -592,7 +623,7 @@ namespace NWNLogRotator.Classes
                 if (_run_settings.SaveBackup == true)
                 {
                     var theDestinationFile = Path.Combine(filepath, backupfilename);
-                    File.Copy(_run_settings.PathToLog, theDestinationFile, overwrite: true);
+                    File.Copy(effectiveLogPath, theDestinationFile, overwrite: true);
                 }
                 return Path.Combine(filepath, filename);
             }
@@ -626,7 +657,7 @@ namespace NWNLogRotator.Classes
 
                             if (_run_settings.SaveBackup == true)
                             {
-                                string theFileToCopy = _run_settings.PathToLog;
+                                string theFileToCopy = effectiveLogPath;
                                 string theDestinationFile = Path.Combine(filepath, backupfilename);
 
                                 File.Copy(theFileToCopy, theDestinationFile, overwrite: true);
@@ -646,6 +677,62 @@ namespace NWNLogRotator.Classes
             }
             return "";
         }
+
+        private static string ResolveLatestLogPath(string configuredPath)
+        {
+            try
+            {
+                var dir = Path.GetDirectoryName(configuredPath);
+                if (string.IsNullOrEmpty(dir)) return configuredPath;
+                var baseName = Path.GetFileName(configuredPath) ?? string.Empty;
+
+                var candidates = new System.Collections.Generic.List<string>();
+                if (File.Exists(configuredPath)) candidates.Add(configuredPath);
+
+                // If it looks like an EE client log, consider 1..4
+                if (Regex.IsMatch(baseName, @"^nwclientlog\d+\.txt$", RegexOptions.IgnoreCase))
+                {
+                    for (int i = 1; i <= 4; i++)
+                    {
+                        var p = Path.Combine(dir, $"nwclientLog{i}.txt");
+                        if (File.Exists(p) && !candidates.Contains(p, StringComparer.OrdinalIgnoreCase))
+                            candidates.Add(p);
+                    }
+                }
+
+                if (candidates.Count == 0) return configuredPath; // non-paginated setups still work
+
+                return candidates
+                    .Select(p => new FileInfo(p))
+                    .OrderByDescending(fi => fi.LastWriteTimeUtc)
+                    .ThenByDescending(fi => fi.Length)
+                    .First()
+                    .FullName;
+            }
+            catch { return configuredPath; }
+        }
+
+        // Return the second-newest nwclientLog[1-4].txt beside configuredPath, or configuredPath if not available
+        private static string SecondNewestEELog(string configuredPath)
+        {
+            try
+            {
+                var dir = Path.GetDirectoryName(configuredPath);
+                if (string.IsNullOrEmpty(dir)) return configuredPath;
+
+                var files = Directory.EnumerateFiles(dir, "nwclientLog*.txt", SearchOption.TopDirectoryOnly)
+                    .Where(p => Regex.IsMatch(Path.GetFileName(p), @"^nwclientlog[1-4]\.txt$", RegexOptions.IgnoreCase))
+                    .Select(p => new FileInfo(p))
+                    .OrderByDescending(fi => fi.LastWriteTimeUtc)
+                    .ThenByDescending(fi => fi.Length)
+                    .Select(fi => fi.FullName)
+                    .ToArray();
+
+                return files.Length >= 2 ? files[1] : configuredPath;
+            }
+            catch { return configuredPath; }
+        }
+
         private static void WaitForStableFile(string path, int settleMs = 1200, int timeoutMs = 15000)
         {
             long lastLen = -1;
