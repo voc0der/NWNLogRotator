@@ -14,7 +14,9 @@ using System.Linq;
 using System.Windows;
 using System.Threading;
 using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace NWNLogRotator.Classes
 {
@@ -23,6 +25,9 @@ namespace NWNLogRotator.Classes
         Settings _settings;
         int _expectedSettingsCount = 42;
         LogParser LogParserInstance = new LogParser();
+
+        // Session window: logs modified within this timespan are considered part of the same session
+        private static readonly TimeSpan SessionWindow = TimeSpan.FromHours(12);
 
         public string CurrentProgramDirectory_Get()
         {
@@ -539,10 +544,21 @@ namespace NWNLogRotator.Classes
             return "NWNLog_" + _dateTime.ToString("yyyy_MM_ddhhm") + ".html";
         }
 
+        /// <summary>
+        /// Main entry point for reading and parsing NWN logs.
+        /// Now supports multi-file sessions where NWN EE rotates logs across nwclientLog1-4.txt
+        /// </summary>
         public string ReadNWNLogAndInvokeParser(Settings _run_settings)
         {
-            var effectiveLogPath = ResolveLatestLogPath(_run_settings.PathToLog);
-            WaitForStableFile(effectiveLogPath);
+            // Get all session log files (may be multiple if session spanned log rotation)
+            var sessionLogPaths = ResolveSessionLogPaths(_run_settings.PathToLog);
+            
+            // Wait for the most recent file to stabilize
+            if (sessionLogPaths.Length > 0)
+            {
+                WaitForStableFile(sessionLogPaths[sessionLogPaths.Length - 1]);
+            }
+
             DateTime _dateTime = CurrentDateTime_Get();
             string filepath = FilePath_Get(_run_settings);
             string filename = FileNameGenerator_Get(_dateTime);
@@ -552,67 +568,48 @@ namespace NWNLogRotator.Classes
             string result;
             try
             {
-                using (var fs = new FileStream(
-                    effectiveLogPath,
-                    FileMode.Open,
-                    FileAccess.Read,
-                    FileShare.ReadWrite | FileShare.Delete,
-                    4096,
-                    FileOptions.SequentialScan))
-                {
-                    result = LogParserInstance.ParseLog(fs, _run_settings);
-                }
+                // Concatenate all session logs and parse as one
+                result = ParseConcatenatedLogs(sessionLogPaths, _run_settings);
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("NWNLogRotator could not read the Log at PathToLog specified!",
-                                "Invalid Log Location",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
-                return "";
+                // Fallback: try single file approach for non-EE setups
+                try
+                {
+                    var singlePath = ResolveLatestLogPath(_run_settings.PathToLog);
+                    using (var fs = new FileStream(
+                        singlePath,
+                        FileMode.Open,
+                        FileAccess.Read,
+                        FileShare.ReadWrite | FileShare.Delete,
+                        4096,
+                        FileOptions.SequentialScan))
+                    {
+                        result = LogParserInstance.ParseLog(fs, _run_settings);
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("NWNLogRotator could not read the Log at PathToLog specified!\n\nError: " + ex.Message,
+                                    "Invalid Log Location",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Error);
+                    return "";
+                }
             }
 
             // maintain minimum row lines requirement
             hasenoughlines = LogParserInstance.LineCount_Get(result, _run_settings.MinimumRowsCount);
             if (hasenoughlines == false)
             {
-                // Try the second-newest EE log once
-                var cand2 = SecondNewestEELog(_run_settings.PathToLog);
-                if (!cand2.Equals(effectiveLogPath, StringComparison.OrdinalIgnoreCase) && File.Exists(cand2))
+                if (_run_settings.Silent == false)
                 {
-                    try
-                    {
-                        using (var fs2 = new FileStream(
-                            cand2,
-                            FileMode.Open,
-                            FileAccess.Read,
-                            FileShare.ReadWrite | FileShare.Delete,
-                            4096,
-                            FileOptions.SequentialScan))
-                        {
-                            var alt = LogParserInstance.ParseLog(fs2, _run_settings);
-                            if (LogParserInstance.LineCount_Get(alt, _run_settings.MinimumRowsCount))
-                            {
-                                result = alt;
-                                hasenoughlines = true;
-                                effectiveLogPath = cand2; // ensure backup copies the file we actually parsed
-                            }
-                        }
-                    }
-                    catch { /* ignore and fall through */ }
+                    MessageBox.Show("This NWN Log did not meet the 'Minimum Rows' requirement. The specified log file was not saved!",
+                                "Minimum Rows Information",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
                 }
-
-                if (hasenoughlines == false)
-                {
-                    if (_run_settings.Silent == false)
-                    {
-                        MessageBox.Show("This NWN Log did not meet the 'Minimum Rows' requirement. The specified log file was not saved!",
-                                    "Minimum Rows Information",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Information);
-                    }
-                    return "";
-                }
+                return "";
             }
 
             try
@@ -622,8 +619,9 @@ namespace NWNLogRotator.Classes
 
                 if (_run_settings.SaveBackup == true)
                 {
+                    // Save concatenated backup of all session logs
                     var theDestinationFile = Path.Combine(filepath, backupfilename);
-                    File.Copy(effectiveLogPath, theDestinationFile, overwrite: true);
+                    SaveConcatenatedBackup(sessionLogPaths, theDestinationFile);
                 }
                 return Path.Combine(filepath, filename);
             }
@@ -657,10 +655,8 @@ namespace NWNLogRotator.Classes
 
                             if (_run_settings.SaveBackup == true)
                             {
-                                string theFileToCopy = effectiveLogPath;
                                 string theDestinationFile = Path.Combine(filepath, backupfilename);
-
-                                File.Copy(theFileToCopy, theDestinationFile, overwrite: true);
+                                SaveConcatenatedBackup(sessionLogPaths, theDestinationFile);
                             }
 
                             return Path.Combine(filepath, filename);
@@ -678,6 +674,185 @@ namespace NWNLogRotator.Classes
             return "";
         }
 
+        /// <summary>
+        /// Resolves all nwclientLog[1-4].txt files that belong to the current gaming session.
+        /// Files are considered part of the same session if modified within the SessionWindow timespan.
+        /// Returns files in chronological order (oldest first) for proper concatenation.
+        /// </summary>
+        private static string[] ResolveSessionLogPaths(string configuredPath)
+        {
+            try
+            {
+                var dir = Path.GetDirectoryName(configuredPath);
+                if (string.IsNullOrEmpty(dir))
+                    return new[] { configuredPath };
+
+                var baseName = Path.GetFileName(configuredPath) ?? string.Empty;
+
+                // Check if this looks like an EE log pattern
+                if (!Regex.IsMatch(baseName, @"^nwclientlog\d*\.txt$", RegexOptions.IgnoreCase))
+                {
+                    // Non-EE setup, just return the configured path
+                    return File.Exists(configuredPath) ? new[] { configuredPath } : new string[0];
+                }
+
+                // Find the most recent log file to establish session end time
+                var allLogs = Directory.EnumerateFiles(dir, "nwclientLog*.txt", SearchOption.TopDirectoryOnly)
+                    .Where(p => Regex.IsMatch(Path.GetFileName(p), @"^nwclientlog[1-4]\.txt$", RegexOptions.IgnoreCase))
+                    .Select(p => new FileInfo(p))
+                    .Where(fi => fi.Exists && fi.Length > 0)
+                    .ToList();
+
+                if (allLogs.Count == 0)
+                    return File.Exists(configuredPath) ? new[] { configuredPath } : new string[0];
+
+                // Find the newest log's modification time
+                var newestLogTime = allLogs.Max(fi => fi.LastWriteTimeUtc);
+
+                // Session logs are those modified within the session window of the newest log
+                // This captures logs that were rotated during the session
+                var sessionCutoff = newestLogTime - SessionWindow;
+
+                var sessionLogs = allLogs
+                    .Where(fi => fi.LastWriteTimeUtc >= sessionCutoff)
+                    .OrderBy(fi => fi.LastWriteTimeUtc)      // Chronological order (oldest first)
+                    .ThenBy(fi => fi.Name)                    // Tie-breaker: by name
+                    .Select(fi => fi.FullName)
+                    .ToArray();
+
+                return sessionLogs.Length > 0 ? sessionLogs : new[] { configuredPath };
+            }
+            catch
+            {
+                return File.Exists(configuredPath) ? new[] { configuredPath } : new string[0];
+            }
+        }
+
+        /// <summary>
+        /// Parses multiple log files as a single concatenated stream.
+        /// Files are read in order and combined before parsing.
+        /// </summary>
+        private string ParseConcatenatedLogs(string[] logPaths, Settings _run_settings)
+        {
+            if (logPaths == null || logPaths.Length == 0)
+                throw new ArgumentException("No log files to parse");
+
+            // For a single file, use the original approach
+            if (logPaths.Length == 1)
+            {
+                using (var fs = new FileStream(
+                    logPaths[0],
+                    FileMode.Open,
+                    FileAccess.Read,
+                    FileShare.ReadWrite | FileShare.Delete,
+                    4096,
+                    FileOptions.SequentialScan))
+                {
+                    return LogParserInstance.ParseLog(fs, _run_settings);
+                }
+            }
+
+            // For multiple files, concatenate into a MemoryStream
+            using (var combinedStream = new MemoryStream())
+            {
+                var encoding = Encoding.GetEncoding("iso-8859-1");
+                
+                foreach (var logPath in logPaths)
+                {
+                    if (!File.Exists(logPath))
+                        continue;
+
+                    try
+                    {
+                        using (var fs = new FileStream(
+                            logPath,
+                            FileMode.Open,
+                            FileAccess.Read,
+                            FileShare.ReadWrite | FileShare.Delete,
+                            4096,
+                            FileOptions.SequentialScan))
+                        {
+                            fs.CopyTo(combinedStream);
+                        }
+
+                        // Ensure there's a newline between concatenated files
+                        var newline = encoding.GetBytes("\n");
+                        combinedStream.Write(newline, 0, newline.Length);
+                    }
+                    catch
+                    {
+                        // Skip files that can't be read
+                        continue;
+                    }
+                }
+
+                if (combinedStream.Length == 0)
+                    throw new InvalidOperationException("No log content could be read");
+
+                // Reset stream position for reading
+                combinedStream.Position = 0;
+
+                return LogParserInstance.ParseLog(combinedStream, _run_settings);
+            }
+        }
+
+        /// <summary>
+        /// Saves a concatenated backup of all session log files.
+        /// </summary>
+        private static void SaveConcatenatedBackup(string[] logPaths, string destinationPath)
+        {
+            if (logPaths == null || logPaths.Length == 0)
+                return;
+
+            // For a single file, just copy it
+            if (logPaths.Length == 1)
+            {
+                File.Copy(logPaths[0], destinationPath, overwrite: true);
+                return;
+            }
+
+            // For multiple files, concatenate them
+            var encoding = Encoding.GetEncoding("iso-8859-1");
+            using (var destStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write))
+            {
+                bool isFirst = true;
+                foreach (var logPath in logPaths)
+                {
+                    if (!File.Exists(logPath))
+                        continue;
+
+                    try
+                    {
+                        // Add separator between files (except before the first one)
+                        if (!isFirst)
+                        {
+                            var separator = encoding.GetBytes("\n\n--- Log file continued ---\n\n");
+                            destStream.Write(separator, 0, separator.Length);
+                        }
+                        isFirst = false;
+
+                        using (var srcStream = new FileStream(
+                            logPath,
+                            FileMode.Open,
+                            FileAccess.Read,
+                            FileShare.ReadWrite | FileShare.Delete))
+                        {
+                            srcStream.CopyTo(destStream);
+                        }
+                    }
+                    catch
+                    {
+                        // Skip files that can't be read
+                        continue;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Legacy method: Returns the single most recently modified nwclientLog file.
+        /// Kept for backward compatibility with non-EE setups.
+        /// </summary>
         private static string ResolveLatestLogPath(string configuredPath)
         {
             try
@@ -686,7 +861,7 @@ namespace NWNLogRotator.Classes
                 if (string.IsNullOrEmpty(dir)) return configuredPath;
                 var baseName = Path.GetFileName(configuredPath) ?? string.Empty;
 
-                var candidates = new System.Collections.Generic.List<string>();
+                var candidates = new List<string>();
                 if (File.Exists(configuredPath)) candidates.Add(configuredPath);
 
                 // If it looks like an EE client log, consider 1..4
@@ -712,7 +887,10 @@ namespace NWNLogRotator.Classes
             catch { return configuredPath; }
         }
 
-        // Return the second-newest nwclientLog[1-4].txt beside configuredPath, or configuredPath if not available
+        /// <summary>
+        /// Legacy method: Return the second-newest nwclientLog[1-4].txt beside configuredPath.
+        /// Kept for backward compatibility but largely superseded by ResolveSessionLogPaths.
+        /// </summary>
         private static string SecondNewestEELog(string configuredPath)
         {
             try
