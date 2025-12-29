@@ -36,12 +36,22 @@ namespace NWNLogRotator.Classes
             }
             else if (_run_settings.EventText && _run_settings.FilterLines != "")
             {
-                List<String> eventLinesTemp = new List<String>();
+                // Reset to defaults to prevent accumulation across gaming sessions
+                eventLines = new List<string>(defaultEventLines);
                 foreach (string theEvent in filterLinesArray)
                 {
-                    eventLinesTemp.Add(theEvent);
+                    string trimmedEvent = theEvent.Trim();
+                    // Add custom filter if not already in the list
+                    if (!eventLines.Contains(trimmedEvent))
+                    {
+                        eventLines.Add(trimmedEvent);
+                    }
                 }
-                eventLines.AddRange(eventLinesTemp);
+            }
+            else if (_run_settings.EventText)
+            {
+                // No custom filters, just use defaults
+                eventLines = new List<string>(defaultEventLines);
             }
 
             string text;
@@ -359,7 +369,8 @@ namespace NWNLogRotator.Classes
             "[CHAT WINDOW TEXT] ",
         };
 
-        private List<string> eventLines = new List<string>
+        // Default event lines to filter out - stored as readonly to prevent accumulation
+        private static readonly List<string> defaultEventLines = new List<string>
         {
             "[Event]",
             "[Server]",
@@ -402,6 +413,9 @@ namespace NWNLogRotator.Classes
             "First login after reset or relog after 1 minute",
             "Your public CDKEY is ",
         };
+
+        // Working copy of event lines - reset each time ParseLog is called
+        private List<string> eventLines = new List<string>();
 
         private static string lineStartMatch = @"(?<=\n|^)";
         private static string lineChatStartMatch = @"\[CHAT\sWINDOW\sTEXT\]\s";
