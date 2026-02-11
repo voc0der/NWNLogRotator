@@ -26,8 +26,8 @@ namespace NWNLogRotator.Classes
         int _expectedSettingsCount = 42;
         LogParser LogParserInstance = new LogParser();
 
-        // Session window: logs modified within this timespan are considered part of the same session
-        private static readonly TimeSpan SessionWindow = TimeSpan.FromHours(12);
+        // Used only when no explicit process session bounds are provided (e.g. manual "Run Once")
+        private static readonly TimeSpan FallbackSessionWindow = TimeSpan.FromMinutes(45);
 
         public string CurrentProgramDirectory_Get()
         {
@@ -544,14 +544,20 @@ namespace NWNLogRotator.Classes
             return "NWNLog_" + _dateTime.ToString("yyyy_MM_ddhhm") + ".html";
         }
 
+        public string LogInputSignature_Get(string configuredPath, DateTime? sessionStartUtc = null, DateTime? sessionEndUtc = null)
+        {
+            var logPaths = ResolveSessionLogPaths(configuredPath, sessionStartUtc, sessionEndUtc);
+            return BuildLogInputSignature(logPaths);
+        }
+
         /// <summary>
         /// Main entry point for reading and parsing NWN logs.
         /// Now supports multi-file sessions where NWN EE rotates logs across nwclientLog1-4.txt
         /// </summary>
-        public string ReadNWNLogAndInvokeParser(Settings _run_settings)
+        public string ReadNWNLogAndInvokeParser(Settings _run_settings, DateTime? sessionStartUtc = null, DateTime? sessionEndUtc = null)
         {
             // Get all session log files (may be multiple if session spanned log rotation)
-            var sessionLogPaths = ResolveSessionLogPaths(_run_settings.PathToLog);
+            var sessionLogPaths = ResolveSessionLogPaths(_run_settings.PathToLog, sessionStartUtc, sessionEndUtc);
             
             // Wait for the most recent file to stabilize
             if (sessionLogPaths.Length > 0)
@@ -559,17 +565,27 @@ namespace NWNLogRotator.Classes
                 WaitForStableFile(sessionLogPaths[sessionLogPaths.Length - 1]);
             }
 
+            // Re-resolve after stabilization to avoid stale file selection near rollover boundaries
+            sessionLogPaths = ResolveSessionLogPaths(_run_settings.PathToLog, sessionStartUtc, sessionEndUtc);
+
+            // If explicit session bounds were provided and no files match, do not fall back to older logs.
+            if (sessionLogPaths.Length == 0 && sessionStartUtc.HasValue)
+            {
+                return "";
+            }
+
             DateTime _dateTime = CurrentDateTime_Get();
             string filepath = FilePath_Get(_run_settings);
             string filename = FileNameGenerator_Get(_dateTime);
             string backupfilename = filename.Remove(filename.Length - 5, 5) + ".txt";
             bool hasenoughlines = false;
+            int skippedReadFiles = 0;
 
             string result;
             try
             {
                 // Concatenate all session logs and parse as one
-                result = ParseConcatenatedLogs(sessionLogPaths, _run_settings);
+                result = ParseConcatenatedLogs(sessionLogPaths, _run_settings, out skippedReadFiles);
             }
             catch (Exception ex)
             {
@@ -596,6 +612,14 @@ namespace NWNLogRotator.Classes
                                     MessageBoxImage.Error);
                     return "";
                 }
+            }
+
+            if (skippedReadFiles > 0 && _run_settings.Silent == false)
+            {
+                MessageBox.Show("NWNLogRotator skipped " + skippedReadFiles + " log file(s) while reading this session. Export may be incomplete.",
+                                "Partial Session Warning",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
             }
 
             // maintain minimum row lines requirement
@@ -676,10 +700,11 @@ namespace NWNLogRotator.Classes
 
         /// <summary>
         /// Resolves all nwclientLog[1-4].txt files that belong to the current gaming session.
-        /// Files are considered part of the same session if modified within the SessionWindow timespan.
+        /// If session bounds are provided, files are selected strictly within that process session.
+        /// Otherwise, a narrow fallback window around the newest log is used for manual workflows.
         /// Returns files in chronological order (oldest first) for proper concatenation.
         /// </summary>
-        private static string[] ResolveSessionLogPaths(string configuredPath)
+        private static string[] ResolveSessionLogPaths(string configuredPath, DateTime? sessionStartUtc = null, DateTime? sessionEndUtc = null)
         {
             try
             {
@@ -706,12 +731,27 @@ namespace NWNLogRotator.Classes
                 if (allLogs.Count == 0)
                     return File.Exists(configuredPath) ? new[] { configuredPath } : new string[0];
 
-                // Find the newest log's modification time
-                var newestLogTime = allLogs.Max(fi => fi.LastWriteTimeUtc);
+                if (sessionStartUtc.HasValue)
+                {
+                    var startUtc = sessionStartUtc.Value.AddSeconds(-2);
+                    var endUtc = (sessionEndUtc ?? DateTime.UtcNow).AddMinutes(1);
+                    var boundedLogs = allLogs
+                        .Where(fi => fi.LastWriteTimeUtc >= startUtc && fi.LastWriteTimeUtc <= endUtc)
+                        .OrderBy(fi => fi.LastWriteTimeUtc)
+                        .ThenBy(fi => fi.Name)
+                        .Select(fi => fi.FullName)
+                        .ToArray();
 
-                // Session logs are those modified within the session window of the newest log
-                // This captures logs that were rotated during the session
-                var sessionCutoff = newestLogTime - SessionWindow;
+                    if (boundedLogs.Length > 0)
+                        return boundedLogs;
+
+                    // Explicit session bounds were provided; do not fall back to broad windows
+                    return new string[0];
+                }
+
+                // Fallback behavior for manual invocations without explicit session boundaries
+                var newestLogTime = allLogs.Max(fi => fi.LastWriteTimeUtc);
+                var sessionCutoff = newestLogTime - FallbackSessionWindow;
 
                 var sessionLogs = allLogs
                     .Where(fi => fi.LastWriteTimeUtc >= sessionCutoff)
@@ -728,12 +768,45 @@ namespace NWNLogRotator.Classes
             }
         }
 
+        private static string BuildLogInputSignature(string[] logPaths)
+        {
+            if (logPaths == null || logPaths.Length == 0)
+                return "";
+
+            var sb = new StringBuilder();
+            foreach (var logPath in logPaths)
+            {
+                try
+                {
+                    var fi = new FileInfo(logPath);
+                    if (!fi.Exists)
+                        continue;
+
+                    sb.Append(fi.FullName.ToLowerInvariant())
+                      .Append('|')
+                      .Append(fi.Length)
+                      .Append('|')
+                      .Append(fi.LastWriteTimeUtc.Ticks)
+                      .Append(';');
+                }
+                catch
+                {
+                    // Ignore unreadable files while generating a best-effort signature
+                    continue;
+                }
+            }
+
+            return sb.ToString();
+        }
+
         /// <summary>
         /// Parses multiple log files as a single concatenated stream.
         /// Files are read in order and combined before parsing.
         /// </summary>
-        private string ParseConcatenatedLogs(string[] logPaths, Settings _run_settings)
+        private string ParseConcatenatedLogs(string[] logPaths, Settings _run_settings, out int skippedFiles)
         {
+            skippedFiles = 0;
+
             if (logPaths == null || logPaths.Length == 0)
                 throw new ArgumentException("No log files to parse");
 
@@ -781,7 +854,7 @@ namespace NWNLogRotator.Classes
                     }
                     catch
                     {
-                        // Skip files that can't be read
+                        skippedFiles++;
                         continue;
                     }
                 }

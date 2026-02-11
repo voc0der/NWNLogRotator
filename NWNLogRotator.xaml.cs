@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,8 +30,13 @@ namespace NWNLogRotator
         Settings _settings;
         static System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
         Notification notification = new Notification();
-        private int ClientLauncherState = 0;
         private string ProcessName = "nwmain";
+        private CancellationTokenSource _watcherCancellation;
+        private bool _isNwnProcessRunning = false;
+        private DateTime? _currentSessionStartUtc = null;
+        private DateTime? _lastSessionStartUtc = null;
+        private DateTime? _lastSessionEndUtc = null;
+        private string _lastAutomaticSessionSignature = "";
 
         public MainWindow()
         {
@@ -149,28 +155,15 @@ namespace NWNLogRotator
             return _settings;
         }
 
-        private int NWNProcessStatus_Get(string ProcessName)
+        private static bool NWNProcessStatus_Get(string ProcessName)
         {
-            if (ClientLauncherState == 1)
+            try
             {
-                return 2;
+                return Process.GetProcessesByName(ProcessName).Length > 0;
             }
-            else if (ClientLauncherState == 2)
+            catch
             {
-                return 0;
-            }
-            else
-            {
-                Process[] processlist = Process.GetProcesses();
-
-                foreach (Process theProcess in processlist)
-                {
-                    if (theProcess.ProcessName.IndexOf(ProcessName) != -1)
-                    {
-                        return 1;
-                    }
-                }
-                return 0;
+                return false;
             }
         }
 
@@ -208,55 +201,101 @@ namespace NWNLogRotator
         private void SetupApplication()
         {
             LoadSettings_Handler();
-            IterateNWN_Watcher(false);
+            StartWatcherLoop();
         }
 
-        private async void IterateNWN_Watcher(bool PreviousStatus)
+        private DateTime? CurrentOrLastSessionStartUtc_Get()
         {
-            _settings = CurrentSettings_Get();
-            var OnColor = Color_Get(_settings.UseTheme, true);
-            var OffColor = Color_Get(_settings.UseTheme, false);
-            int IterateDelay = 5000;
-            ProcessName = _settings.ServerMode == true ? "nwserver" : "nwmain";
-            var Status = NWNProcessStatus_Get(ProcessName);
+            if (_isNwnProcessRunning && _currentSessionStartUtc.HasValue)
+                return _currentSessionStartUtc;
 
-            if (Status > 0)
-            {
-                NWNStatusTextBlock.Text = ProcessName + " is active!";
-                NWNStatusTextBlock.Foreground = OnColor;
+            return _lastSessionStartUtc;
+        }
 
-                if (Status == 1)
-                {
-                    await Task.Delay(IterateDelay);
-                    IterateNWN_Watcher(true);
-                }
-            }
-            else
+        private DateTime? CurrentOrLastSessionEndUtc_Get()
+        {
+            if (_isNwnProcessRunning)
+                return DateTime.UtcNow;
+
+            return _lastSessionEndUtc;
+        }
+
+        private void StartWatcherLoop()
+        {
+            if (_watcherCancellation != null)
+                return;
+
+            _watcherCancellation = new CancellationTokenSource();
+            WatchNWNProcessLoop(_watcherCancellation.Token);
+        }
+
+        private async void WatchNWNProcessLoop(CancellationToken token)
+        {
+            var iterateDelay = TimeSpan.FromSeconds(5);
+
+            while (!token.IsCancellationRequested)
             {
-                NWNStatusTextBlock.Text = ProcessName + " not found!";
-                NWNStatusTextBlock.Foreground = OffColor;
-                if (PreviousStatus == true)
+                _settings = CurrentSettings_Get();
+                var OnColor = Color_Get(_settings.UseTheme, true);
+                var OffColor = Color_Get(_settings.UseTheme, false);
+                ProcessName = _settings.ServerMode == true ? "nwserver" : "nwmain";
+                var isRunning = NWNProcessStatus_Get(ProcessName);
+
+                if (isRunning)
                 {
-                    await Task.Delay(1500);
-                    
-                    if(_settings.SaveOnLaunch == false)
+                    NWNStatusTextBlock.Text = ProcessName + " is active!";
+                    NWNStatusTextBlock.Foreground = OnColor;
+
+                    if (_isNwnProcessRunning == false)
                     {
-                        if (NWNLog_Save(_settings, true) == true)
-                            UpdateResultsPane(1);
+                        _currentSessionStartUtc = DateTime.UtcNow;
                     }
-                    else
+                }
+                else
+                {
+                    NWNStatusTextBlock.Text = ProcessName + " not found!";
+                    NWNStatusTextBlock.Foreground = OffColor;
+
+                    if (_isNwnProcessRunning)
                     {
-                        if(_settings.CloseOnLogGenerated == true )
+                        var sessionStartUtc = _currentSessionStartUtc ?? DateTime.UtcNow.AddMinutes(-2);
+                        var sessionEndUtc = DateTime.UtcNow;
+                        _lastSessionStartUtc = sessionStartUtc;
+                        _lastSessionEndUtc = sessionEndUtc;
+                        _currentSessionStartUtc = null;
+
+                        try
+                        {
+                            await Task.Delay(1500, token);
+                        }
+                        catch (TaskCanceledException)
+                        {
+                            break;
+                        }
+
+                        if (_settings.SaveOnLaunch == false)
+                        {
+                            if (NWNLog_Save(_settings, true, sessionStartUtc, sessionEndUtc) == true)
+                                UpdateResultsPane(1);
+                        }
+                        else if (_settings.CloseOnLogGenerated == true)
                         {
                             ExitEvent();
                             Process.GetCurrentProcess().Kill();
                         }
                     }
-                        
                 }
-                await Task.Delay(IterateDelay);
-                ClientLauncherState = 0;
-                IterateNWN_Watcher(false);
+
+                _isNwnProcessRunning = isRunning;
+
+                try
+                {
+                    await Task.Delay(iterateDelay, token);
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
             }
         }
 
@@ -483,12 +522,27 @@ namespace NWNLogRotator
             _settings.UseTheme = "light";
         }
 
-        private bool NWNLog_Save(Settings _settings, bool _automatic)
+        private bool NWNLog_Save(Settings _settings, bool _automatic, DateTime? sessionStartUtc = null, DateTime? sessionEndUtc = null)
         {
-            string _filepathandname = FileHandlerInstance.ReadNWNLogAndInvokeParser(_settings);
+            string sessionSignature = "";
+            if (_automatic && sessionStartUtc.HasValue)
+            {
+                sessionSignature = FileHandlerInstance.LogInputSignature_Get(_settings.PathToLog, sessionStartUtc, sessionEndUtc);
+                if (string.IsNullOrEmpty(sessionSignature) || sessionSignature == _lastAutomaticSessionSignature)
+                {
+                    return false;
+                }
+            }
+
+            string _filepathandname = FileHandlerInstance.ReadNWNLogAndInvokeParser(_settings, sessionStartUtc, sessionEndUtc);
 
             if (_filepathandname != "")
             {
+                if (_automatic && sessionStartUtc.HasValue)
+                {
+                    _lastAutomaticSessionSignature = sessionSignature;
+                }
+
                 if (_settings.Notifications == true)
                 {
                     notification.ShowNotification("Log file generated successfully!");
@@ -579,21 +633,11 @@ namespace NWNLogRotator
                     p.StartInfo.RedirectStandardOutput = false;
                     p.StartInfo.UseShellExecute = true;
                     p.StartInfo.CreateNoWindow = true;
-                    if (Path.GetFileName(_settings.PathToClient) == ProcessName + ".exe")
-                    {
-                        ClientLauncherState = 1;
-                        IterateNWN_Watcher(false);
-                    }
                     await Task.Run(() =>
                     {
                         p.Start();
                         p.WaitForExit();
                     });
-                    if (Path.GetFileName(_settings.PathToClient) == ProcessName + ".exe")
-                    {
-                        ClientLauncherState = 2;
-                        IterateNWN_Watcher(true);
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -734,6 +778,7 @@ namespace NWNLogRotator
 
         public void WindowClosed_Event(object sender, CancelEventArgs e)
         {
+            _watcherCancellation?.Cancel();
             ExitEvent();
         }
 
@@ -844,7 +889,7 @@ namespace NWNLogRotator
             Mouse.OverrideCursor = Cursors.Wait;
             await Task.Run(() =>
             {
-                SavedLogResult = NWNLog_Save(_settings, false);
+                SavedLogResult = NWNLog_Save(_settings, false, CurrentOrLastSessionStartUtc_Get(), CurrentOrLastSessionEndUtc_Get());
             });
 
             SaveToggle_Event();
