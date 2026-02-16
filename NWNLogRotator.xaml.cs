@@ -735,7 +735,7 @@ namespace NWNLogRotator
         private void MinimumRowsCountSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (MinimumRowsCountTextBlock != null)
-                MinimumRowsCountTextBlock.Text = e.NewValue.ToString();
+                MinimumRowsCountTextBlock.Text = ((int)Math.Round(e.NewValue)).ToString();
         }
 
         private void SaveBackupCheckBox_Unchecked(object sender, RoutedEventArgs e)
