@@ -36,3 +36,6 @@ While open, NWNLogRotator will process new logs automatically based on the statu
      * [game.log.chat.emotes] enabled = true (all graphic emotes are logged as their text equivalent)
      * [game.log.chat.text] enabled = false (if true, then the text part of the chat window is logged; if both this and chat.all are set to true, then the text chat will duplicate in the log)
    * For 1.69, it is located in nwnplayer.ini as ClientEntireChatWindowLogging = 1 under [Game Options].
+
+# Star History
+[![Star History Chart](https://api.star-history.com/svg?repos=voc0der/NWNLogRotator&type=Date)](https://star-history.com/#voc0der/NWNLogRotator&Date)
