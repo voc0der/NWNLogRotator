@@ -1,7 +1,12 @@
-name: Build NWN Log Rotator
+name: Release NWN Log Rotator
 
 on:
-  pull_request:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -69,3 +74,59 @@ jobs:
         name: Release-build-x64
         path: |
           bin/Release/x64/NWNLogRotator-x64.exe
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Step 2: Download the build artifacts (x86 and x64)
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: Release-build-x86
+        path: ./bin/Release/x86/
+
+    - name: Download build artifacts (x64)
+      uses: actions/download-artifact@v4
+      with:
+        name: Release-build-x64
+        path: ./bin/Release/x64/
+
+    # Debugging Step: List all downloaded files (Linux)
+    - name: List all downloaded files
+      run: |
+        echo "Listing all downloaded files in x86 directory"
+        find ./bin/Release/x86/ -type f
+        echo "Listing all downloaded files in x64 directory"
+        find ./bin/Release/x64/ -type f
+
+    # Step 3: Determine the next semantic version tag
+    - name: Calculate next version
+      id: next_version
+      run: |
+        # Fetch all tags to ensure git describe works properly
+        git fetch --tags
+        # Get the latest tag, or default to v1.0.0 if none exists
+        latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) || echo "v1.0.0")
+        echo "Latest tag: $latest_tag"
+        # Calculate the next version
+        next_version=$(echo $latest_tag | awk -F. -v OFS=. '{$NF+=1; print}')
+        echo "next_version=$next_version" >> $GITHUB_ENV
+
+    # Step 4: Create GitHub release
+    - name: Create GitHub release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.next_version }}
+        name: ${{ env.next_version }}
+        files: |
+          ./bin/Release/x86/NWNLogRotator-x86.exe
+          ./bin/Release/x64/NWNLogRotator-x64.exe
+        body: |
+          ## Changes
+          - Auto-generated release with x86 and x64 binaries.
